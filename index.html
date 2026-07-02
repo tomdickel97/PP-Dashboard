@@ -85,6 +85,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
         <button onClick="{{ goSzenarien }}" style="{{ tabStyle4 }}">Szenarien</button>
         <button onClick="{{ goIdeen }}" style="{{ tabStyle5 }}">Ideen</button>
         <button onClick="{{ goEmpfehlungen }}" style="{{ tabStyle6 }}">Empfehlungen</button>
+        <button onClick="{{ goBerichte }}" style="{{ tabStyle7 }}">Berichte</button>
       </div>
     </div>
   </sc-if>
@@ -129,6 +130,10 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 4h6M8 4h1a1 1 0 011 1v0a1 1 0 001 1h2a1 1 0 001-1v0a1 1 0 011-1h1a1 1 0 011 1v14a1 1 0 01-1 1H7a1 1 0 01-1-1V5a1 1 0 011-1z"/><path d="M9 13l2 2 4-4"/></svg>
             <span>Empfehlungen</span>
           </button>
+          <button onClick="{{ goBerichte }}" style="{{ nav7 }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 3h7l5 5v13a0 0 0 01 0 0H7a1 1 0 01-1-1V4a1 1 0 011-1z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6M9 9h2"/></svg>
+            <span>Berichte</span>
+          </button>
         </nav>
         <div style="padding:16px 20px;border-top:1px solid #EEEEEB">
           <div style="font-size:11px;color:#9A9A96;letter-spacing:.05em">Stand {{ dataStamp }}</div>
@@ -154,10 +159,11 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
 
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:16px 0 4px">
             <span style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96;margin-right:2px">Zeitraum</span>
-            <button onClick="{{ presetLast30 }}" style="{{ presetStyle0 }}">Letzte 30 Tage</button>
-            <button onClick="{{ presetThisYear }}" style="{{ presetStyle1 }}">Dieses Jahr</button>
-            <button onClick="{{ presetLastYear }}" style="{{ presetStyle2 }}">Letztes Jahr</button>
-            <button onClick="{{ presetGesamt }}" style="{{ presetStyle3 }}">Gesamt</button>
+            <button onClick="{{ presetThisMonth }}" style="{{ presetStyle0 }}">Dieser Monat</button>
+            <button onClick="{{ presetLastMonth }}" style="{{ presetStyle1 }}">Letzter Monat</button>
+            <button onClick="{{ presetThisYear }}" style="{{ presetStyle2 }}">Dieses Jahr</button>
+            <button onClick="{{ presetLastYear }}" style="{{ presetStyle3 }}">Letztes Jahr</button>
+            <button onClick="{{ presetGesamt }}" style="{{ presetStyle4 }}">Gesamt</button>
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap" class="pp-daterange">
               <div class="pp-datedivider" style="width:1px;height:22px;background:#E4E4E0;margin:0 4px"></div>
               <label style="display:inline-flex;align-items:center;gap:6px"><span style="font-size:12px;color:#8A8A86">Von</span>
@@ -210,8 +216,9 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
               <div style="font-family:'Archivo';font-weight:800;font-size:28px;letter-spacing:-.02em;font-feature-settings:'tnum' 1;margin-top:10px">{{ kpiConversion }}</div>
             </div>
             <div style="padding:20px 22px">
-              <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A96">Deckungsbeitrag</div>
-              <div style="font-family:'Archivo';font-weight:800;font-size:28px;letter-spacing:-.02em;font-feature-settings:'tnum' 1;margin-top:10px">{{ kpiContribution }}</div>
+              <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A96">Organik-Quote</div>
+              <div style="font-family:'Archivo';font-weight:800;font-size:28px;letter-spacing:-.02em;font-feature-settings:'tnum' 1;margin-top:10px">{{ kpiOrganic }}</div>
+              <div style="font-size:12px;margin-top:6px;color:#8A8A86">Anteil Verkäufe ohne Werbung</div>
             </div>
           </div>
 
@@ -365,7 +372,13 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
             </div>
           </div>
 
-          <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A96;margin:20px 0 8px">Produkt-Cockpit · Gesamtzeitraum</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin:20px 0 8px">
+            <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A96">Produkt-Cockpit · {{ sel.scopeLabel }}</div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <button onClick="{{ sel.setScopeGesamt }}" style="{{ sel.scopeGesamtStyle }}">Gesamt</button>
+              <button onClick="{{ sel.setScopeYear }}" style="{{ sel.scopeYearStyle }}">Jährlich · {{ sel.activeYear }}</button>
+            </div>
+          </div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:#EEEEEB;border:1px solid #E4E4E0">
             <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Umsatz</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px">{{ sel.revenueStr }}</div></div>
             <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Einheiten</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px">{{ sel.unitsStr }}</div></div>
@@ -886,6 +899,78 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
         </div>
       </sc-if>
 
+      <sc-if value="{{ isBerichte }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Berichte" style="max-width:1240px;margin:0 auto;padding:30px 40px 72px;animation:ppfade .25s ease">
+          <div style="padding-bottom:20px;border-bottom:2px solid #0A0A0A">
+            <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9A96;margin-bottom:8px">Berichte</div>
+            <h1 style="font-family:'Archivo';font-weight:800;font-size:30px;letter-spacing:-.02em;margin:0;line-height:1">PDF-Export &amp; Geschäftsbericht</h1>
+            <div style="font-size:13.5px;color:#8A8A86;margin-top:10px;max-width:640px;line-height:1.55">Erstelle druckfertige PDFs aus den erfassten Dashboard-Daten. Der Bericht öffnet sich in einem neuen Fenster – dort über <b style="color:#0A0A0A">Drucken → „Als PDF speichern"</b> sichern.</div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;margin-top:26px;align-items:start">
+
+            <div style="background:#fff;border:1px solid #E4E4E0;display:flex;flex-direction:column">
+              <div style="padding:20px 22px;border-bottom:1px solid #EEEEEB">
+                <div style="display:flex;align-items:center;gap:11px">
+                  <div style="width:38px;height:38px;background:#FFF3EC;border:1px solid #FFD9C2;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#FF5A00" stroke-width="1.8"><path d="M7 3h7l5 5v13H7a1 1 0 01-1-1V4a1 1 0 011-1z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
+                  </div>
+                  <div>
+                    <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9A9A96">Sicherungskopie</div>
+                    <div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:2px">Produktdaten-Export</div>
+                  </div>
+                </div>
+              </div>
+              <div style="padding:20px 22px;flex:1">
+                <div style="font-size:13.5px;color:#4A4A46;line-height:1.6">Alle eingetragenen Monatswerte je Produkt – Verkäufe, Preis, Umsatz, PPC-Einheiten, Werbekosten, Aufrufe und Ziele – als vollständige PDF-Übersicht. Ideal als Backup oder Nachweis der erfassten Daten.</div>
+                <div style="font-size:12px;color:#9A9A96;margin-top:14px">Enthält <b style="color:#0A0A0A">{{ repProductCount }}</b> Produkte · alle erfassten Monate</div>
+              </div>
+              <div style="padding:16px 22px;border-top:1px solid #EEEEEB">
+                <button onClick="{{ genProductReport }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:9px;padding:12px 16px;border:none;background:#0A0A0A;color:#fff;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="background:#FF5A00">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6M6 18H4v-6a2 2 0 012-2h12a2 2 0 012 2v6h-2M8 14h8v7H8z"/></svg>
+                  PDF erstellen
+                </button>
+              </div>
+            </div>
+
+            <div style="background:#fff;border:1px solid #E4E4E0;display:flex;flex-direction:column">
+              <div style="padding:20px 22px;border-bottom:1px solid #EEEEEB">
+                <div style="display:flex;align-items:center;gap:11px">
+                  <div style="width:38px;height:38px;background:#F1F1EE;border:1px solid #E0E0DB;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="1.8"><path d="M4 19V5M4 19h16"/><rect x="7" y="10" width="3" height="6"/><rect x="12" y="7" width="3" height="9"/><rect x="17" y="12" width="3" height="4"/></svg>
+                  </div>
+                  <div>
+                    <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9A9A96">Monatlich</div>
+                    <div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:2px">Geschäftsbericht</div>
+                  </div>
+                </div>
+              </div>
+              <div style="padding:20px 22px;flex:1">
+                <div style="font-size:13.5px;color:#4A4A46;line-height:1.6">Zusammenfassung der wichtigsten Kennzahlen für einen Monat – Umsatz, Einheiten, Gewinn, Marge, ACOS, Conversion und Organik-Quote inkl. Vormonatsvergleich – plus konkrete Handlungsempfehlungen.</div>
+                <div style="display:flex;align-items:center;gap:10px;margin-top:16px;flex-wrap:wrap">
+                  <span style="font-size:12px;font-weight:600;color:#7A7A76;text-transform:uppercase;letter-spacing:.05em">Berichtsmonat</span>
+                  <select value="{{ repMonth }}" onChange="{{ setRepMonth }}" style="border:1px solid #E2E2E2;padding:8px 11px;font-size:13px;background:#fff;cursor:pointer;font-feature-settings:'tnum' 1">
+                    <sc-for list="{{ repMonthOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.ym }}">{{ o.label }}</option></sc-for>
+                  </select>
+                </div>
+              </div>
+              <div style="padding:16px 22px;border-top:1px solid #EEEEEB">
+                <button onClick="{{ genBusinessReport }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:9px;padding:12px 16px;border:none;background:#0A0A0A;color:#fff;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="background:#FF5A00">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6M6 18H4v-6a2 2 0 012-2h12a2 2 0 012 2v6h-2M8 14h8v7H8z"/></svg>
+                  Bericht für {{ repMonthLabel }} erstellen
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="margin-top:24px;background:#FAFAF8;border:1px solid #EEEEEB;padding:16px 20px;display:flex;gap:12px;align-items:flex-start">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9A9A96" stroke-width="1.8" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+            <div style="font-size:12.5px;color:#7A7A76;line-height:1.55">Der Bericht öffnet in einem neuen Browser-Tab. Falls nichts passiert, bitte <b style="color:#0A0A0A">Pop-ups erlauben</b>. Im Druckdialog als Ziel „Als PDF speichern" wählen – Ränder und Umbrüche sind bereits für A4 optimiert.</div>
+          </div>
+        </div>
+      </sc-if>
+
     </main>
   </div>
 
@@ -1078,6 +1163,8 @@ class Component extends DCLogic {
       ideaUploading:false,
       recDismissed:(saved && saved.recDismissed) || {},
       detailYear:null,
+      detailScope:'gesamt',
+      reportMonth:this._curYm(),
       period:{preset:'gesamt', from:dmin||'2025-07', to:dmax||'2026-07'},
       chartYear:String(new Date().getFullYear())
     };
@@ -1254,13 +1341,14 @@ class Component extends DCLogic {
     return {units,views,revenue,vat,net,unitProfit,marginPct,grossProfit,estProfit,conversion,breakEvenAcos,actualAcos,velocity,cover,threshold,status,reorderQty,adSpend,days,stock,unitsPpc,organicUnits,organicRate,ppcRevenue,tacos,maxCpc};
   }
   aggregate(from,to){
-    let revenue=0,units=0,ad=0,grossProfit=0,estProfit=0,views=0,contribution=0,ppcRev=0;
-    this.state.products.forEach(p=>{ const d=this.derive(p,from,to); revenue+=d.revenue; units+=d.units; ad+=d.adSpend; grossProfit+=d.grossProfit; estProfit+=d.estProfit; views+=d.views; contribution+=d.grossProfit; ppcRev+=d.ppcRevenue; });
+    let revenue=0,units=0,ad=0,grossProfit=0,estProfit=0,views=0,contribution=0,ppcRev=0,ppcUnits=0;
+    this.state.products.forEach(p=>{ const d=this.derive(p,from,to); revenue+=d.revenue; units+=d.units; ad+=d.adSpend; grossProfit+=d.grossProfit; estProfit+=d.estProfit; views+=d.views; contribution+=d.grossProfit; ppcRev+=d.ppcRevenue; ppcUnits+=d.unitsPpc; });
     const avgMargin = revenue>0 ? grossProfit/revenue : 0;
     const acos = ppcRev>0 ? ad/ppcRev : 0;
     const tacos = revenue>0 ? ad/revenue : 0;
     const conversion = views>0 ? units/views : 0;
-    return {revenue,units,ad,grossProfit,estProfit,views,avgMargin,acos,tacos,conversion,contribution};
+    const organicRate = units>0 ? (units-ppcUnits)/units : 0;
+    return {revenue,units,ad,grossProfit,estProfit,views,avgMargin,acos,tacos,conversion,contribution,organicRate};
   }
   yearRevenueSeries(year){
     const arr=[];
@@ -1389,7 +1477,14 @@ class Component extends DCLogic {
   _removeIdea(id){ this.setState(s=>({ideas:s.ideas.filter(i=>i.id!==id)}), ()=>this._persist()); }
   _openAbgleich(p){ this.setState({stockModal:{productId:p.id, value:String(Math.max(0,Math.round(this._stockOf(p))))}}); }
   _saveAbgleich(){ const sm=this.state.stockModal; if(!sm) return; const v=Math.max(0,Math.round(+sm.value||0)); const iso=this._todayISO(); this.setState(s=>({products:s.products.map(p=> p.id===sm.productId?{...p,stockRef:{value:v,date:iso}}:p), stockModal:null}), ()=>this._persist()); }
-  _setPreset(preset){ const dr=this._dataRange(); const y=this._curYm().slice(0,4); let from,to; if(preset==='last30'){ from=this._curYm(); to=this._curYm(); } else if(preset==='thisYear'){ from=y+'-01'; to=y+'-12'; } else if(preset==='lastYear'){ const py=(+y-1); from=py+'-01'; to=py+'-12'; } else { preset='gesamt'; from=dr.min; to=dr.max; } this.setState({period:{preset,from,to}}); }
+  _shiftYm(ym,delta){ let [y,m]=ym.split('-').map(Number); const d=new Date(y,(m-1)+delta,1); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
+  _setPreset(preset){ const dr=this._dataRange(); const cur=this._curYm(); const y=cur.slice(0,4); let from,to;
+    if(preset==='thisMonth'){ from=cur; to=cur; }
+    else if(preset==='lastMonth'){ const lm=this._shiftYm(cur,-1); from=lm; to=lm; }
+    else if(preset==='thisYear'){ from=y+'-01'; to=y+'-12'; }
+    else if(preset==='lastYear'){ const py=(+y-1); from=py+'-01'; to=py+'-12'; }
+    else { preset='gesamt'; from=dr.min; to=dr.max; }
+    this.setState({period:{preset,from,to}}); }
   _scenDefaults(p){ const d=this.derive(p); const dm=this.months.filter(ym=>p.monthly[ym]).length||1; const avg=Math.max(0,Math.round(d.units/12)); return {productId:p.id, price:+(+p.price).toFixed(2), adSpend:Math.round(d.adSpend/dm), units:avg, prodCost:+(+p.productionCost).toFixed(2)}; }
 
   _recommendations(){
@@ -1470,6 +1565,146 @@ class Component extends DCLogic {
   _dismissRec(key,mode){ this.setState(s=>({recDismissed:{...s.recDismissed,[key]:mode}}), ()=>this._persist()); }
   _restoreRecs(){ this.setState({recDismissed:{}}, ()=>this._persist()); }
 
+  // ---------- Berichte / PDF ----------
+  _esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  _openPrintWindow(title, inner){
+    const w = window.open('', '_blank');
+    if(!w){ alert('Bitte Pop-ups für diese Seite erlauben – der Bericht öffnet sich in einem neuen Fenster und kann dort über „Drucken → Als PDF speichern" gesichert werden.'); return; }
+    const css = `
+      *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      @page{size:A4;margin:16mm 14mm}
+      html,body{margin:0;padding:0}
+      body{font-family:'IBM Plex Sans',-apple-system,Segoe UI,Roboto,sans-serif;color:#0A0A0A;font-size:11.5px;line-height:1.5}
+      h1,h2,h3,.arch{font-family:'Archivo','IBM Plex Sans',sans-serif}
+      .head{display:flex;align-items:flex-end;justify-content:space-between;border-bottom:3px solid #0A0A0A;padding-bottom:12px;margin-bottom:22px}
+      .brand{display:flex;align-items:center;gap:9px}
+      .brand .sq{width:14px;height:14px;background:#FF5A00}
+      .brand .nm{font-family:'Archivo';font-weight:800;font-size:15px;letter-spacing:.02em}
+      .brand .sub{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#9A9A96;margin-top:1px}
+      .rtitle{font-family:'Archivo';font-weight:800;font-size:22px;letter-spacing:-.01em;margin:2px 0 0}
+      .rmeta{text-align:right;font-size:10px;color:#8A8A86}
+      h2.sec{font-family:'Archivo';font-weight:800;font-size:14px;margin:26px 0 9px;padding-bottom:5px;border-bottom:1px solid #E4E4E0}
+      table{width:100%;border-collapse:collapse;margin-top:6px}
+      th{font-size:8.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#8A8A86;text-align:right;padding:6px 7px;border-bottom:1.5px solid #0A0A0A}
+      th:first-child{text-align:left}
+      td{font-size:10.5px;padding:5px 7px;text-align:right;border-bottom:1px solid #EFEFEC;font-variant-numeric:tabular-nums}
+      td:first-child{text-align:left;font-weight:600}
+      tfoot td{border-top:1.5px solid #0A0A0A;border-bottom:none;font-weight:700;font-size:10.5px}
+      .kpigrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#E4E4E0;border:1px solid #E4E4E0;margin-top:6px}
+      .kpi{background:#fff;padding:11px 12px}
+      .kpi .l{font-size:8.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96}
+      .kpi .v{font-family:'Archivo';font-weight:800;font-size:19px;margin-top:5px;font-variant-numeric:tabular-nums}
+      .kpi .d{font-size:9px;margin-top:3px}
+      .up{color:#1B7F4B}.down{color:#D42E12}.mut{color:#8A8A86}
+      .prodblock{margin-bottom:16px;break-inside:avoid}
+      .prodhd{display:flex;justify-content:space-between;align-items:baseline;border-left:3px solid #FF5A00;padding-left:9px;margin-bottom:2px}
+      .prodhd .pn{font-family:'Archivo';font-weight:700;font-size:13px}
+      .prodhd .pa{font-size:9.5px;color:#9A9A96}
+      .rec{break-inside:avoid;border:1px solid #E4E4E0;border-left:4px solid #9A9A96;padding:9px 12px;margin-top:8px}
+      .rec.kritisch{border-left-color:#D42E12}.rec.wichtig{border-left-color:#D8930A}.rec.hinweis{border-left-color:#1B7F4B}
+      .rec .rh{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+      .rec .rt{font-weight:700;font-size:11.5px}
+      .rec .bad{font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;color:#fff;white-space:nowrap}
+      .bad.kritisch{background:#D42E12}.bad.wichtig{background:#D8930A}.bad.hinweis{background:#1B7F4B}
+      .rec .rr{color:#3A3A36;margin-top:3px}
+      .rec .ra{margin-top:4px;font-size:10.5px}.rec .ra b{color:#0A0A0A}
+      .note{font-size:10px;color:#8A8A86;margin-top:6px;line-height:1.5}
+      .foot{margin-top:26px;padding-top:8px;border-top:1px solid #E4E4E0;font-size:8.5px;color:#B0B0AC;display:flex;justify-content:space-between}
+      @media print{.noprint{display:none}}
+      .printbar{position:fixed;top:0;left:0;right:0;background:#0A0A0A;color:#fff;padding:9px 16px;display:flex;justify-content:space-between;align-items:center;font-family:'IBM Plex Sans',sans-serif;font-size:12px;z-index:99}
+      .printbar button{font:inherit;font-weight:600;background:#FF5A00;color:#fff;border:none;padding:7px 15px;cursor:pointer}
+      .wrap{max-width:190mm;margin:0 auto}
+      body{padding-top:0}
+    `;
+    const bar = '<div class="printbar noprint"><span>Bericht bereit · über „Als PDF speichern" im Druckdialog sichern</span><button onclick="window.print()">Als PDF speichern / Drucken</button></div>';
+    const doc = '<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><title>'+this._esc(title)+'</title>'+
+      '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'+
+      '<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">'+
+      '<style>'+css+'</style></head><body>'+bar+'<div class="wrap" style="padding-top:52px">'+inner+'</div></body></html>';
+    w.document.open(); w.document.write(doc); w.document.close(); w.focus();
+    setTimeout(()=>{ try{ w.print(); }catch(e){} }, 650);
+  }
+  _reportHead(title, sub){
+    return '<div class="head"><div class="brand"><div class="sq"></div><div><div class="nm">PARTY PEAK</div><div class="sub">Amazon FBA Control</div></div></div>'+
+      '<div style="flex:1;text-align:center;padding:0 16px"><div class="rtitle">'+this._esc(title)+'</div></div>'+
+      '<div class="rmeta">'+this._esc(sub||'')+'<br>Erstellt '+this._esc(this._fmtDate(this._todayISO()))+'</div></div>';
+  }
+  _reportFoot(){
+    return '<div class="foot"><span>Party Peak · Roth &amp; Dickel GbR · vertraulich</span><span>Alle Werte aus dem Party-Peak-Dashboard · '+this._esc(this._fmtDate(this._todayISO()))+'</span></div>';
+  }
+  _reportProductData(){
+    const prods=this.state.products;
+    let body=this._reportHead('Produktdaten-Export', prods.length+' Produkte');
+    body+='<div class="note">Übersicht aller im Dashboard erfassten Monatswerte je Produkt – als Sicherungskopie und Nachweis der eingetragenen Daten.</div>';
+    if(!prods.length){ body+='<h2 class="sec">Keine Produkte erfasst</h2>'; }
+    prods.forEach(p=>{
+      const months=this.months.filter(ym=>p.monthly[ym]).sort();
+      const d=this.derive(p);
+      body+='<div class="prodblock"><div class="prodhd"><span class="pn">'+this._esc(p.name)+'</span><span class="pa">'+this._esc(p.asin||'—')+' · '+this._esc(p.dims||'')+'</span></div>';
+      body+='<div class="note" style="margin:2px 0 0">Aktueller Preis '+this._eur(p.price,2)+' · Produktion '+this._eur(p.productionCost,2)+' · FBA '+this._eur(p.fbaFee,2)+' · Versand '+this._eur(p.shipping,2)+' · Bestand '+this._num(this._stockOf(p))+' Stk</div>';
+      if(!months.length){ body+='<div class="note">Noch keine Monatswerte erfasst.</div></div>'; return; }
+      let tU=0,tR=0,tPpc=0,tAd=0,tV=0;
+      let rows='';
+      months.forEach(ym=>{ const m=p.monthly[ym]; const un=+m.units||0; const pr=this._monthPrice(p,m); const ppc=+m.unitsPpc||0; const ad=+m.adCost||0; const vw=+m.views||0; const tgt=+((p.targets||{})[ym]||0); const rev=un*pr;
+        tU+=un; tR+=rev; tPpc+=ppc; tAd+=ad; tV+=vw;
+        rows+='<tr><td>'+this._esc(this._mlabel(ym))+'</td><td>'+this._num(un)+'</td><td>'+this._eur(pr,2)+'</td><td>'+this._eur(rev)+'</td><td>'+this._num(ppc)+'</td><td>'+this._eur(ad,2)+'</td><td>'+this._num(vw)+'</td><td>'+(tgt>0?this._num(tgt):'—')+'</td></tr>';
+      });
+      body+='<table><thead><tr><th>Monat</th><th>Verkäufe</th><th>Preis</th><th>Umsatz</th><th>PPC-Stk</th><th>Werbek.</th><th>Aufrufe</th><th>Ziel</th></tr></thead>'+
+        '<tbody>'+rows+'</tbody>'+
+        '<tfoot><tr><td>Summe</td><td>'+this._num(tU)+'</td><td>—</td><td>'+this._eur(tR)+'</td><td>'+this._num(tPpc)+'</td><td>'+this._eur(tAd,2)+'</td><td>'+this._num(tV)+'</td><td>—</td></tr></tfoot></table></div>';
+    });
+    body+=this._reportFoot();
+    this._openPrintWindow('Party Peak · Produktdaten-Export', body);
+  }
+  _reportBusiness(ym){
+    ym = ym || this._curYm();
+    const prev=this._shiftYm(ym,-1);
+    const a=this.aggregate(ym,ym), b=this.aggregate(prev,prev);
+    const delta=(cur,prv)=>{ if(!(prv>0)) return {txt:'kein Vergleichswert', cls:'mut'}; const dp=(cur-prv)/prv*100; return {txt:(dp>=0?'▲ +':'▼ ')+this._pct(Math.abs(dp),1)+' ggü. Vormonat', cls:dp>=0?'up':'down'}; };
+    const dRev=delta(a.revenue,b.revenue), dUn=delta(a.units,b.units), dPr=delta(a.estProfit,b.estProfit);
+    let body=this._reportHead('Monatlicher Geschäftsbericht', this._mlabel(ym));
+    body+='<div class="note">Zusammenfassung der wichtigsten Kennzahlen für <b>'+this._esc(this._mlabel(ym))+'</b> im Vergleich zum Vormonat ('+this._esc(this._mlabel(prev))+'), mit abgeleiteten Handlungsempfehlungen.</div>';
+    // KPI-Block 1
+    body+='<h2 class="sec">Kennzahlen im Überblick</h2>';
+    body+='<div class="kpigrid">'+
+      '<div class="kpi"><div class="l">Umsatz</div><div class="v">'+this._eur(a.revenue)+'</div><div class="d '+dRev.cls+'">'+dRev.txt+'</div></div>'+
+      '<div class="kpi"><div class="l">Verkaufte Einheiten</div><div class="v">'+this._num(a.units)+'</div><div class="d '+dUn.cls+'">'+dUn.txt+'</div></div>'+
+      '<div class="kpi"><div class="l">Geschätzter Gewinn</div><div class="v">'+this._eur(a.estProfit)+'</div><div class="d '+dPr.cls+'">'+dPr.txt+'</div></div>'+
+      '<div class="kpi"><div class="l">Ø Marge</div><div class="v">'+this._pct(a.avgMargin*100)+'</div><div class="d mut">gewichtet</div></div>'+
+      '</div>';
+    body+='<div class="kpigrid" style="margin-top:1px">'+
+      '<div class="kpi"><div class="l">Werbeausgaben</div><div class="v">'+this._eur(a.ad)+'</div><div class="d mut">im Monat</div></div>'+
+      '<div class="kpi"><div class="l">Gesamt-ACOS</div><div class="v">'+(a.ad>0?this._pct(a.acos*100):'—')+'</div><div class="d mut">Werbek. ÷ PPC-Umsatz</div></div>'+
+      '<div class="kpi"><div class="l">Ø Conversion</div><div class="v">'+(a.views>0?this._pct(a.conversion*100):'—')+'</div><div class="d mut">Käufe ÷ Aufrufe</div></div>'+
+      '<div class="kpi"><div class="l">Organik-Quote</div><div class="v">'+(a.units>0?this._pct(a.organicRate*100,0):'—')+'</div><div class="d mut">Anteil ohne Werbung</div></div>'+
+      '</div>';
+    // Produkt-Tabelle für den Monat
+    body+='<h2 class="sec">Produkt-Performance · '+this._esc(this._mlabel(ym))+'</h2>';
+    const prows=this.state.products.map(p=>({p, d:this.derive(p,ym,ym)})).filter(x=>x.d.units>0 || x.d.revenue>0).sort((x,y)=>y.d.revenue-x.d.revenue);
+    if(prows.length){
+      let rows='';
+      prows.forEach(({p,d})=>{ rows+='<tr><td>'+this._esc(p.name)+'</td><td>'+this._num(d.units)+'</td><td>'+this._eur(d.revenue)+'</td><td>'+this._pct(d.marginPct*100,0)+'</td><td>'+(d.views>0?this._pct(d.conversion*100):'—')+'</td><td>'+(d.ppcRevenue>0?this._pct(d.actualAcos):'—')+'</td></tr>'; });
+      body+='<table><thead><tr><th>Produkt</th><th>Einheiten</th><th>Umsatz</th><th>Marge</th><th>Conv.</th><th>ACOS</th></tr></thead><tbody>'+rows+'</tbody>'+
+        '<tfoot><tr><td>Gesamt</td><td>'+this._num(a.units)+'</td><td>'+this._eur(a.revenue)+'</td><td>'+this._pct(a.avgMargin*100,0)+'</td><td>'+(a.views>0?this._pct(a.conversion*100):'—')+'</td><td>'+(a.ad>0?this._pct(a.acos*100):'—')+'</td></tr></tfoot></table>';
+    } else {
+      body+='<div class="note">Für '+this._esc(this._mlabel(ym))+' sind keine Verkäufe erfasst.</div>';
+    }
+    // Handlungsempfehlungen
+    body+='<h2 class="sec">Handlungsempfehlungen</h2>';
+    const recs=this._recommendations();
+    if(recs.length){
+      const top=recs.slice(0,10);
+      top.forEach(r=>{ body+='<div class="rec '+r.priority+'"><div class="rh"><span class="rt">'+this._esc(r.productName)+' · '+this._esc(r.area)+'</span><span class="bad '+r.priority+'">'+this._esc(r.priority)+'</span></div>'+
+        '<div class="rr">'+this._esc(r.reason)+'</div><div class="ra"><b>Empfehlung:</b> '+this._esc(r.action)+'</div></div>'; });
+      const nk=recs.filter(r=>r.priority==='kritisch').length, nw=recs.filter(r=>r.priority==='wichtig').length;
+      body+='<div class="note" style="margin-top:10px"><b>Fazit:</b> '+ (nk>0?(nk+' kritische'):'Keine kritischen') +' und '+nw+' wichtige Punkte offen'+(recs.length>10?(' (Top 10 von '+recs.length+' angezeigt)'):'')+'. Kritische Punkte zuerst abarbeiten.</div>';
+    } else {
+      body+='<div class="rec hinweis"><div class="rt">Keine akuten Handlungsempfehlungen</div><div class="rr">Alle überwachten Kennzahlen liegen im grünen Bereich. Sortiment stabil weiterführen.</div></div>';
+    }
+    body+=this._reportFoot();
+    this._openPrintWindow('Party Peak · Geschäftsbericht '+this._mlabel(ym), body);
+  }
+
   renderVals(){
     const st=this.state, mod=st.module, pid=st.productId;
     const isDetail = mod==='produkte' && pid;
@@ -1492,11 +1727,11 @@ class Component extends DCLogic {
     const V = {
       narrow:st.narrow, wide:!st.narrow,
       isCockpit: mod==='cockpit', isProdukteList: mod==='produkte' && !pid, isProdukteDetail: isDetail,
-      isLager: mod==='lager', isWerbung: mod==='werbung', isSzenarien: mod==='szenarien', isIdeen: mod==='ideen', isEmpfehlungen: mod==='empfehlungen',
+      isLager: mod==='lager', isWerbung: mod==='werbung', isSzenarien: mod==='szenarien', isIdeen: mod==='ideen', isEmpfehlungen: mod==='empfehlungen', isBerichte: mod==='berichte',
       goCockpit:()=>this._go('cockpit'), goProdukte:()=>this._go('produkte'), goLager:()=>this._go('lager'),
-      goWerbung:()=>this._go('werbung'), goSzenarien:()=>this._go('szenarien'), goIdeen:()=>this._go('ideen'), goEmpfehlungen:()=>this._go('empfehlungen'),
-      nav0:nv('cockpit'), nav1:nv('produkte'), nav2:nv('lager'), nav3:nv('werbung'), nav4:nv('szenarien'), nav5:nv('ideen'), nav6:nv('empfehlungen'),
-      tabStyle0:tb('cockpit'), tabStyle1:tb('produkte'), tabStyle2:tb('lager'), tabStyle3:tb('werbung'), tabStyle4:tb('szenarien'), tabStyle5:tb('ideen'), tabStyle6:tb('empfehlungen'),
+      goWerbung:()=>this._go('werbung'), goSzenarien:()=>this._go('szenarien'), goIdeen:()=>this._go('ideen'), goEmpfehlungen:()=>this._go('empfehlungen'), goBerichte:()=>this._go('berichte'),
+      nav0:nv('cockpit'), nav1:nv('produkte'), nav2:nv('lager'), nav3:nv('werbung'), nav4:nv('szenarien'), nav5:nv('ideen'), nav6:nv('empfehlungen'), nav7:nv('berichte'),
+      tabStyle0:tb('cockpit'), tabStyle1:tb('produkte'), tabStyle2:tb('lager'), tabStyle3:tb('werbung'), tabStyle4:tb('szenarien'), tabStyle5:tb('ideen'), tabStyle6:tb('empfehlungen'), tabStyle7:tb('berichte'),
       productCount: st.products.length, dataStamp:'Juli 2026',
       periodLabel: this._mlabel(from)+' – '+this._mlabel(to), periodDays: this._num(this._rangeDays(from,to)),
       periodFrom: per.from, periodTo: per.to,
@@ -1506,8 +1741,8 @@ class Component extends DCLogic {
 
     // period presets + selects
     const presetStyle=(k)=> per.preset===k?'padding:7px 12px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12px;font-weight:600;cursor:pointer':'padding:7px 12px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12px;font-weight:500;cursor:pointer';
-    V.presetStyle0=presetStyle('last30'); V.presetStyle1=presetStyle('thisYear'); V.presetStyle2=presetStyle('lastYear'); V.presetStyle3=presetStyle('gesamt');
-    V.presetLast30=()=>this._setPreset('last30'); V.presetThisYear=()=>this._setPreset('thisYear'); V.presetLastYear=()=>this._setPreset('lastYear'); V.presetGesamt=()=>this._setPreset('gesamt');
+    V.presetStyle0=presetStyle('thisMonth'); V.presetStyle1=presetStyle('lastMonth'); V.presetStyle2=presetStyle('thisYear'); V.presetStyle3=presetStyle('lastYear'); V.presetStyle4=presetStyle('gesamt');
+    V.presetThisMonth=()=>this._setPreset('thisMonth'); V.presetLastMonth=()=>this._setPreset('lastMonth'); V.presetThisYear=()=>this._setPreset('thisYear'); V.presetLastYear=()=>this._setPreset('lastYear'); V.presetGesamt=()=>this._setPreset('gesamt');
     V.monthOptions=this.months.map(ym=>({ym, label:this._mlabel(ym)}));
     V.setPeriodFrom=(e)=>{ const v=e.target.value; this.setState(s=>({period:{...s.period, from:v, preset:'custom'}})); };
     V.setPeriodTo=(e)=>{ const v=e.target.value; this.setState(s=>({period:{...s.period, to:v, preset:'custom'}})); };
@@ -1517,17 +1752,25 @@ class Component extends DCLogic {
     V.kpiRevenue=this._eur(agg.revenue); V.kpiUnits=this._num(agg.units); V.kpiMargin=this._pct(agg.avgMargin*100);
     V.kpiProfit=this._eur(agg.estProfit); V.kpiAdSpend=this._eur(agg.ad); V.kpiAcos=this._pct(agg.acos*100);
     V.kpiConversion=this._pct(agg.conversion*100); V.kpiContribution=this._eur(agg.contribution);
+    V.kpiOrganic = agg.units>0 ? this._pct(agg.organicRate*100,0) : '—';
     V.profitColor = agg.estProfit>=0?ink:red;
     V.acosColor = agg.acos*100 > agg.avgMargin*100 ? red : ink;
 
-    // period revenue delta (last two months in period)
-    const pmonths=this.months.filter(ym=>ym>=from&&ym<=to);
-    const revP=pmonths.map(ym=>{ let v=0; st.products.forEach(p=>{ const m=p.monthly[ym]; if(m) v+=(+m.units||0)*this._monthPrice(p,m); }); return v; });
-    const unitsP=pmonths.map(ym=>{ let v=0; st.products.forEach(p=>{ const m=p.monthly[ym]; if(m) v+=(+m.units||0); }); return v; });
-    const lr=revP[revP.length-1]||0, pr=revP[revP.length-2]||0; const rdp=pr>0?((lr-pr)/pr*100):0;
-    const lu=unitsP[unitsP.length-1]||0, pu=unitsP[unitsP.length-2]||0; const udp=pu>0?((lu-pu)/pu*100):0;
-    V.revDelta=(rdp>=0?'▲ +':'▼ ')+this._pct(Math.abs(rdp),1)+' ggü. Vormonat'; V.revDeltaColor=rdp>=0?green:red;
-    V.unitsDelta=(udp>=0?'▲ +':'▼ ')+this._pct(Math.abs(udp),1)+' ggü. Vormonat'; V.unitsDeltaColor=udp>=0?green:red;
+    // Vergleich: gleich langes, unmittelbar davorliegendes Fenster
+    // (1 Monat -> Vormonat, 12 Monate/Jahr -> Vorjahr, sonst -> Vorperiode)
+    const monthSpan=(aY,bY)=>{ const [ay,am]=aY.split('-').map(Number); const [by,bm]=bY.split('-').map(Number); return (by-ay)*12+(bm-am)+1; };
+    const nMonths=Math.max(1, monthSpan(from,to));
+    const sumWin=(mFrom,mTo)=>{ let r=0,u=0; let ym=mFrom; let guard=0; while(ym<=mTo && guard<600){ st.products.forEach(p=>{ const m=p.monthly[ym]; if(m){ r+=(+m.units||0)*this._monthPrice(p,m); u+=(+m.units||0); } }); ym=this._shiftYm(ym,1); guard++; } return {r,u}; };
+    const curWin=sumWin(from,to);
+    const prevFrom=this._shiftYm(from,-nMonths), prevTo=this._shiftYm(from,-1);
+    const prevWin=sumWin(prevFrom,prevTo);
+    const cmpLabel = nMonths===1?'ggü. Vormonat' : nMonths===12?'ggü. Vorjahr' : 'ggü. Vorperiode';
+    const rdp = prevWin.r>0 ? ((curWin.r-prevWin.r)/prevWin.r*100) : 0;
+    const udp = prevWin.u>0 ? ((curWin.u-prevWin.u)/prevWin.u*100) : 0;
+    V.revDelta   = prevWin.r>0 ? ((rdp>=0?'▲ +':'▼ ')+this._pct(Math.abs(rdp),1)+' '+cmpLabel) : '— kein Vergleichswert';
+    V.revDeltaColor   = prevWin.r>0 ? (rdp>=0?green:red) : '#8A8A86';
+    V.unitsDelta = prevWin.u>0 ? ((udp>=0?'▲ +':'▼ ')+this._pct(Math.abs(udp),1)+' '+cmpLabel) : '— kein Vergleichswert';
+    V.unitsDeltaColor = prevWin.u>0 ? (udp>=0?green:red) : '#8A8A86';
 
     // revenue chart (own year)
     const chartSeries=this.yearRevenueSeries(st.chartYear);
@@ -1583,6 +1826,16 @@ class Component extends DCLogic {
     }; });
     V.openNewProduct=()=> this.setState({modalOpen:true, draft:this._blankDraft()});
 
+    // ---- Berichte ----
+    const repMonth = st.reportMonth || this._curYm();
+    V.repMonth = repMonth;
+    V.repMonthLabel = this._mlabel(repMonth);
+    V.repMonthOptions = (this.months.filter(ym=>ym<=this._curYm()).sort().reverse()).map(ym=>({ ym, label:this._mlabel(ym) }));
+    V.setRepMonth = (e)=>{ this.setState({reportMonth:e.target.value}); };
+    V.repProductCount = st.products.length;
+    V.genProductReport = ()=> this._reportProductData();
+    V.genBusinessReport = ()=> this._reportBusiness(this.state.reportMonth || this._curYm());
+
     // ---- Produkte detail ----
     if(isDetail){
       const p=st.products.find(x=>x.id===pid);
@@ -1602,6 +1855,10 @@ class Component extends DCLogic {
         if(!activeYear || !yearsPresent.includes(activeYear)) activeYear = yearsPresent.includes(curYear)?curYear:(yearsPresent[yearsPresent.length-1]||curYear);
         const yearMonths = this.months.filter(ym=>p.monthly[ym] && ym.slice(0,4)===activeYear);
         const detailYears = yearsPresent.map(y=>({ label:y, style:(y===activeYear?'padding:6px 13px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-feature-settings:\'tnum\' 1':'padding:6px 13px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12px;font-weight:500;cursor:pointer;font-feature-settings:\'tnum\' 1'), select:()=>this.setState({detailYear:y}) }));
+        // Kachel-Ansicht: Gesamt (alle Daten) oder Jährlich (aktives Jahr)
+        const detailScope = st.detailScope==='year' ? 'year' : 'gesamt';
+        const dTiles = detailScope==='year' ? this.derive(p, activeYear+'-01', activeYear+'-12') : d;
+        const scopeBtn=(active)=> active?'padding:5px 12px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:11.5px;font-weight:600;cursor:pointer;font-feature-settings:\'tnum\' 1':'padding:5px 12px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:11.5px;font-weight:500;cursor:pointer;font-feature-settings:\'tnum\' 1';
         const monthRows = yearMonths.map(ym=>{ const m=p.monthly[ym]; const conv=(+m.views>0)?(+m.units/+m.views):0; const tv=+((p.targets||{})[ym]||0); const un=+m.units||0; const ppcu=Math.min(un,+m.unitsPpc||0); const orgu=Math.max(0,un-ppcu); const ach=tv>0?un/tv:0;
           const mPrice=this._monthPrice(p,m); const mUnitProfit=(mPrice-(mPrice-p.fbaFee)*0.19)-p.fbaFee-p.shipping-p.productionCost; const mRev=un*mPrice; const mProfit=un*mUnitProfit-(+m.adCost||0); return {
           label:this._mlabel(ym), units:un, ppc:+m.unitsPpc||0, adCost:+m.adCost||0, views:+m.views||0, target:tv||'',
@@ -1623,12 +1880,15 @@ class Component extends DCLogic {
         const addMonthOptions=this.months.filter(ym=>!p.monthly[ym]).map(ym=>({ym, label:this._mlabel(ym)}));
         V.sel={ name:p.name, asin:p.asin, dims:p.dims, amazonUrl:p.amazonUrl||'', hasUrl:!!p.amazonUrl, price:p.price, productionCost:p.productionCost, fbaFee:p.fbaFee, shipping:p.shipping,
           qualityRows, activeYear,
-          unitProfitStr:this._eur(d.unitProfit,2), unitProfitColor:d.unitProfit<0?red:ink, marginStr:this._pct(d.marginPct*100),
-          conversionStr:this._pct(d.conversion*100), conversionColor:convColor(d.conversion), revenueStr:this._eur(d.revenue), vatStr:this._eur(d.vat,2),
-          unitsStr:this._num(d.units), acosStr:d.ppcRevenue>0?this._pct(d.actualAcos):'—', acosColor:d.actualAcos>d.breakEvenAcos?red:ink,
-          tacosStr:this._pct(d.tacos), stockStr:this._num(d.stock), stockColor:d.stock<0?red:ink,
+          scopeLabel: detailScope==='year'?('Jahr '+activeYear):'Gesamtzeitraum',
+          scopeGesamtStyle: scopeBtn(detailScope==='gesamt'), scopeYearStyle: scopeBtn(detailScope==='year'),
+          setScopeGesamt:()=>this.setState({detailScope:'gesamt'}), setScopeYear:()=>this.setState({detailScope:'year'}),
+          unitProfitStr:this._eur(d.unitProfit,2), unitProfitColor:d.unitProfit<0?red:ink, marginStr:this._pct(dTiles.marginPct*100),
+          conversionStr:this._pct(dTiles.conversion*100), conversionColor:convColor(dTiles.conversion), revenueStr:this._eur(dTiles.revenue), vatStr:this._eur(d.vat,2),
+          unitsStr:this._num(dTiles.units), acosStr:dTiles.ppcRevenue>0?this._pct(dTiles.actualAcos):'—', acosColor:dTiles.actualAcos>dTiles.breakEvenAcos?red:ink,
+          tacosStr:dTiles.revenue>0?this._pct(dTiles.tacos):'—', stockStr:this._num(d.stock), stockColor:d.stock<0?red:ink,
           coverStr:isFinite(d.cover)?Math.round(d.cover)+' Tage':'∞', coverColor:statusColor(d.status),
-          maxCpcStr:this._eur(d.maxCpc,2), organicRateStr:this._pct(d.organicRate*100,0),
+          maxCpcStr:this._eur(dTiles.maxCpc,2), organicRateStr:dTiles.units>0?this._pct(dTiles.organicRate*100,0):'—',
           starsVal:p.stars!=null?p.stars:'', starsStr:(+(p.stars!=null?p.stars:0)).toLocaleString('de-DE',{minimumFractionDigits:1,maximumFractionDigits:1}),
           addMonthOptions,
           statusColor:statusColor(d.status), statusLabel:statusLabel(d.status), recs, monthRows, detailYears };
