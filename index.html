@@ -410,7 +410,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
             </div>
             <div style="padding:13px 22px;border-top:1px solid #EEEEEB;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
               <span style="font-size:12px;color:#7A7A76">Ziel {{ goal.monthLabel }}</span>
-              <input type="number" value="{{ goal.targetInput }}" onChange="{{ goal.setTarget }}" style="width:92px;border:1px solid #E2E2E2;padding:7px 9px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1">
+              <input type="number" value="{{ goal.targetInput }}" onChange="{{ goal.setTarget }}" onFocus="{{ editFocus }}" onBlur="{{ editBlur }}" style="width:92px;border:1px solid #E2E2E2;padding:7px 9px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1">
               <span style="font-size:12px;color:#9A9A96">Stk · Ziele je Monat editierbar in der Tabelle unten</span>
             </div>
           </div>
@@ -507,16 +507,16 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                   <sc-for list="{{ sel.monthRows }}" as="m" hint-placeholder-count="6">
                     <tr style="border-bottom:1px solid #F1F1EE">
                       <td style="padding:8px 16px;font-weight:600;font-size:13.5px">{{ m.label }}</td>
-                      <td style="padding:8px 8px;text-align:right"><input type="number" value="{{ m.units }}" onChange="{{ m.setUnits }}" style="width:54px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
-                      <td style="padding:8px 8px;text-align:right"><input type="number" step="0.01" value="{{ m.price }}" onChange="{{ m.setPrice }}" style="width:62px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
+                      <td style="padding:8px 8px;text-align:right"><input type="number" value="{{ m.units }}" onChange="{{ m.setUnits }}" onFocus="{{ editFocus }}" onBlur="{{ editBlur }}" style="width:54px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
+                      <td style="padding:8px 8px;text-align:right"><input type="number" step="0.01" value="{{ m.price }}" onChange="{{ m.setPrice }}" onFocus="{{ editFocus }}" onBlur="{{ editBlur }}" style="width:62px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
                       <td style="padding:8px 8px;text-align:right;font-feature-settings:'tnum' 1;font-size:13.5px;font-weight:600">{{ m.revStr }}</td>
                       <td style="padding:8px 8px;text-align:right;font-feature-settings:'tnum' 1;font-size:13.5px;font-weight:600;color:{{ m.profitColor }}">{{ m.profitStr }}</td>
-                      <td style="padding:8px 8px;text-align:right"><input type="number" value="{{ m.ppc }}" onChange="{{ m.setPpc }}" style="width:54px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
+                      <td style="padding:8px 8px;text-align:right"><input type="number" value="{{ m.ppc }}" onChange="{{ m.setPpc }}" onFocus="{{ editFocus }}" onBlur="{{ editBlur }}" style="width:54px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
                       <td style="padding:8px 8px;text-align:right;font-feature-settings:'tnum' 1;font-size:13px;color:#7A7A76">{{ m.orgRateStr }}</td>
-                      <td style="padding:8px 8px;text-align:right"><input type="number" step="0.01" value="{{ m.adCost }}" onChange="{{ m.setAdCost }}" style="width:64px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
-                      <td style="padding:8px 8px;text-align:right"><input type="number" value="{{ m.target }}" onChange="{{ m.setTarget }}" style="width:54px;border:1px solid #E8E8E4;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1;color:#6A6A66"></td>
+                      <td style="padding:8px 8px;text-align:right"><input type="number" step="0.01" value="{{ m.adCost }}" onChange="{{ m.setAdCost }}" onFocus="{{ editFocus }}" onBlur="{{ editBlur }}" style="width:64px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
+                      <td style="padding:8px 8px;text-align:right"><input type="number" value="{{ m.target }}" onChange="{{ m.setTarget }}" onFocus="{{ editFocus }}" onBlur="{{ editBlur }}" style="width:54px;border:1px solid #E8E8E4;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1;color:#6A6A66"></td>
                       <td style="padding:8px 8px;text-align:right;font-feature-settings:'tnum' 1;font-size:13.5px;font-weight:600;color:{{ m.achColor }}">{{ m.achStr }}</td>
-                      <td style="padding:8px 8px;text-align:right"><input type="number" value="{{ m.views }}" onChange="{{ m.setViews }}" style="width:54px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
+                      <td style="padding:8px 8px;text-align:right"><input type="number" value="{{ m.views }}" onChange="{{ m.setViews }}" onFocus="{{ editFocus }}" onBlur="{{ editBlur }}" style="width:54px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
                       <td style="padding:8px 16px 8px 8px;text-align:right;font-feature-settings:'tnum' 1;font-size:13.5px;font-weight:600;color:{{ m.convColor }}">{{ m.convStr }}</td>
                     </tr>
                   </sc-for>
@@ -1165,13 +1165,13 @@ class Component extends DCLogic {
       detailYear:null,
       detailScope:'gesamt',
       reportMonth:this._curYm(),
-      period:{preset:'gesamt', from:dmin||'2025-07', to:dmax||'2026-07'},
+      period:{preset:'thisYear', from:(String(new Date().getFullYear())+'-01'), to:this._curYm()},
       chartYear:String(new Date().getFullYear())
     };
   }
   componentDidMount(){ this._onResize = ()=> this.setState({narrow: window.innerWidth < 900}); window.addEventListener('resize', this._onResize); this._sbInit(); }
   componentWillUnmount(){ window.removeEventListener('resize', this._onResize); try{ if(this._sb && this._sbChannel) this._sb.removeChannel(this._sbChannel); }catch(e){} }
-  _persist(){ try { localStorage.setItem('partypeak_v4', JSON.stringify(this._snapshot())); } catch(e){} this._sbPush(); }
+  _persist(){ clearTimeout(this._persistT); this._persistT=setTimeout(()=>{ try { localStorage.setItem('partypeak_v4', JSON.stringify(this._snapshot())); } catch(e){} }, 250); this._sbPush(); }
 
   /* ============================================================
      PARTY PEAK · SUPABASE-SYNC  — START
@@ -1220,6 +1220,13 @@ class Component extends DCLogic {
   }
   _sbApplyRemote(remote){
     try{
+      // Während aktiv getippt wird NICHT übernehmen (sonst springt das Eingabefeld) –
+      // stattdessen nach kurzer Tipp-Pause frisch nachladen.
+      if(this._editingActive || (Date.now()-(this._lastEditTs||0) < 2500)){
+        clearTimeout(this._pullRetryT);
+        this._pullRetryT=setTimeout(()=>this._sbPull(), 2800);
+        return;
+      }
       const sig = this._stableStringify(remote);
       if(sig === this._lastSyncedSig) return; // eigenes Echo oder identisch -> ignorieren
       this._lastSyncedSig = sig;
@@ -1232,17 +1239,19 @@ class Component extends DCLogic {
   }
   _sbPush(){
     if(!this._sbReady) return;
-    const snap = this._snapshot();
-    const sig = this._stableStringify(snap);
-    if(sig === this._lastSyncedSig) return; // nichts wirklich geaendert
-    this._lastSyncedSig = sig;
+    // Nur einen Timer neu setzen (billig); die teure Signatur-Berechnung + Upload
+    // passiert gebündelt erst nach kurzer Pause -> kein Ruckeln pro Tastendruck.
     clearTimeout(this._sbPushT);
     this._sbPushT = setTimeout(async ()=>{
+      const snap = this._snapshot();
+      const sig = this._stableStringify(snap);
+      if(sig === this._lastSyncedSig) return; // nichts wirklich geaendert
+      this._lastSyncedSig = sig;
       try{
         const { error } = await this._sb.from(this._sbTable).upsert({ id:this._sbRow, data:snap, updated_at:new Date().toISOString() });
         if(error) console.warn('[Party Peak] Speichern fehlgeschlagen:', error.message);
       }catch(e){ console.warn('[Party Peak] Speichern-Ausnahme:', e); }
-    }, 500); // kurzes Debounce, damit Slider/Tippen nicht bei jedem Zeichen sendet
+    }, 600); // Debounce, damit Slider/Tippen nicht bei jedem Zeichen sendet
   }
   /* PARTY PEAK · SUPABASE-SYNC — ENDE */
 
@@ -1328,9 +1337,28 @@ class Component extends DCLogic {
     const tacos = revenue>0 ? adSpend/revenue*100 : 0;
     const maxCpc = unitProfit*conversion;
     const stock = this._stockOf(p);
-    const dataMonths = this.months.filter(ym=>p.monthly[ym]);
-    const last3 = dataMonths.slice(-3).reduce((s,ym)=> s + (+p.monthly[ym].units||0), 0);
-    const velocity = last3/90;
+    // Velocity = Verkaufsrate/Tag im LAUFENDEN Jahr, ab Produktstart (erster Datenmonat des Jahres)
+    // bis heute – geteilt durch die tatsächlich verstrichenen Tage (nicht fix 90, nicht ab Jahresanfang).
+    const _curY = this._curYm().slice(0,4);
+    const _cym = this._curYm();
+    const yMonths = this.months.filter(ym=> ym.slice(0,4)===_curY && ym<=_cym && p.monthly[ym]);
+    let velocity = 0;
+    if(yMonths.length){
+      const vUnits = yMonths.reduce((s,ym)=> s + (+p.monthly[ym].units||0), 0);
+      const [fy,fm] = yMonths[0].split('-').map(Number);   // erster Datenmonat im Jahr = Produktstart
+      const startD = new Date(fy, fm-1, 1);
+      const days = Math.max(1, Math.round((new Date() - startD)/86400000)+1);
+      velocity = vUnits/days;
+    } else {
+      // Fallback (z.B. Jahresanfang noch ohne Daten): letzte bis zu 3 Datenmonate / deren tatsächliche Tage
+      const dm = this.months.filter(ym=>p.monthly[ym]).slice(-3);
+      if(dm.length){
+        const u = dm.reduce((s,ym)=> s + (+p.monthly[ym].units||0), 0);
+        const [ay,am]=dm[0].split('-').map(Number); const [by,bm]=dm[dm.length-1].split('-').map(Number);
+        const d0=new Date(ay,am-1,1), d1=new Date(by,bm,0);
+        velocity = u/Math.max(1, Math.round((d1-d0)/86400000)+1);
+      }
+    }
     const cover = velocity>0 ? stock/velocity : Infinity;
     const threshold = (+p.leadTime||0) + (+p.safetyDays||0);
     let status = 'green';
@@ -1444,14 +1472,14 @@ class Component extends DCLogic {
   _open(id){ this.setState({module:'produkte', productId:id}); window.scrollTo(0,0); }
 
   // ---------- mutations ----------
-  _update(id, patch){ this.setState(s=>({products:s.products.map(p=> p.id===id?{...p,...patch}:p)}), ()=>this._persist()); }
-  _setMonth(id, ym, field, val){ this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const mo={...p.monthly}; mo[ym]={...(mo[ym]||{units:0,views:0}), [field]: Math.max(0,+val||0)}; return {...p,monthly:mo}; })}), ()=>this._persist()); }
+  _update(id, patch){ this._lastEditTs=Date.now(); this.setState(s=>({products:s.products.map(p=> p.id===id?{...p,...patch}:p)}), ()=>this._persist()); }
+  _setMonth(id, ym, field, val){ this._lastEditTs=Date.now(); this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const mo={...p.monthly}; mo[ym]={...(mo[ym]||{units:0,views:0}), [field]: Math.max(0,+val||0)}; return {...p,monthly:mo}; })}), ()=>this._persist()); }
   // Gueltiger Preis eines Monats: eigener Monatspreis, sonst Fallback auf aktuellen Produktpreis
   _monthPrice(p, m){ return (m && m.price!=null && m.price!=='') ? (+m.price||0) : (+p.price||0); }
   // Produktpreis aendern: vorhandene Monate ohne eigenen Preis mit dem ALTEN Preis einfrieren,
   // damit sich vergangene Umsaetze/Gewinne nicht rueckwirkend veraendern.
-  _setProductPrice(id, val){ const np=Math.max(0,+val||0); this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const oldP=+p.price||0; const mo={...p.monthly}; Object.keys(mo).forEach(ym=>{ const mm=mo[ym]; if(mm && (mm.price==null||mm.price==='')){ mo[ym]={...mm, price:oldP}; } }); return {...p, price:np, monthly:mo}; })}), ()=>this._persist()); }
-  _setTarget(id, ym, val){ this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const t={...(p.targets||{})}; t[ym]=Math.max(0,Math.round(+val||0)); return {...p,targets:t}; })}), ()=>this._persist()); }
+  _setProductPrice(id, val){ this._lastEditTs=Date.now(); const np=Math.max(0,+val||0); this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const oldP=+p.price||0; const mo={...p.monthly}; Object.keys(mo).forEach(ym=>{ const mm=mo[ym]; if(mm && (mm.price==null||mm.price==='')){ mo[ym]={...mm, price:oldP}; } }); return {...p, price:np, monthly:mo}; })}), ()=>this._persist()); }
+  _setTarget(id, ym, val){ this._lastEditTs=Date.now(); this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const t={...(p.targets||{})}; t[ym]=Math.max(0,Math.round(+val||0)); return {...p,targets:t}; })}), ()=>this._persist()); }
   _addMonth(id){ this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const keys=Object.keys(p.monthly).sort(); let last=keys[keys.length-1]||'2026-06'; let [y,m]=last.split('-').map(Number); m++; if(m>12){m=1;y++;} const nk=y+'-'+String(m).padStart(2,'0'); if(p.monthly[nk]) return p; const mo={...p.monthly, [nk]:{units:0,views:0,unitsPpc:0,adCost:0,price:+p.price||0}}; if(!this.months.includes(nk)) this.months=[...this.months,nk]; return {...p,monthly:mo}; })}), ()=>this._persist()); }
   _deleteProduct(id){ this.setState(s=>({products:s.products.filter(p=>p.id!==id), productId:null, module:'produkte', deleteModal:null}), ()=>this._persist()); if(typeof window!=='undefined') window.scrollTo(0,0); }
   _addMonthYm(id, ym){ if(!ym) return; this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; if(p.monthly[ym]) return p; const mo={...p.monthly,[ym]:{units:0,views:0,unitsPpc:0,adCost:0,price:+p.price||0}}; if(!this.months.includes(ym)){ this.months=[...this.months,ym].sort(); } return {...p,monthly:mo}; }), detailAddYm:''}), ()=>this._persist()); }
@@ -1481,7 +1509,7 @@ class Component extends DCLogic {
   _setPreset(preset){ const dr=this._dataRange(); const cur=this._curYm(); const y=cur.slice(0,4); let from,to;
     if(preset==='thisMonth'){ from=cur; to=cur; }
     else if(preset==='lastMonth'){ const lm=this._shiftYm(cur,-1); from=lm; to=lm; }
-    else if(preset==='thisYear'){ from=y+'-01'; to=y+'-12'; }
+    else if(preset==='thisYear'){ from=y+'-01'; to=cur; }
     else if(preset==='lastYear'){ const py=(+y-1); from=py+'-01'; to=py+'-12'; }
     else { preset='gesamt'; from=dr.min; to=dr.max; }
     this.setState({period:{preset,from,to}}); }
@@ -1746,6 +1774,9 @@ class Component extends DCLogic {
     V.monthOptions=this.months.map(ym=>({ym, label:this._mlabel(ym)}));
     V.setPeriodFrom=(e)=>{ const v=e.target.value; this.setState(s=>({period:{...s.period, from:v, preset:'custom'}})); };
     V.setPeriodTo=(e)=>{ const v=e.target.value; this.setState(s=>({period:{...s.period, to:v, preset:'custom'}})); };
+    // Eingabe-Fokus: markiert aktives Tippen (blockt Realtime-Übernahme) + markiert 0 zum Überschreiben
+    V.editFocus=(e)=>{ this._editingActive=true; this._lastEditTs=Date.now(); try{ e.target.select(); }catch(_){} };
+    V.editBlur=(e)=>{ this._editingActive=false; this._lastEditTs=Date.now(); };
 
     // ---- Cockpit KPIs (period) ----
     const agg=this.aggregate(from,to);
@@ -1756,15 +1787,16 @@ class Component extends DCLogic {
     V.profitColor = agg.estProfit>=0?ink:red;
     V.acosColor = agg.acos*100 > agg.avgMargin*100 ? red : ink;
 
-    // Vergleich: gleich langes, unmittelbar davorliegendes Fenster
-    // (1 Monat -> Vormonat, 12 Monate/Jahr -> Vorjahr, sonst -> Vorperiode)
+    // Vergleich: Monat -> Vormonat, Jahr (auch YTD) -> gleiche Spanne im Vorjahr, sonst -> Vorperiode
     const monthSpan=(aY,bY)=>{ const [ay,am]=aY.split('-').map(Number); const [by,bm]=bY.split('-').map(Number); return (by-ay)*12+(bm-am)+1; };
     const nMonths=Math.max(1, monthSpan(from,to));
+    const isYearPreset = (per.preset==='thisYear' || per.preset==='lastYear');
     const sumWin=(mFrom,mTo)=>{ let r=0,u=0; let ym=mFrom; let guard=0; while(ym<=mTo && guard<600){ st.products.forEach(p=>{ const m=p.monthly[ym]; if(m){ r+=(+m.units||0)*this._monthPrice(p,m); u+=(+m.units||0); } }); ym=this._shiftYm(ym,1); guard++; } return {r,u}; };
     const curWin=sumWin(from,to);
-    const prevFrom=this._shiftYm(from,-nMonths), prevTo=this._shiftYm(from,-1);
+    const prevFrom = isYearPreset ? this._shiftYm(from,-12) : this._shiftYm(from,-nMonths);
+    const prevTo   = isYearPreset ? this._shiftYm(to,-12)   : this._shiftYm(from,-1);
     const prevWin=sumWin(prevFrom,prevTo);
-    const cmpLabel = nMonths===1?'ggü. Vormonat' : nMonths===12?'ggü. Vorjahr' : 'ggü. Vorperiode';
+    const cmpLabel = isYearPreset ? 'ggü. Vorjahr' : (nMonths===1 ? 'ggü. Vormonat' : 'ggü. Vorperiode');
     const rdp = prevWin.r>0 ? ((curWin.r-prevWin.r)/prevWin.r*100) : 0;
     const udp = prevWin.u>0 ? ((curWin.u-prevWin.u)/prevWin.u*100) : 0;
     V.revDelta   = prevWin.r>0 ? ((rdp>=0?'▲ +':'▼ ')+this._pct(Math.abs(rdp),1)+' '+cmpLabel) : '— kein Vergleichswert';
