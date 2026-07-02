@@ -1,0 +1,14 @@
+{
+  "name": "Party Peak · Amazon FBA Control",
+  "short_name": "Party Peak",
+  "description": "Party Peak Business-Dashboard",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A0A0A",
+  "theme_color": "#0A0A0A",
+  "icons": [
+    { "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
