@@ -49,6 +49,24 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
 .pp-scroll::-webkit-scrollbar{height:8px;width:8px}
 .pp-scroll::-webkit-scrollbar-thumb{background:#D2D2CE}
 @keyframes ppfade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+/* Kalkulations-Felder: jedes Label reserviert 2 Zeilen -> Eingabefelder bleiben in einer Reihe buendig */
+.pp-calcgrid > label > span{display:block;min-height:2.4em;line-height:1.25}
+/* ===== Mobile-Anpassungen ===== */
+@media (max-width:680px){
+  [data-screen-label]{padding:22px 16px 60px !important}
+  h1{font-size:24px !important}
+  /* Jahres-Chips: horizontal scrollbar statt abgeschnitten */
+  .pp-yearchips{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;max-width:100%;padding-bottom:2px}
+  .pp-yearchips button{flex:0 0 auto}
+  /* Von/Bis-Datumswahl: volle Breite, saubere Paare */
+  .pp-daterange{width:100%;margin-top:2px}
+  .pp-daterange > label{flex:1 1 auto;min-width:0}
+  .pp-daterange select{width:100%;min-width:0}
+  .pp-datedivider{display:none !important}
+}
+@media (max-width:420px){
+  [data-screen-label]{padding:20px 12px 56px !important}
+}
 </style>
 </helmet>
 <div style="display:flex;flex-direction:column;min-height:100vh;background:#F4F4F2;color:#0A0A0A">
@@ -56,7 +74,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
   <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:#fff;border-bottom:1px solid #E4E4E0;position:sticky;top:0;z-index:30">
       <div style="display:flex;align-items:center;gap:9px">
-        <div style="width:22px;height:22px;background:#0A0A0A;display:flex;align-items:center;justify-content:center"><div style="width:9px;height:9px;background:#FF5A00"></div></div>
+        <img src="./icon.png" alt="Party Peak" style="width:26px;height:26px;object-fit:contain;flex-shrink:0">
         <span style="font-family:'Archivo';font-weight:800;font-size:15px;letter-spacing:-.01em">PARTY PEAK</span>
       </div>
       <div style="display:flex;gap:4px;overflow-x:auto" class="pp-scroll">
@@ -76,7 +94,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
     <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
       <aside style="width:236px;flex-shrink:0;background:#fff;border-right:1px solid #E4E4E0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh">
         <div style="padding:22px 22px 20px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;gap:11px">
-          <div style="width:30px;height:30px;background:#0A0A0A;display:flex;align-items:center;justify-content:center;flex-shrink:0"><div style="width:12px;height:12px;background:#FF5A00"></div></div>
+          <img src="./icon.png" alt="Party Peak" style="width:34px;height:34px;object-fit:contain;flex-shrink:0">
           <div style="line-height:1.1">
             <div style="font-family:'Archivo';font-weight:800;font-size:16px;letter-spacing:-.01em">PARTY PEAK</div>
             <div style="font-size:10.5px;color:#9A9A96;letter-spacing:.06em;text-transform:uppercase;margin-top:2px">Amazon FBA Control</div>
@@ -140,15 +158,19 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
             <button onClick="{{ presetThisYear }}" style="{{ presetStyle1 }}">Dieses Jahr</button>
             <button onClick="{{ presetLastYear }}" style="{{ presetStyle2 }}">Letztes Jahr</button>
             <button onClick="{{ presetGesamt }}" style="{{ presetStyle3 }}">Gesamt</button>
-            <div style="width:1px;height:22px;background:#E4E4E0;margin:0 4px"></div>
-            <span style="font-size:12px;color:#8A8A86">Von</span>
-            <select value="{{ periodFrom }}" onChange="{{ setPeriodFrom }}" style="border:1px solid #E2E2E2;padding:7px 9px;font-size:12.5px;background:#fff;cursor:pointer;font-feature-settings:'tnum' 1">
-              <sc-for list="{{ monthOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.ym }}">{{ o.label }}</option></sc-for>
-            </select>
-            <span style="font-size:12px;color:#8A8A86">Bis</span>
-            <select value="{{ periodTo }}" onChange="{{ setPeriodTo }}" style="border:1px solid #E2E2E2;padding:7px 9px;font-size:12.5px;background:#fff;cursor:pointer;font-feature-settings:'tnum' 1">
-              <sc-for list="{{ monthOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.ym }}">{{ o.label }}</option></sc-for>
-            </select>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap" class="pp-daterange">
+              <div class="pp-datedivider" style="width:1px;height:22px;background:#E4E4E0;margin:0 4px"></div>
+              <label style="display:inline-flex;align-items:center;gap:6px"><span style="font-size:12px;color:#8A8A86">Von</span>
+                <select value="{{ periodFrom }}" onChange="{{ setPeriodFrom }}" style="border:1px solid #E2E2E2;padding:7px 9px;font-size:12.5px;background:#fff;cursor:pointer;font-feature-settings:'tnum' 1">
+                  <sc-for list="{{ monthOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.ym }}">{{ o.label }}</option></sc-for>
+                </select>
+              </label>
+              <label style="display:inline-flex;align-items:center;gap:6px"><span style="font-size:12px;color:#8A8A86">Bis</span>
+                <select value="{{ periodTo }}" onChange="{{ setPeriodTo }}" style="border:1px solid #E2E2E2;padding:7px 9px;font-size:12.5px;background:#fff;cursor:pointer;font-feature-settings:'tnum' 1">
+                  <sc-for list="{{ monthOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.ym }}">{{ o.label }}</option></sc-for>
+                </select>
+              </label>
+            </div>
           </div>
 
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:0;border:1px solid #E4E4E0;border-top:none;background:#fff;margin-top:12px">
@@ -235,7 +257,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
               </div>
               <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
                 <div style="text-align:right"><div style="font-size:11px;color:#9A9A96">Spitzenmonat</div><div style="font-family:'Archivo';font-weight:700;font-size:14px">{{ peakMonth }}</div></div>
-                <div style="display:flex;align-items:center;gap:4px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em;margin-right:2px">Jahr</span><sc-for list="{{ chartYears }}" as="y" hint-placeholder-count="6"><button onClick="{{ y.select }}" style="{{ y.style }}">{{ y.label }}</button></sc-for></div>
+                <div style="display:flex;align-items:center;gap:4px" class="pp-yearchips"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em;margin-right:2px">Jahr</span><sc-for list="{{ chartYears }}" as="y" hint-placeholder-count="6"><button onClick="{{ y.select }}" style="{{ y.style }}">{{ y.label }}</button></sc-for></div>
               </div>
             </div>
             <div style="padding:20px 14px 12px">{{ revenueChartEl }}</div>
@@ -422,7 +444,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
             <div style="background:#fff;border:1px solid #E4E4E0">
               <div style="padding:18px 22px;border-bottom:1px solid #EEEEEB"><div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#9A9A96">Kalkulation</div><div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:3px">Kosten &amp; Preis pflegen</div></div>
               <div style="padding:6px 22px 20px">
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#EEEEEB">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#EEEEEB" class="pp-calcgrid">
                   <label style="background:#fff;padding:12px 2px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Verkaufspreis €</span><input type="number" step="0.01" value="{{ sel.price }}" onChange="{{ editPrice }}" style="width:100%;border:1px solid #E2E2E2;padding:8px 10px;font-size:14px;margin-top:6px;font-feature-settings:'tnum' 1"></label>
                   <label style="background:#fff;padding:12px 2px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Produktionskosten €</span><input type="number" step="0.01" value="{{ sel.productionCost }}" onChange="{{ editProdCost }}" style="width:100%;border:1px solid #E2E2E2;padding:8px 10px;font-size:14px;margin-top:6px;font-feature-settings:'tnum' 1"></label>
                   <label style="background:#fff;padding:12px 2px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">FBA-Gebühr €</span><input type="number" step="0.01" value="{{ sel.fbaFee }}" onChange="{{ editFba }}" style="width:100%;border:1px solid #E2E2E2;padding:8px 10px;font-size:14px;margin-top:6px;font-feature-settings:'tnum' 1"></label>
@@ -453,10 +475,13 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
               </div>
             </div>
             <div style="overflow-x:auto" class="pp-scroll">
-              <table style="width:100%;border-collapse:collapse;min-width:960px">
+              <table style="width:100%;border-collapse:collapse;min-width:1200px">
                 <thead><tr style="text-align:left">
                   <th style="padding:10px 22px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB">Monat</th>
                   <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Verkäufe</th>
+                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Preis €</th>
+                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Umsatz</th>
+                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Gewinn</th>
                   <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">davon PPC</th>
                   <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Org.-Rate</th>
                   <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Werbek. €</th>
@@ -470,6 +495,9 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                     <tr style="border-bottom:1px solid #F1F1EE">
                       <td style="padding:8px 22px;font-weight:600;font-size:13.5px">{{ m.label }}</td>
                       <td style="padding:8px 14px;text-align:right"><input type="number" value="{{ m.units }}" onChange="{{ m.setUnits }}" style="width:70px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
+                      <td style="padding:8px 14px;text-align:right"><input type="number" step="0.01" value="{{ m.price }}" onChange="{{ m.setPrice }}" style="width:78px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
+                      <td style="padding:8px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:13.5px;font-weight:600">{{ m.revStr }}</td>
+                      <td style="padding:8px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:13.5px;font-weight:600;color:{{ m.profitColor }}">{{ m.profitStr }}</td>
                       <td style="padding:8px 14px;text-align:right"><input type="number" value="{{ m.ppc }}" onChange="{{ m.setPpc }}" style="width:70px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
                       <td style="padding:8px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:13px;color:#7A7A76">{{ m.orgRateStr }}</td>
                       <td style="padding:8px 14px;text-align:right"><input type="number" step="0.01" value="{{ m.adCost }}" onChange="{{ m.setAdCost }}" style="width:80px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
@@ -1189,21 +1217,26 @@ class Component extends DCLogic {
     const dr=this._dataRange();
     from = from || dr.min; to = to || dr.max;
     if(from>to){ const t=from; from=to; to=t; }
+    // Aktuelle Stück-Oekonomie (fuer Anzeige von Marge/Break-Even/Wasserfall – basiert auf JETZIGEM Preis)
     const vat = (p.price - p.fbaFee)*0.19;
     const net = p.price - vat;
     const unitProfit = net - p.fbaFee - p.shipping - p.productionCost;
     const marginPct = p.price>0 ? unitProfit/p.price : 0;
-    let units=0, views=0, unitsPpc=0, adSpend=0;
-    this.months.forEach(ym=>{ if(ym<from||ym>to) return; const m=p.monthly[ym]; if(m){ units+=(+m.units||0); views+=(+m.views||0); unitsPpc+=Math.min(+m.units||0,+m.unitsPpc||0); adSpend+=(+m.adCost||0); } });
-    const revenue = units*p.price;
-    const grossProfit = units*unitProfit;
+    // Aggregation PRO MONAT mit dem jeweils gueltigen Monatspreis
+    let units=0, views=0, unitsPpc=0, adSpend=0, revenue=0, grossProfit=0, ppcRevenue=0;
+    this.months.forEach(ym=>{ if(ym<from||ym>to) return; const m=p.monthly[ym]; if(!m) return;
+      const mUnits=+m.units||0, mViews=+m.views||0, mPpc=Math.min(mUnits,+m.unitsPpc||0), mAd=+m.adCost||0;
+      const mPrice=this._monthPrice(p,m);
+      const mUnitProfit=(mPrice-(mPrice-p.fbaFee)*0.19)-p.fbaFee-p.shipping-p.productionCost;
+      units+=mUnits; views+=mViews; unitsPpc+=mPpc; adSpend+=mAd;
+      revenue+=mUnits*mPrice; grossProfit+=mUnits*mUnitProfit; ppcRevenue+=mPpc*mPrice;
+    });
     const days = this._rangeDays(from,to);
     const estProfit = grossProfit - adSpend;
     const conversion = views>0 ? units/views : 0;
     const breakEvenAcos = marginPct*100;
     const organicUnits = Math.max(0, units-unitsPpc);
     const organicRate = units>0 ? organicUnits/units : 0;
-    const ppcRevenue = unitsPpc*p.price;
     const actualAcos = ppcRevenue>0 ? adSpend/ppcRevenue*100 : 0;
     const tacos = revenue>0 ? adSpend/revenue*100 : 0;
     const maxCpc = unitProfit*conversion;
@@ -1231,7 +1264,7 @@ class Component extends DCLogic {
   }
   yearRevenueSeries(year){
     const arr=[];
-    for(let m=1;m<=12;m++){ const ym=year+'-'+String(m).padStart(2,'0'); let v=0; this.state.products.forEach(p=>{ const mo=p.monthly[ym]; if(mo) v+=(+mo.units||0)*p.price; }); arr.push({ym, label:this._monthNames[m-1], value:v}); }
+    for(let m=1;m<=12;m++){ const ym=year+'-'+String(m).padStart(2,'0'); let v=0; this.state.products.forEach(p=>{ const mo=p.monthly[ym]; if(mo) v+=(+mo.units||0)*this._monthPrice(p,mo); }); arr.push({ym, label:this._monthNames[m-1], value:v}); }
     return arr;
   }
 
@@ -1314,10 +1347,15 @@ class Component extends DCLogic {
   // ---------- mutations ----------
   _update(id, patch){ this.setState(s=>({products:s.products.map(p=> p.id===id?{...p,...patch}:p)}), ()=>this._persist()); }
   _setMonth(id, ym, field, val){ this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const mo={...p.monthly}; mo[ym]={...(mo[ym]||{units:0,views:0}), [field]: Math.max(0,+val||0)}; return {...p,monthly:mo}; })}), ()=>this._persist()); }
+  // Gueltiger Preis eines Monats: eigener Monatspreis, sonst Fallback auf aktuellen Produktpreis
+  _monthPrice(p, m){ return (m && m.price!=null && m.price!=='') ? (+m.price||0) : (+p.price||0); }
+  // Produktpreis aendern: vorhandene Monate ohne eigenen Preis mit dem ALTEN Preis einfrieren,
+  // damit sich vergangene Umsaetze/Gewinne nicht rueckwirkend veraendern.
+  _setProductPrice(id, val){ const np=Math.max(0,+val||0); this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const oldP=+p.price||0; const mo={...p.monthly}; Object.keys(mo).forEach(ym=>{ const mm=mo[ym]; if(mm && (mm.price==null||mm.price==='')){ mo[ym]={...mm, price:oldP}; } }); return {...p, price:np, monthly:mo}; })}), ()=>this._persist()); }
   _setTarget(id, ym, val){ this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const t={...(p.targets||{})}; t[ym]=Math.max(0,Math.round(+val||0)); return {...p,targets:t}; })}), ()=>this._persist()); }
-  _addMonth(id){ this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const keys=Object.keys(p.monthly).sort(); let last=keys[keys.length-1]||'2026-06'; let [y,m]=last.split('-').map(Number); m++; if(m>12){m=1;y++;} const nk=y+'-'+String(m).padStart(2,'0'); if(p.monthly[nk]) return p; const mo={...p.monthly, [nk]:{units:0,views:0}}; if(!this.months.includes(nk)) this.months=[...this.months,nk]; return {...p,monthly:mo}; })}), ()=>this._persist()); }
+  _addMonth(id){ this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const keys=Object.keys(p.monthly).sort(); let last=keys[keys.length-1]||'2026-06'; let [y,m]=last.split('-').map(Number); m++; if(m>12){m=1;y++;} const nk=y+'-'+String(m).padStart(2,'0'); if(p.monthly[nk]) return p; const mo={...p.monthly, [nk]:{units:0,views:0,unitsPpc:0,adCost:0,price:+p.price||0}}; if(!this.months.includes(nk)) this.months=[...this.months,nk]; return {...p,monthly:mo}; })}), ()=>this._persist()); }
   _deleteProduct(id){ this.setState(s=>({products:s.products.filter(p=>p.id!==id), productId:null, module:'produkte', deleteModal:null}), ()=>this._persist()); if(typeof window!=='undefined') window.scrollTo(0,0); }
-  _addMonthYm(id, ym){ if(!ym) return; this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; if(p.monthly[ym]) return p; const mo={...p.monthly,[ym]:{units:0,views:0,unitsPpc:0,adCost:0}}; if(!this.months.includes(ym)){ this.months=[...this.months,ym].sort(); } return {...p,monthly:mo}; }), detailAddYm:''}), ()=>this._persist()); }
+  _addMonthYm(id, ym){ if(!ym) return; this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; if(p.monthly[ym]) return p; const mo={...p.monthly,[ym]:{units:0,views:0,unitsPpc:0,adCost:0,price:+p.price||0}}; if(!this.months.includes(ym)){ this.months=[...this.months,ym].sort(); } return {...p,monthly:mo}; }), detailAddYm:''}), ()=>this._persist()); }
   _moveIdea(id, dir){ const order=['inbox','pruefung','umsetzung','verworfen']; this.setState(s=>({ideas:s.ideas.map(it=>{ if(it.id!==id) return it; let i=order.indexOf(it.status)+dir; i=Math.max(0,Math.min(order.length-1,i)); return {...it,status:order[i]}; })}), ()=>this._persist()); }
   _blankIdea(){ return {title:'',description:'',category:'produkt',statuses:[],priority:'Mittel',potential:50,progress:0,files:[]}; }
   _normIdea(i){
@@ -1473,7 +1511,7 @@ class Component extends DCLogic {
 
     // period revenue delta (last two months in period)
     const pmonths=this.months.filter(ym=>ym>=from&&ym<=to);
-    const revP=pmonths.map(ym=>{ let v=0; st.products.forEach(p=>{ const m=p.monthly[ym]; if(m) v+=(+m.units||0)*p.price; }); return v; });
+    const revP=pmonths.map(ym=>{ let v=0; st.products.forEach(p=>{ const m=p.monthly[ym]; if(m) v+=(+m.units||0)*this._monthPrice(p,m); }); return v; });
     const unitsP=pmonths.map(ym=>{ let v=0; st.products.forEach(p=>{ const m=p.monthly[ym]; if(m) v+=(+m.units||0); }); return v; });
     const lr=revP[revP.length-1]||0, pr=revP[revP.length-2]||0; const rdp=pr>0?((lr-pr)/pr*100):0;
     const lu=unitsP[unitsP.length-1]||0, pu=unitsP[unitsP.length-2]||0; const udp=pu>0?((lu-pu)/pu*100):0;
@@ -1553,12 +1591,15 @@ class Component extends DCLogic {
         if(!activeYear || !yearsPresent.includes(activeYear)) activeYear = yearsPresent.includes(curYear)?curYear:(yearsPresent[yearsPresent.length-1]||curYear);
         const yearMonths = this.months.filter(ym=>p.monthly[ym] && ym.slice(0,4)===activeYear);
         const detailYears = yearsPresent.map(y=>({ label:y, style:(y===activeYear?'padding:6px 13px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-feature-settings:\'tnum\' 1':'padding:6px 13px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12px;font-weight:500;cursor:pointer;font-feature-settings:\'tnum\' 1'), select:()=>this.setState({detailYear:y}) }));
-        const monthRows = yearMonths.map(ym=>{ const m=p.monthly[ym]; const conv=(+m.views>0)?(+m.units/+m.views):0; const tv=+((p.targets||{})[ym]||0); const un=+m.units||0; const ppcu=Math.min(un,+m.unitsPpc||0); const orgu=Math.max(0,un-ppcu); const ach=tv>0?un/tv:0; return {
+        const monthRows = yearMonths.map(ym=>{ const m=p.monthly[ym]; const conv=(+m.views>0)?(+m.units/+m.views):0; const tv=+((p.targets||{})[ym]||0); const un=+m.units||0; const ppcu=Math.min(un,+m.unitsPpc||0); const orgu=Math.max(0,un-ppcu); const ach=tv>0?un/tv:0;
+          const mPrice=this._monthPrice(p,m); const mUnitProfit=(mPrice-(mPrice-p.fbaFee)*0.19)-p.fbaFee-p.shipping-p.productionCost; const mRev=un*mPrice; const mProfit=un*mUnitProfit-(+m.adCost||0); return {
           label:this._mlabel(ym), units:un, ppc:+m.unitsPpc||0, adCost:+m.adCost||0, views:+m.views||0, target:tv||'',
+          price:+(+mPrice).toFixed(2), revStr:this._eur(mRev), profitStr:this._eur(mProfit), profitColor: mProfit<0?red:ink,
           orgRateStr: un>0?this._pct(orgu/un*100,0):'—',
           convStr:this._pct(conv*100), convColor: convColor(conv),
           achStr: tv>0?this._pct(ach*100,0):'—', achColor: tv<=0?'#9A9A96': (ach>=1?green: ach>=0.8?yellow:red),
           setUnits:(e)=>this._setMonth(p.id,ym,'units',e.target.value), setViews:(e)=>this._setMonth(p.id,ym,'views',e.target.value), setTarget:(e)=>this._setTarget(p.id,ym,e.target.value),
+          setPrice:(e)=>this._setMonth(p.id,ym,'price',e.target.value),
           setPpc:(e)=>this._setMonth(p.id,ym,'unitsPpc',e.target.value), setAdCost:(e)=>this._setMonth(p.id,ym,'adCost',e.target.value)
         }; });
         const ratingMeta={green:{tone:green,label:'Grün',desc:'Kein Handlungsbedarf'},yellow:{tone:yellow,label:'Gelb',desc:'Ausbaufähig'},red:{tone:red,label:'Rot',desc:'Kritisch'}};
@@ -1587,7 +1628,7 @@ class Component extends DCLogic {
         V.addSelectedMonth=()=>{ this._addMonthYm(p.id, st.detailAddYm); };
         V.askDelete=()=>this.setState({deleteModal:{productId:p.id, name:p.name}});
         V.waterfallEl=this._waterfall(p); V.salesChartEl=this._barChart(yearMonths.map(ym=>({label:this._mlabel(ym),value:+p.monthly[ym].units||0})));
-        V.editPrice=(e)=>this._update(p.id,{price:parse(e)}); V.editProdCost=(e)=>this._update(p.id,{productionCost:parse(e)});
+        V.editPrice=(e)=>this._setProductPrice(p.id, parse(e)); V.editProdCost=(e)=>this._update(p.id,{productionCost:parse(e)});
         V.editFba=(e)=>this._update(p.id,{fbaFee:parse(e)}); V.editShip=(e)=>this._update(p.id,{shipping:parse(e)});
         V.addMonthRow=()=>this._addMonth(p.id);
         // ---- Monatsziel (current month) ----
