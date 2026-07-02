@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- ============================================================
+     PARTY PEAK · SUPABASE-KONFIGURATION
+     URL und Key sind eingetragen - hier musst du nichts mehr aendern.
+     ============================================================ -->
+<script>
+  window.PP_SUPABASE = {
+    url:   "https://gsnaqtxptinlutrclelg.supabase.co",      // Projekt-URL (aus deiner Project ID)
+    key:   "sb_publishable_TIjo3UXYisIKOfvu4MjkbQ_f09uqBXj", // publishable key (ok fuer den Browser)
+    table: "dashboard",                                      // muss zur SQL-Tabelle passen
+    row:   "main"                                            // fester Zeilen-Schluessel (nicht aendern)
+  };
+</script>
+
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Home-Bildschirm / PWA: Logo als App-Icon -->
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icon.png">
+<link rel="icon" type="image/png" href="./icon.png">
+<meta name="theme-color" content="#0A0A0A">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Party Peak">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:'IBM Plex Sans',system-ui,sans-serif;color:#0A0A0A;background:#F4F4F2;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::selection{background:#FF5A00;color:#fff}
+input,select,button,textarea{font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0A !important}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+input[type=number]{-moz-appearance:textfield}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:2px;background:#0A0A0A;cursor:pointer;border-radius:0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;background:#FF5A00;border:2px solid #0A0A0A;border-radius:0;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;border:2px solid #0A0A0A;border-radius:0;cursor:pointer}
+.pp-scroll::-webkit-scrollbar{height:8px;width:8px}
+.pp-scroll::-webkit-scrollbar-thumb{background:#D2D2CE}
+@keyframes ppfade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+<div style="display:flex;flex-direction:column;min-height:100vh;background:#F4F4F2;color:#0A0A0A">
+
+  <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:#fff;border-bottom:1px solid #E4E4E0;position:sticky;top:0;z-index:30">
+      <div style="display:flex;align-items:center;gap:9px">
+        <div style="width:22px;height:22px;background:#0A0A0A;display:flex;align-items:center;justify-content:center"><div style="width:9px;height:9px;background:#FF5A00"></div></div>
+        <span style="font-family:'Archivo';font-weight:800;font-size:15px;letter-spacing:-.01em">PARTY PEAK</span>
+      </div>
+      <div style="display:flex;gap:4px;overflow-x:auto" class="pp-scroll">
+        <button onClick="{{ goCockpit }}" style="{{ tabStyle0 }}">Cockpit</button>
+        <button onClick="{{ goProdukte }}" style="{{ tabStyle1 }}">Produkte</button>
+        <button onClick="{{ goLager }}" style="{{ tabStyle2 }}">Lager</button>
+        <button onClick="{{ goWerbung }}" style="{{ tabStyle3 }}">Werbung</button>
+        <button onClick="{{ goSzenarien }}" style="{{ tabStyle4 }}">Szenarien</button>
+        <button onClick="{{ goIdeen }}" style="{{ tabStyle5 }}">Ideen</button>
+        <button onClick="{{ goEmpfehlungen }}" style="{{ tabStyle6 }}">Empfehlungen</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="display:flex;flex:1;min-height:0">
+
+    <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+      <aside style="width:236px;flex-shrink:0;background:#fff;border-right:1px solid #E4E4E0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh">
+        <div style="padding:22px 22px 20px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;gap:11px">
+          <div style="width:30px;height:30px;background:#0A0A0A;display:flex;align-items:center;justify-content:center;flex-shrink:0"><div style="width:12px;height:12px;background:#FF5A00"></div></div>
+          <div style="line-height:1.1">
+            <div style="font-family:'Archivo';font-weight:800;font-size:16px;letter-spacing:-.01em">PARTY PEAK</div>
+            <div style="font-size:10.5px;color:#9A9A96;letter-spacing:.06em;text-transform:uppercase;margin-top:2px">Amazon FBA Control</div>
+          </div>
+        </div>
+        <nav style="padding:14px 12px;display:flex;flex-direction:column;gap:2px;flex:1">
+          <button onClick="{{ goCockpit }}" style="{{ nav0 }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 13a8 8 0 0116 0"/><path d="M12 13l4-4"/><circle cx="12" cy="13" r="1.3" fill="currentColor" stroke="none"/><path d="M4 19h16"/></svg>
+            <span>Cockpit</span>
+          </button>
+          <button onClick="{{ goProdukte }}" style="{{ nav1 }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/></svg>
+            <span>Produkte</span>
+          </button>
+          <button onClick="{{ goLager }}" style="{{ nav2 }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 8l8-4 8 4-8 4-8-4z"/><path d="M4 12l8 4 8-4M4 16l8 4 8-4"/></svg>
+            <span>Lager &amp; Nachschub</span>
+          </button>
+          <button onClick="{{ goWerbung }}" style="{{ nav3 }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></svg>
+            <span>Werbung &amp; ACOS</span>
+          </button>
+          <button onClick="{{ goSzenarien }}" style="{{ nav4 }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7h10M18 7h2M4 12h4M12 12h8M4 17h12M18 17h2"/><circle cx="16" cy="7" r="2" fill="#fff"/><circle cx="10" cy="12" r="2" fill="#fff"/><circle cx="15" cy="17" r="2" fill="#fff"/></svg>
+            <span>Szenarien</span>
+          </button>
+          <button onClick="{{ goIdeen }}" style="{{ nav5 }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 00-4 10.5c.6.6 1 1.3 1 2.5h6c0-1.2.4-1.9 1-2.5A6 6 0 0012 3z"/></svg>
+            <span>Ideen-Board</span>
+          </button>
+          <button onClick="{{ goEmpfehlungen }}" style="{{ nav6 }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 4h6M8 4h1a1 1 0 011 1v0a1 1 0 001 1h2a1 1 0 001-1v0a1 1 0 011-1h1a1 1 0 011 1v14a1 1 0 01-1 1H7a1 1 0 01-1-1V5a1 1 0 011-1z"/><path d="M9 13l2 2 4-4"/></svg>
+            <span>Empfehlungen</span>
+          </button>
+        </nav>
+        <div style="padding:16px 20px;border-top:1px solid #EEEEEB">
+          <div style="font-size:11px;color:#9A9A96;letter-spacing:.05em">Stand {{ dataStamp }}</div>
+          <div style="font-size:11px;color:#9A9A96;margin-top:3px">{{ productCount }} Produkte · Single Source</div>
+        </div>
+      </aside>
+    </sc-if>
+
+    <main style="flex:1;min-width:0;background:#F4F4F2">
+
+      <sc-if value="{{ isCockpit }}" hint-placeholder-val="{{ true }}">
+        <div data-screen-label="Cockpit" style="max-width:1240px;margin:0 auto;padding:30px 40px 72px;animation:ppfade .25s ease">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;padding-bottom:20px;border-bottom:2px solid #0A0A0A">
+            <div>
+              <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9A96;margin-bottom:8px">Cockpit</div>
+              <h1 style="font-family:'Archivo';font-weight:800;font-size:30px;letter-spacing:-.02em;margin:0;line-height:1">Geschäftsüberblick</h1>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:12px;color:#8A8A86">Betrachtungszeitraum · {{ periodDays }} Tage</div>
+              <div style="font-family:'Archivo';font-weight:700;font-size:15px;margin-top:2px">{{ periodLabel }}</div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:16px 0 4px">
+            <span style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96;margin-right:2px">Zeitraum</span>
+            <button onClick="{{ presetLast30 }}" style="{{ presetStyle0 }}">Letzte 30 Tage</button>
+            <button onClick="{{ presetThisYear }}" style="{{ presetStyle1 }}">Dieses Jahr</button>
+            <button onClick="{{ presetLastYear }}" style="{{ presetStyle2 }}">Letztes Jahr</button>
+            <button onClick="{{ presetGesamt }}" style="{{ presetStyle3 }}">Gesamt</button>
+            <div style="width:1px;height:22px;background:#E4E4E0;margin:0 4px"></div>
+            <span style="font-size:12px;color:#8A8A86">Von</span>
+            <select value="{{ periodFrom }}" onChange="{{ setPeriodFrom }}" style="border:1px solid #E2E2E2;padding:7px 9px;font-size:12.5px;background:#fff;cursor:pointer;font-feature-settings:'tnum' 1">
+              <sc-for list="{{ monthOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.ym }}">{{ o.label }}</option></sc-for>
+            </select>
+            <span style="font-size:12px;color:#8A8A86">Bis</span>
+            <select value="{{ periodTo }}" onChange="{{ setPeriodTo }}" style="border:1px solid #E2E2E2;padding:7px 9px;font-size:12.5px;background:#fff;cursor:pointer;font-feature-settings:'tnum' 1">
+              <sc-for list="{{ monthOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.ym }}">{{ o.label }}</option></sc-for>
+            </select>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:0;border:1px solid #E4E4E0;border-top:none;background:#fff;margin-top:12px">
+            <div style="padding:20px 22px;border-right:1px solid #EEEEEB;border-top:1px solid #EEEEEB">
+              <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A96">Gesamtumsatz</div>
+              <div style="font-family:'Archivo';font-weight:800;font-size:34px;letter-spacing:-.02em;font-feature-settings:'tnum' 1;margin-top:10px">{{ kpiRevenue }}</div>
+              <div style="font-size:12px;margin-top:6px;color:{{ revDeltaColor }}">{{ revDelta }}</div>
+            </div>
+            <div style="padding:20px 22px;border-right:1px solid #EEEEEB;border-top:1px solid #EEEEEB">
+              <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A96">Verkaufte Einheiten</div>
+              <div style="font-family:'Archivo';font-weight:800;font-size:34px;letter-spacing:-.02em;font-feature-settings:'tnum' 1;margin-top:10px">{{ kpiUnits }}</div>
+              <div style="font-size:12px;margin-top:6px;color:{{ unitsDeltaColor }}">{{ unitsDelta }}</div>
+            </div>
+            <div style="padding:20px 22px;border-right:1px solid #EEEEEB;border-top:1px solid #EEEEEB">
+              <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A96">Ø Marge</div>
+              <div style="font-family:'Archivo';font-weight:800;font-size:34px;letter-spacing:-.02em;font-feature-settings:'tnum' 1;margin-top:10px">{{ kpiMargin }}</div>
+              <div style="font-size:12px;margin-top:6px;color:#8A8A86">gewichtet über Sortiment</div>
+            </div>
+            <div style="padding:20px 22px;border-top:1px solid #EEEEEB">
+              <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A96">Geschätzter Gewinn</div>
+              <div style="font-family:'Archivo';font-weight:800;font-size:34px;letter-spacing:-.02em;font-feature-settings:'tnum' 1;margin-top:10px;color:{{ profitColor }}">{{ kpiProfit }}</div>
+              <div style="font-size:12px;margin-top:6px;color:#8A8A86">nach Werbekosten</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:0;border:1px solid #E4E4E0;border-top:none;background:#fff">
+            <div style="padding:20px 22px;border-right:1px solid #EEEEEB">
+              <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A96">Werbeausgaben</div>
+              <div style="font-family:'Archivo';font-weight:800;font-size:28px;letter-spacing:-.02em;font-feature-settings:'tnum' 1;margin-top:10px">{{ kpiAdSpend }}</div>
+              <div style="font-size:12px;margin-top:6px;color:#8A8A86">Summe im Zeitraum · {{ periodDays }} Tage</div>
+            </div>
+            <div style="padding:20px 22px;border-right:1px solid #EEEEEB">
+              <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A96">Gesamt-ACOS</div>
+              <div style="font-family:'Archivo';font-weight:800;font-size:28px;letter-spacing:-.02em;font-feature-settings:'tnum' 1;margin-top:10px;color:{{ acosColor }}">{{ kpiAcos }}</div>
+            </div>
+            <div style="padding:20px 22px;border-right:1px solid #EEEEEB">
+              <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A96">Ø Conversion</div>
+              <div style="font-family:'Archivo';font-weight:800;font-size:28px;letter-spacing:-.02em;font-feature-settings:'tnum' 1;margin-top:10px">{{ kpiConversion }}</div>
+            </div>
+            <div style="padding:20px 22px">
+              <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A96">Deckungsbeitrag</div>
+              <div style="font-family:'Archivo';font-weight:800;font-size:28px;letter-spacing:-.02em;font-feature-settings:'tnum' 1;margin-top:10px">{{ kpiContribution }}</div>
+            </div>
+          </div>
+
+          <div style="margin-top:40px;background:#fff;border:1px solid #E4E4E0">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #EEEEEB;flex-wrap:wrap;gap:10px">
+              <div>
+                <div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#9A9A96">Produkt-Status</div>
+                <div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:3px">Ampel-Übersicht · Ziel · Lager · Werbung</div>
+              </div>
+              <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:#9A9A96">
+                <span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;background:#1B7F4B"></span>OK</span>
+                <span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;background:#D8930A"></span>Achtung</span>
+                <span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;background:#D42E12"></span>Kritisch</span>
+              </div>
+            </div>
+            <div style="overflow-x:auto" class="pp-scroll">
+              <table style="width:100%;border-collapse:collapse;min-width:640px">
+                <thead><tr style="text-align:left">
+                  <th style="padding:11px 22px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB">Produkt</th>
+                  <th style="padding:11px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB">Verkaufsziel</th>
+                  <th style="padding:11px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB">Lagerbestand</th>
+                  <th style="padding:11px 22px 11px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB">Werbekosten</th>
+                </tr></thead>
+                <tbody>
+                  <sc-for list="{{ cockpitStatus }}" as="row" hint-placeholder-count="5">
+                    <tr onClick="{{ row.open }}" style="cursor:pointer;border-bottom:1px solid #F1F1EE" style-hover="background:#FAFAF8">
+                      <td style="padding:13px 22px"><div style="font-weight:600;font-size:14px">{{ row.name }}</div><div style="font-size:11.5px;color:#9A9A96;font-feature-settings:'tnum' 1;margin-top:1px">{{ row.asin }}</div></td>
+                      <td style="padding:13px 14px"><div style="display:inline-flex;align-items:center;gap:8px"><span style="width:10px;height:10px;background:{{ row.goalColor }};flex-shrink:0"></span><span style="font-size:12.5px;color:#3A3A36">{{ row.goalText }}</span></div></td>
+                      <td style="padding:13px 14px"><div style="display:inline-flex;align-items:center;gap:8px"><span style="width:10px;height:10px;background:{{ row.stockColor }};flex-shrink:0"></span><span style="font-size:12.5px;color:#3A3A36">{{ row.stockText }}</span></div></td>
+                      <td style="padding:13px 22px 13px 14px"><div style="display:inline-flex;align-items:center;gap:8px"><span style="width:10px;height:10px;background:{{ row.adColor }};flex-shrink:0"></span><span style="font-size:12.5px;color:#3A3A36">{{ row.adText }}</span></div></td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div style="margin-top:40px;background:#fff;border:1px solid #E4E4E0">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #EEEEEB;flex-wrap:wrap;gap:12px">
+              <div>
+                <div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#9A9A96">Umsatzverlauf</div>
+                <div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:3px">Monatlicher Umsatz · {{ chartYear }}</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+                <div style="text-align:right"><div style="font-size:11px;color:#9A9A96">Spitzenmonat</div><div style="font-family:'Archivo';font-weight:700;font-size:14px">{{ peakMonth }}</div></div>
+                <div style="display:flex;align-items:center;gap:4px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em;margin-right:2px">Jahr</span><sc-for list="{{ chartYears }}" as="y" hint-placeholder-count="6"><button onClick="{{ y.select }}" style="{{ y.style }}">{{ y.label }}</button></sc-for></div>
+              </div>
+            </div>
+            <div style="padding:20px 14px 12px">{{ revenueChartEl }}</div>
+          </div>
+
+          <div style="margin-top:40px;background:#fff;border:1px solid #E4E4E0">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #EEEEEB;flex-wrap:wrap;gap:10px">
+              <div>
+                <div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#9A9A96">Sortiment · {{ periodLabel }}</div>
+                <div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:3px">Produkt-Performance</div>
+              </div>
+              <div style="font-size:12px;color:#8A8A86">Zeile anklicken für Details →</div>
+            </div>
+            <div style="overflow-x:auto" class="pp-scroll">
+              <table style="width:100%;border-collapse:collapse;min-width:820px">
+                <thead>
+                  <tr style="text-align:left">
+                    <th style="padding:11px 22px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB">Produkt</th>
+                    <th onClick="{{ sortUnits }}" style="padding:11px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right;cursor:pointer;user-select:none">Einheiten {{ arrUnits }}</th>
+                    <th onClick="{{ sortRevenue }}" style="padding:11px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right;cursor:pointer;user-select:none">Umsatz {{ arrRevenue }}</th>
+                    <th onClick="{{ sortMargin }}" style="padding:11px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right;cursor:pointer;user-select:none">Marge {{ arrMargin }}</th>
+                    <th onClick="{{ sortVelocity }}" style="padding:11px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right;cursor:pointer;user-select:none">Velocity {{ arrVelocity }}</th>
+                    <th onClick="{{ sortConversion }}" style="padding:11px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right;cursor:pointer;user-select:none">Conversion {{ arrConversion }}</th>
+                    <th onClick="{{ sortAcos }}" style="padding:11px 22px 11px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right;cursor:pointer;user-select:none">ACOS {{ arrAcos }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <sc-for list="{{ cockpitRows }}" as="row" hint-placeholder-count="5">
+                    <tr onClick="{{ row.open }}" style="cursor:pointer;border-bottom:1px solid #F1F1EE" style-hover="background:#FAFAF8">
+                      <td style="padding:13px 22px">
+                        <div style="font-weight:600;font-size:14px">{{ row.name }}</div>
+                        <div style="font-size:11.5px;color:#9A9A96;font-feature-settings:'tnum' 1;margin-top:1px">{{ row.asin }}</div>
+                      </td>
+                      <td style="padding:13px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:14px">{{ row.unitsStr }}</td>
+                      <td style="padding:13px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:14px;font-weight:600">{{ row.revenueStr }}</td>
+                      <td style="padding:13px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:14px;color:{{ row.marginColor }}">{{ row.marginStr }}</td>
+                      <td style="padding:13px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:14px">{{ row.velocityStr }}</td>
+                      <td style="padding:13px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:14px;color:{{ row.conversionColor }}">{{ row.conversionStr }}</td>
+                      <td style="padding:13px 22px 13px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:14px;color:{{ row.acosColor }}">{{ row.acosStr }}</td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isProdukteList }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Produkte" style="max-width:1240px;margin:0 auto;padding:30px 40px 72px;animation:ppfade .25s ease">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;padding-bottom:20px;border-bottom:2px solid #0A0A0A">
+            <div>
+              <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9A96;margin-bottom:8px">Produkte</div>
+              <h1 style="font-family:'Archivo';font-weight:800;font-size:30px;letter-spacing:-.02em;margin:0;line-height:1">Sortiment verwalten</h1>
+            </div>
+            <button onClick="{{ openNewProduct }}" style="background:#FF5A00;color:#fff;border:none;padding:12px 20px;font-weight:600;font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:8px" style-hover="background:#E85200">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+              Produkt anlegen
+            </button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:0;border-left:1px solid #E4E4E0;border-top:1px solid #E4E4E0;margin-top:26px">
+            <sc-for list="{{ productCards }}" as="p" hint-placeholder-count="5">
+              <div onClick="{{ p.open }}" style="background:#fff;border-right:1px solid #E4E4E0;border-bottom:1px solid #E4E4E0;padding:20px 22px;cursor:pointer" style-hover="background:#FAFAF8">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+                  <div>
+                    <div style="font-family:'Archivo';font-weight:700;font-size:16px;line-height:1.15">{{ p.name }}</div>
+                    <div style="font-size:11.5px;color:#9A9A96;font-feature-settings:'tnum' 1;margin-top:3px;display:flex;align-items:center;gap:8px">
+                      <span>{{ p.asin }}</span>
+                      <sc-if value="{{ p.hasUrl }}" hint-placeholder-val="{{ false }}">
+                        <a href="{{ p.amazonUrl }}" target="_blank" rel="noopener" onClick="{{ p.stopBubble }}" style="color:#FF5A00;text-decoration:none;font-weight:700" style-hover="text-decoration:underline">↗ Amazon</a>
+                      </sc-if>
+                    </div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px;flex-shrink:0"><div style="width:8px;height:8px;background:{{ p.dotColor }}"></div><span style="font-size:11px;color:#8A8A86">{{ p.stockLabel }}</span></div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:#EEEEEB;border:1px solid #EEEEEB;margin-top:16px">
+                  <div style="background:#fff;padding:10px 12px"><div style="font-size:10px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">VK</div><div style="font-family:'Archivo';font-weight:700;font-size:16px;font-feature-settings:'tnum' 1;margin-top:3px">{{ p.priceStr }}</div></div>
+                  <div style="background:#fff;padding:10px 12px"><div style="font-size:10px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Marge</div><div style="font-family:'Archivo';font-weight:700;font-size:16px;font-feature-settings:'tnum' 1;margin-top:3px;color:{{ p.marginColor }}">{{ p.marginStr }}</div></div>
+                  <div style="background:#fff;padding:10px 12px"><div style="font-size:10px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Bestand</div><div style="font-family:'Archivo';font-weight:700;font-size:16px;font-feature-settings:'tnum' 1;margin-top:3px">{{ p.stockStr }}</div></div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isProdukteDetail }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Produktdetail" style="max-width:1240px;margin:0 auto;padding:30px 40px 72px;animation:ppfade .25s ease">
+          <button onClick="{{ goProdukte }}" style="background:none;border:none;color:#8A8A86;font-size:13px;cursor:pointer;padding:0;display:flex;align-items:center;gap:6px;margin-bottom:18px" style-hover="color:#0A0A0A">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg> Alle Produkte
+          </button>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;padding-bottom:20px;border-bottom:2px solid #0A0A0A">
+            <div>
+              <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9A96;margin-bottom:8px">{{ sel.asin }} · {{ sel.dims }}
+                <sc-if value="{{ sel.hasUrl }}" hint-placeholder-val="{{ false }}">
+                  <a href="{{ sel.amazonUrl }}" target="_blank" rel="noopener" style="color:#FF5A00;text-decoration:none;margin-left:8px;font-weight:700" style-hover="text-decoration:underline">↗ Amazon-Listing</a>
+                </sc-if>
+              </div>
+              <h1 style="font-family:'Archivo';font-weight:800;font-size:30px;letter-spacing:-.02em;margin:0;line-height:1">{{ sel.name }}</h1>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+              <label style="display:flex;align-items:center;gap:7px;padding:6px 12px;border:1px solid #E4E4E0;background:#fff"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Sterne</span><input type="number" min="0" max="5" step="0.1" value="{{ sel.starsVal }}" onChange="{{ editStars }}" style="width:56px;border:1px solid #E2E2E2;padding:5px 7px;text-align:right;font-size:13px;font-feature-settings:'tnum' 1"></label>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid {{ sel.statusColor }}"><div style="width:9px;height:9px;background:{{ sel.statusColor }}"></div><span style="font-size:12.5px;font-weight:600">{{ sel.statusLabel }}</span></div>
+              <button onClick="{{ askDelete }}" style="display:flex;align-items:center;gap:7px;padding:8px 14px;border:1px solid #E4C4BE;background:#fff;color:#D42E12;font-size:12.5px;font-weight:600;cursor:pointer" style-hover="background:#FBEDEB"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/></svg>Löschen</button>
+            </div>
+          </div>
+
+          <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A96;margin:20px 0 8px">Produkt-Cockpit · Gesamtzeitraum</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:#EEEEEB;border:1px solid #E4E4E0">
+            <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Umsatz</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px">{{ sel.revenueStr }}</div></div>
+            <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Einheiten</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px">{{ sel.unitsStr }}</div></div>
+            <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Ø Marge</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px">{{ sel.marginStr }}</div></div>
+            <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Nettomarge / Stk</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px;color:{{ sel.unitProfitColor }}">{{ sel.unitProfitStr }}</div></div>
+            <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">ACOS</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px;color:{{ sel.acosColor }}">{{ sel.acosStr }}</div></div>
+            <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">TACOS</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px">{{ sel.tacosStr }}</div></div>
+            <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Conversion</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px;color:{{ sel.conversionColor }}">{{ sel.conversionStr }}</div></div>
+            <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Max. CPC</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px">{{ sel.maxCpcStr }}</div></div>
+            <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Org.-Rate</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px">{{ sel.organicRateStr }}</div></div>
+            <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Bestand</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px;color:{{ sel.stockColor }}">{{ sel.stockStr }}</div></div>
+            <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Reichweite</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px;color:{{ sel.coverColor }}">{{ sel.coverStr }}</div></div>
+            <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Bewertung · {{ sel.starsStr }}</div><div style="margin-top:9px">{{ starEl }}</div></div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #E4E4E0;margin-top:34px">
+            <div style="padding:18px 22px;border-bottom:1px solid #EEEEEB;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+              <div><div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#9A9A96">Monatsziel</div><div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:3px">Laufender Monat · {{ goal.monthLabel }}</div></div>
+              <div style="display:flex;align-items:center;gap:8px;padding:7px 13px;border:1px solid {{ goal.tone }}"><div style="width:9px;height:9px;background:{{ goal.tone }}"></div><span style="font-size:12.5px;font-weight:600;color:{{ goal.tone }}">{{ goal.statusLabel }}</span></div>
+            </div>
+            <div style="padding:24px 22px;display:flex;gap:32px;align-items:center;flex-wrap:wrap">
+              <div style="flex-shrink:0">{{ goal.ringEl }}</div>
+              <div style="flex:1;min-width:260px;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#EEEEEB;border:1px solid #EEEEEB">
+                <div style="background:#fff;padding:14px 16px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Ist / Ziel</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;margin-top:6px;font-feature-settings:'tnum' 1">{{ goal.actualStr }} <span style="color:#B0B0AC;font-weight:600;font-size:15px">/ {{ goal.targetStr }}</span></div></div>
+                <div style="background:#fff;padding:14px 16px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Noch offen</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;margin-top:6px;font-feature-settings:'tnum' 1">{{ goal.remainingStr }}</div></div>
+                <div style="background:#fff;padding:14px 16px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Velocity Ist</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;margin-top:6px;font-feature-settings:'tnum' 1">{{ goal.curVelStr }}</div><div style="font-size:11px;color:#9A9A96;margin-top:2px">Stk/Tag · Tag {{ goal.dayStr }}</div></div>
+                <div style="background:#fff;padding:14px 16px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Benötigt / Tag</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;margin-top:6px;font-feature-settings:'tnum' 1;color:{{ goal.reqColor }}">{{ goal.reqVelStr }}</div><div style="font-size:11px;color:#9A9A96;margin-top:2px">für Zielerreichung</div></div>
+              </div>
+            </div>
+            <div style="padding:13px 22px;border-top:1px solid #EEEEEB;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="font-size:12px;color:#7A7A76">Ziel {{ goal.monthLabel }}</span>
+              <input type="number" value="{{ goal.targetInput }}" onChange="{{ goal.setTarget }}" style="width:92px;border:1px solid #E2E2E2;padding:7px 9px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1">
+              <span style="font-size:12px;color:#9A9A96">Stk · Ziele je Monat editierbar in der Tabelle unten</span>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:26px;margin-top:26px;align-items:start" class="pp-detailgrid">
+            <div style="background:#fff;border:1px solid #E4E4E0">
+              <div style="padding:18px 22px;border-bottom:1px solid #EEEEEB"><div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#9A9A96">Margen-Wasserfall</div><div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:3px">Vom Verkaufspreis zur Nettomarge</div></div>
+              <div style="padding:22px 18px">{{ waterfallEl }}</div>
+            </div>
+            <div style="background:#fff;border:1px solid #E4E4E0">
+              <div style="padding:18px 22px;border-bottom:1px solid #EEEEEB"><div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#9A9A96">Empfehlungen</div><div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:3px">Handlungsbedarf</div></div>
+              <div style="padding:8px 22px 18px">
+                <sc-for list="{{ sel.recs }}" as="r" hint-placeholder-count="3">
+                  <div style="display:flex;gap:12px;padding:14px 0;border-bottom:1px solid #F1F1EE">
+                    <div style="width:4px;flex-shrink:0;background:{{ r.tone }}"></div>
+                    <div><div style="font-weight:600;font-size:13.5px">{{ r.title }}</div><div style="font-size:12.5px;color:#7A7A76;margin-top:3px;line-height:1.45">{{ r.body }}</div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #E4E4E0;margin-top:26px">
+            <div style="padding:18px 22px;border-bottom:1px solid #EEEEEB"><div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#9A9A96">Content-Qualität</div><div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:3px">Listing &amp; A+ Content bewerten</div></div>
+            <div style="padding:8px 22px 20px">
+              <sc-for list="{{ sel.qualityRows }}" as="q" hint-placeholder-count="2">
+                <div style="display:flex;align-items:center;gap:20px;padding:14px 0;border-bottom:1px solid #F1F1EE;flex-wrap:wrap">
+                  <div style="min-width:150px;flex:0 0 auto">
+                    <div style="font-weight:600;font-size:14px">{{ q.label }}</div>
+                    <div style="display:flex;align-items:center;gap:7px;margin-top:4px"><div style="width:8px;height:8px;background:{{ q.tone }}"></div><span style="font-size:12px;color:#7A7A76">{{ q.statusText }}</span></div>
+                  </div>
+                  <div style="display:flex;gap:8px;flex:1;min-width:240px">
+                    <sc-for list="{{ q.buttons }}" as="b" hint-placeholder-count="3">
+                      <button onClick="{{ b.select }}" style="{{ b.style }}"><span style="width:8px;height:8px;background:{{ b.dotColor }};flex-shrink:0"></span>{{ b.label }}</button>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-for>
+              <div style="font-size:12px;color:#9A9A96;margin-top:12px;line-height:1.5"><span style="color:#1B7F4B;font-weight:600">Grün</span> kein Handlungsbedarf · <span style="color:#D8930A;font-weight:600">Gelb</span> ausbaufähig · <span style="color:#D42E12;font-weight:600">Rot</span> kritisch</div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:26px;margin-top:26px;align-items:start" class="pp-detailgrid">
+            <div style="background:#fff;border:1px solid #E4E4E0">
+              <div style="padding:18px 22px;border-bottom:1px solid #EEEEEB"><div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#9A9A96">Kalkulation</div><div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:3px">Kosten &amp; Preis pflegen</div></div>
+              <div style="padding:6px 22px 20px">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#EEEEEB">
+                  <label style="background:#fff;padding:12px 2px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Verkaufspreis €</span><input type="number" step="0.01" value="{{ sel.price }}" onChange="{{ editPrice }}" style="width:100%;border:1px solid #E2E2E2;padding:8px 10px;font-size:14px;margin-top:6px;font-feature-settings:'tnum' 1"></label>
+                  <label style="background:#fff;padding:12px 2px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Produktionskosten €</span><input type="number" step="0.01" value="{{ sel.productionCost }}" onChange="{{ editProdCost }}" style="width:100%;border:1px solid #E2E2E2;padding:8px 10px;font-size:14px;margin-top:6px;font-feature-settings:'tnum' 1"></label>
+                  <label style="background:#fff;padding:12px 2px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">FBA-Gebühr €</span><input type="number" step="0.01" value="{{ sel.fbaFee }}" onChange="{{ editFba }}" style="width:100%;border:1px solid #E2E2E2;padding:8px 10px;font-size:14px;margin-top:6px;font-feature-settings:'tnum' 1"></label>
+                  <label style="background:#fff;padding:12px 2px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Versand / Stk €</span><input type="number" step="0.01" value="{{ sel.shipping }}" onChange="{{ editShip }}" style="width:100%;border:1px solid #E2E2E2;padding:8px 10px;font-size:14px;margin-top:6px;font-feature-settings:'tnum' 1"></label>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding-top:14px;font-size:13px;color:#7A7A76"><span>MwSt. 19 % · (VK − FBA)</span><span style="font-feature-settings:'tnum' 1">{{ sel.vatStr }}</span></div>
+                <label style="display:block;margin-top:14px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Amazon-Listing-Link</span><input value="{{ sel.amazonUrl }}" onChange="{{ editUrl }}" placeholder="https://www.amazon.de/dp/B0..." style="width:100%;border:1px solid #E2E2E2;padding:8px 10px;font-size:13px;margin-top:6px"></label>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #E4E4E0">
+              <div style="padding:18px 22px;border-bottom:1px solid #EEEEEB"><div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#9A9A96">Verkaufsverlauf</div><div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:3px">Einheiten pro Monat · {{ sel.activeYear }}</div></div>
+              <div style="padding:22px 18px 14px">{{ salesChartEl }}</div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #E4E4E0;margin-top:26px">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #EEEEEB;flex-wrap:wrap;gap:12px">
+              <div><div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#9A9A96">Monatswerte</div><div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:3px">Verkäufe, Ziele &amp; Zielerreichung</div></div>
+              <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+                <div style="display:flex;align-items:center;gap:6px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Jahr</span><div style="display:flex;gap:4px;flex-wrap:wrap"><sc-for list="{{ sel.detailYears }}" as="y" hint-placeholder-count="2"><button onClick="{{ y.select }}" style="{{ y.style }}">{{ y.label }}</button></sc-for></div></div>
+                <div style="display:flex;align-items:center;gap:6px">
+                  <select value="{{ detailAddYm }}" onChange="{{ setDetailAddYm }}" style="border:1px solid #E2E2E2;padding:8px 9px;font-size:12.5px;background:#fff;cursor:pointer;font-feature-settings:'tnum' 1">
+                    <option value="">Monat wählen…</option>
+                    <sc-for list="{{ sel.addMonthOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.ym }}">{{ o.label }}</option></sc-for>
+                  </select>
+                  <button onClick="{{ addSelectedMonth }}" style="background:#0A0A0A;color:#fff;border:none;padding:9px 14px;font-weight:600;font-size:12.5px;cursor:pointer;display:flex;align-items:center;gap:6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg> Hinzufügen</button>
+                </div>
+              </div>
+            </div>
+            <div style="overflow-x:auto" class="pp-scroll">
+              <table style="width:100%;border-collapse:collapse;min-width:960px">
+                <thead><tr style="text-align:left">
+                  <th style="padding:10px 22px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB">Monat</th>
+                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Verkäufe</th>
+                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">davon PPC</th>
+                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Org.-Rate</th>
+                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Werbek. €</th>
+                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Ziel</th>
+                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Erreichung</th>
+                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Aufrufe</th>
+                  <th style="padding:10px 22px 10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Conversion</th>
+                </tr></thead>
+                <tbody>
+                  <sc-for list="{{ sel.monthRows }}" as="m" hint-placeholder-count="6">
+                    <tr style="border-bottom:1px solid #F1F1EE">
+                      <td style="padding:8px 22px;font-weight:600;font-size:13.5px">{{ m.label }}</td>
+                      <td style="padding:8px 14px;text-align:right"><input type="number" value="{{ m.units }}" onChange="{{ m.setUnits }}" style="width:70px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
+                      <td style="padding:8px 14px;text-align:right"><input type="number" value="{{ m.ppc }}" onChange="{{ m.setPpc }}" style="width:70px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
+                      <td style="padding:8px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:13px;color:#7A7A76">{{ m.orgRateStr }}</td>
+                      <td style="padding:8px 14px;text-align:right"><input type="number" step="0.01" value="{{ m.adCost }}" onChange="{{ m.setAdCost }}" style="width:80px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
+                      <td style="padding:8px 14px;text-align:right"><input type="number" value="{{ m.target }}" onChange="{{ m.setTarget }}" style="width:70px;border:1px solid #E8E8E4;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1;color:#6A6A66"></td>
+                      <td style="padding:8px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:13.5px;font-weight:600;color:{{ m.achColor }}">{{ m.achStr }}</td>
+                      <td style="padding:8px 14px;text-align:right"><input type="number" value="{{ m.views }}" onChange="{{ m.setViews }}" style="width:70px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
+                      <td style="padding:8px 22px 8px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:13.5px;font-weight:600;color:{{ m.convColor }}">{{ m.convStr }}</td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isLager }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Lager" style="max-width:1240px;margin:0 auto;padding:30px 40px 72px;animation:ppfade .25s ease">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;padding-bottom:20px;border-bottom:2px solid #0A0A0A">
+            <div>
+              <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9A96;margin-bottom:8px">Lager &amp; Nachschub</div>
+              <h1 style="font-family:'Archivo';font-weight:800;font-size:30px;letter-spacing:-.02em;margin:0;line-height:1">Bestand &amp; Reichweite</h1>
+            </div>
+            <div style="font-size:12px;color:#8A8A86;max-width:300px;text-align:right">Bestand wird automatisch fortgeschrieben: Referenzwert minus alle Verkäufe seit dem letzten Abgleich</div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0;border:1px solid #E4E4E0;border-top:none;background:#fff">
+            <div style="padding:18px 22px;border-right:1px solid #EEEEEB"><div style="display:flex;align-items:center;gap:8px"><div style="width:9px;height:9px;background:#D42E12"></div><span style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96">Kritisch</span></div><div style="font-family:'Archivo';font-weight:800;font-size:30px;font-feature-settings:'tnum' 1;margin-top:8px;color:#D42E12">{{ lagerRed }}</div></div>
+            <div style="padding:18px 22px;border-right:1px solid #EEEEEB"><div style="display:flex;align-items:center;gap:8px"><div style="width:9px;height:9px;background:#D8930A"></div><span style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96">Beobachten</span></div><div style="font-family:'Archivo';font-weight:800;font-size:30px;font-feature-settings:'tnum' 1;margin-top:8px;color:#D8930A">{{ lagerYellow }}</div></div>
+            <div style="padding:18px 22px;border-right:1px solid #EEEEEB"><div style="display:flex;align-items:center;gap:8px"><div style="width:9px;height:9px;background:#1B7F4B"></div><span style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96">Bestand ok</span></div><div style="font-family:'Archivo';font-weight:800;font-size:30px;font-feature-settings:'tnum' 1;margin-top:8px;color:#1B7F4B">{{ lagerGreen }}</div></div>
+            <div style="padding:18px 22px"><div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96">Nachbestellwert</div><div style="font-family:'Archivo';font-weight:800;font-size:30px;font-feature-settings:'tnum' 1;margin-top:8px">{{ lagerReorderValue }}</div></div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #E4E4E0;border-top:none;margin-top:0;overflow-x:auto" class="pp-scroll">
+            <table style="width:100%;border-collapse:collapse;min-width:920px">
+              <thead><tr style="text-align:left">
+                <th style="padding:12px 22px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB">Produkt</th>
+                <th style="padding:12px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Bestand (berechnet)</th>
+                <th style="padding:12px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Velocity</th>
+                <th style="padding:12px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Reichweite</th>
+                <th style="padding:12px 16px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB">Status</th>
+                <th style="padding:12px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Empf. Menge</th>
+                <th style="padding:12px 22px 12px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Abgleich</th>
+              </tr></thead>
+              <tbody>
+                <sc-for list="{{ lagerRows }}" as="row" hint-placeholder-count="5">
+                  <tr style="border-bottom:1px solid #F1F1EE">
+                    <td style="padding:12px 22px"><div style="font-weight:600;font-size:14px">{{ row.name }}</div><div style="font-size:11.5px;color:#9A9A96;font-feature-settings:'tnum' 1;margin-top:1px">{{ row.asin }}</div></td>
+                    <td style="padding:12px 14px;text-align:right"><div style="font-family:'Archivo';font-weight:700;font-size:16px;font-feature-settings:'tnum' 1;color:{{ row.stockColor }}">{{ row.stockStr }}</div><div style="font-size:10.5px;color:#9A9A96;margin-top:2px;font-feature-settings:'tnum' 1">Ref {{ row.refValueStr }} − {{ row.soldSinceStr }} verk.</div></td>
+                    <td style="padding:12px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:13.5px">{{ row.velocityStr }}</td>
+                    <td style="padding:12px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:14px;font-weight:600;color:{{ row.coverColor }}">{{ row.coverStr }}</td>
+                    <td style="padding:12px 16px"><div style="display:inline-flex;align-items:center;gap:8px;padding:5px 10px;border:1px solid {{ row.dotColor }}"><div style="width:8px;height:8px;background:{{ row.dotColor }}"></div><span style="font-size:12px;font-weight:600">{{ row.statusLabel }}</span></div></td>
+                    <td style="padding:12px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:14px;font-weight:700;color:{{ row.reorderColor }}">{{ row.reorderStr }}</td>
+                    <td style="padding:12px 22px 12px 14px;text-align:right">
+                      <button onClick="{{ row.openAbgleich }}" style="background:#0A0A0A;color:#fff;border:none;padding:7px 11px;font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:#333">Aktualisieren</button>
+                      <div style="font-size:10.5px;color:#9A9A96;margin-top:4px;font-feature-settings:'tnum' 1">Letzter: {{ row.refDateStr }}</div>
+                    </td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+          <div style="font-size:12px;color:#9A9A96;margin-top:14px;line-height:1.5">Reichweite = berechneter Bestand ÷ Velocity (Verkäufe/Tag, letzte 90 Tage). Der berechnete Bestand = letzter manueller Referenzwert − alle danach eingetragenen Verkäufe. <span style="color:#D42E12;font-weight:600">Rot</span>, sobald Reichweite &lt; Lieferzeit + Sicherheitspuffer. Über <b>Aktualisieren</b> setzt du nach Inventur/Nachschub einen neuen Referenzpunkt mit heutigem Datum.</div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isWerbung }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Werbung" style="max-width:1240px;margin:0 auto;padding:30px 40px 72px;animation:ppfade .25s ease">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;padding-bottom:20px;border-bottom:2px solid #0A0A0A">
+            <div>
+              <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9A96;margin-bottom:8px">Werbung &amp; ACOS-Strategie</div>
+              <h1 style="font-family:'Archivo';font-weight:800;font-size:30px;letter-spacing:-.02em;margin:0;line-height:1">ACOS-Steuerung</h1>
+            </div>
+            <div style="display:flex;gap:22px">
+              <div style="text-align:right"><div style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Ø Ist-ACOS</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:4px">{{ werbeAvgActual }}</div></div>
+              <div style="text-align:right"><div style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Werbebudget</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:4px">{{ kpiAdSpend }}</div></div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:#8A8A86;margin-top:14px">Berechnungszeitraum (aus Cockpit): <b style="color:#0A0A0A">{{ periodLabel }}</b> · {{ periodDays }} Tage. Werbeausgaben = Summe der manuell pro Monat erfassten Werbekosten. ACOS = Werbekosten ÷ PPC-Umsatz, TACOS = Werbekosten ÷ Gesamtumsatz.</div>
+
+          <div style="display:flex;flex-direction:column;gap:0;border:1px solid #E4E4E0;background:#fff;margin-top:14px">
+            <sc-for list="{{ adRows }}" as="row" hint-placeholder-count="5">
+              <div style="padding:22px 24px;border-top:1px solid #EEEEEB;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px;align-items:center" class="pp-adrow">
+                <div>
+                  <div style="font-family:'Archivo';font-weight:700;font-size:16px;line-height:1.15">{{ row.name }}</div>
+                  <div style="font-size:11.5px;color:#9A9A96;font-feature-settings:'tnum' 1;margin-top:3px">{{ row.asin }} · Ausgaben {{ row.adSpendStr }}</div>
+                </div>
+                <div>
+                  <div style="position:relative;height:34px;background:#F4F4F2;border:1px solid #EEEEEB">
+                    <div style="position:absolute;left:0;top:0;bottom:0;background:{{ row.fillColor }};width:{{ row.actualW }}"></div>
+                    <div style="position:absolute;top:-6px;bottom:-6px;width:2px;background:#0A0A0A;left:{{ row.breakL }}"></div>
+                    <div style="position:absolute;top:-6px;bottom:-6px;width:2px;background:#FF5A00;left:{{ row.targetL }}"></div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:11px">
+                    <span style="color:{{ row.fillColor }};font-weight:600">Ist {{ row.actualStr }}</span>
+                    <span style="color:#0A0A0A">▏Break-Even {{ row.breakStr }}</span>
+                    <span style="color:#FF5A00;font-weight:600">▏Ziel {{ row.targetStr }}</span>
+                  </div>
+                </div>
+                <div style="display:grid;grid-template-columns:auto auto;gap:10px 14px;align-items:center">
+                  <label style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.04em">Ziel-ACOS %</label>
+                  <input type="number" step="0.1" value="{{ row.targetAcos }}" onChange="{{ row.setTarget }}" style="width:84px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13px;font-feature-settings:'tnum' 1">
+                  <div style="grid-column:1/3;display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:#9A9A96">
+                    <span>TACOS <b style="color:#0A0A0A">{{ row.tacosStr }}</b></span>
+                    <span>Max. CPC <b style="color:#0A0A0A">{{ row.maxCpcStr }}</b></span>
+                    <span>PPC-Verkäufe <b style="color:#0A0A0A">{{ row.ppcUnitsStr }}</b></span>
+                  </div>
+                  <div style="grid-column:1/3;display:flex;align-items:center;gap:8px;padding:9px 11px;background:{{ row.recBg }};margin-top:2px"><div style="width:6px;height:24px;background:{{ row.recTone }};flex-shrink:0"></div><span style="font-size:12.5px;font-weight:600;color:{{ row.recTone }}">{{ row.recText }}</span></div>
+                  <button onClick="{{ row.openProduct }}" style="grid-column:1/3;background:none;border:none;color:#8A8A86;font-size:11.5px;cursor:pointer;text-align:left;padding:0" style-hover="color:#0A0A0A">Werbekosten pro Monat auf der Produktseite pflegen →</button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="font-size:12px;color:#9A9A96;margin-top:14px;line-height:1.5">Break-Even-ACOS = Marge in % vom Verkaufspreis – bis dahin ist eine werbegetriebene Bestellung profitabel. Ist-ACOS = manuell erfasste Werbekosten ÷ PPC-Umsatz im Cockpit-Zeitraum. Max. CPC = Nettomarge/Stk × Conversion Rate – so viel darf ein Klick maximal kosten.</div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isSzenarien }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Szenarien" style="max-width:1240px;margin:0 auto;padding:30px 40px 72px;animation:ppfade .25s ease">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;padding-bottom:20px;border-bottom:2px solid #0A0A0A">
+            <div>
+              <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9A96;margin-bottom:8px">Szenarien &amp; Predictions</div>
+              <h1 style="font-family:'Archivo';font-weight:800;font-size:30px;letter-spacing:-.02em;margin:0;line-height:1">Was-wäre-wenn</h1>
+            </div>
+            <button onClick="{{ scenarioReset }}" style="background:#fff;border:1px solid #E2E2E2;padding:9px 15px;font-size:12.5px;font-weight:600;cursor:pointer">Zurücksetzen</button>
+          </div>
+
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:20px">
+            <sc-for list="{{ scenarioProducts }}" as="p" hint-placeholder-count="5">
+              <button onClick="{{ p.select }}" style="{{ p.style }}">{{ p.name }}</button>
+            </sc-for>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:26px;margin-top:26px;align-items:start" class="pp-detailgrid">
+            <div style="background:#fff;border:1px solid #E4E4E0">
+              <div style="padding:18px 22px;border-bottom:1px solid #EEEEEB"><div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#9A9A96">Regler</div><div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:3px">{{ scen.name }}</div></div>
+              <div style="padding:22px 24px;display:flex;flex-direction:column;gap:24px">
+                <div>
+                  <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:12.5px;font-weight:600">Verkaufspreis</span><span style="font-family:'Archivo';font-weight:700;font-size:16px;font-feature-settings:'tnum' 1">{{ scen.priceStr }}</span></div>
+                  <input type="range" min="{{ scen.priceMin }}" max="{{ scen.priceMax }}" step="0.5" value="{{ scen.price }}" onInput="{{ scenSetPrice }}" style="margin-top:12px">
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:12.5px;font-weight:600">Werbeausgaben / Monat</span><span style="font-family:'Archivo';font-weight:700;font-size:16px;font-feature-settings:'tnum' 1">{{ scen.adStr }}</span></div>
+                  <input type="range" min="0" max="{{ scen.adMax }}" step="10" value="{{ scen.adSpend }}" onInput="{{ scenSetAd }}" style="margin-top:12px">
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:12.5px;font-weight:600">Verkaufsmenge / Monat</span><span style="font-family:'Archivo';font-weight:700;font-size:16px;font-feature-settings:'tnum' 1">{{ scen.unitsStr }} Stk</span></div>
+                  <input type="range" min="0" max="{{ scen.unitsMax }}" step="1" value="{{ scen.units }}" onInput="{{ scenSetUnits }}" style="margin-top:12px">
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:12.5px;font-weight:600">Produktionskosten</span><span style="font-family:'Archivo';font-weight:700;font-size:16px;font-feature-settings:'tnum' 1">{{ scen.prodStr }}</span></div>
+                  <input type="range" min="0" max="{{ scen.prodMax }}" step="0.1" value="{{ scen.prodCost }}" onInput="{{ scenSetProd }}" style="margin-top:12px">
+                </div>
+              </div>
+            </div>
+
+            <div style="background:#fff;border:1px solid #E4E4E0">
+              <div style="padding:18px 22px;border-bottom:1px solid #EEEEEB"><div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#9A9A96">Live-Ergebnis</div><div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:3px">Prognose vs. aktueller Stand</div></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr">
+                <div style="padding:18px 22px;border-right:1px solid #EEEEEB;border-bottom:1px solid #EEEEEB"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Nettomarge / Stk</div><div style="font-family:'Archivo';font-weight:800;font-size:26px;font-feature-settings:'tnum' 1;margin-top:7px;color:{{ scen.marginColor }}">{{ scen.unitProfitStr }}</div><div style="font-size:11.5px;margin-top:4px;color:{{ scen.marginDeltaColor }}">{{ scen.marginDelta }}</div></div>
+                <div style="padding:18px 22px;border-bottom:1px solid #EEEEEB"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Marge %</div><div style="font-family:'Archivo';font-weight:800;font-size:26px;font-feature-settings:'tnum' 1;margin-top:7px">{{ scen.marginPctStr }}</div><div style="font-size:11.5px;margin-top:4px;color:#9A9A96">Break-Even-ACOS {{ scen.breakStr }}</div></div>
+                <div style="padding:18px 22px;border-right:1px solid #EEEEEB"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Gewinn / Monat</div><div style="font-family:'Archivo';font-weight:800;font-size:26px;font-feature-settings:'tnum' 1;margin-top:7px;color:{{ scen.profitColor }}">{{ scen.profitStr }}</div><div style="font-size:11.5px;margin-top:4px;color:{{ scen.profitDeltaColor }}">{{ scen.profitDelta }}</div></div>
+                <div style="padding:18px 22px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">ACOS</div><div style="font-family:'Archivo';font-weight:800;font-size:26px;font-feature-settings:'tnum' 1;margin-top:7px;color:{{ scen.acosColor }}">{{ scen.acosStr }}</div><div style="font-size:11.5px;margin-top:4px;color:#9A9A96">Umsatz {{ scen.revenueStr }}</div></div>
+              </div>
+              <div style="padding:18px 22px;background:{{ scen.verdictBg }};display:flex;align-items:center;gap:10px"><div style="width:6px;height:26px;background:{{ scen.verdictTone }};flex-shrink:0"></div><span style="font-size:13px;font-weight:600;color:{{ scen.verdictTone }}">{{ scen.verdict }}</span></div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isIdeen }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Ideen" style="max-width:1240px;margin:0 auto;padding:30px 40px 72px;animation:ppfade .25s ease">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;padding-bottom:20px;border-bottom:2px solid #0A0A0A">
+            <div>
+              <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9A96;margin-bottom:8px">Ideen-Board</div>
+              <h1 style="font-family:'Archivo';font-weight:800;font-size:30px;letter-spacing:-.02em;margin:0;line-height:1">Backlog &amp; Umsetzung</h1>
+              <p style="margin:8px 0 0;font-size:13.5px;color:#6A6A66">{{ ideaSubtitle }}</p>
+            </div>
+            <button onClick="{{ ideaOpenNew }}" style="display:inline-flex;align-items:center;gap:8px;background:#FF5A00;color:#fff;border:none;padding:11px 18px;font-weight:600;font-size:13.5px;cursor:pointer;white-space:nowrap" style-hover="background:#E85200">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Neue Idee
+            </button>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px" class="pp-ideakpi">
+            <div style="background:#fff;border:1px solid #E4E4E0;padding:16px 18px">
+              <div style="font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9A9A96;margin-bottom:12px">Ideen gesamt</div>
+              <div style="font-family:'Archivo';font-weight:800;font-size:28px;line-height:1;font-feature-settings:'tnum' 1">{{ ideaKpiTotal }}</div>
+            </div>
+            <div style="background:#fff;border:1px solid #E4E4E0;padding:16px 18px">
+              <div style="font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9A9A96;margin-bottom:12px">Ø Potential</div>
+              <div style="font-family:'Archivo';font-weight:800;font-size:28px;line-height:1;font-feature-settings:'tnum' 1;color:#FF5A00">{{ ideaKpiPot }}<span style="font-size:16px;color:#C9C9C4">%</span></div>
+            </div>
+            <div style="background:#fff;border:1px solid #E4E4E0;padding:16px 18px">
+              <div style="font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9A9A96;margin-bottom:12px">Ø Fortschritt</div>
+              <div style="font-family:'Archivo';font-weight:800;font-size:28px;line-height:1;font-feature-settings:'tnum' 1">{{ ideaKpiProg }}<span style="font-size:16px;color:#C9C9C4">%</span></div>
+            </div>
+            <div style="background:#fff;border:1px solid #E4E4E0;padding:16px 18px">
+              <div style="font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9A9A96;margin-bottom:12px">In Umsetzung</div>
+              <div style="font-family:'Archivo';font-weight:800;font-size:28px;line-height:1;font-feature-settings:'tnum' 1">{{ ideaKpiImpl }}</div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:16px;padding:14px 16px;background:#fff;border:1px solid #E4E4E0">
+            <div style="position:relative;flex:1;min-width:220px">
+              <svg style="position:absolute;left:12px;top:50%;transform:translateY(-50%)" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9A9A96" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+              <input value="{{ ideaSearch }}" onInput="{{ onIdeaSearch }}" placeholder="Ideen durchsuchen…" style="width:100%;border:1px solid #E2E2E2;padding:9px 12px 9px 34px;font-size:13.5px">
+            </div>
+            <div style="display:flex;gap:7px;flex-wrap:wrap">
+              <sc-for list="{{ ideaFilterOptions }}" as="opt" hint-placeholder-count="4">
+                <button onClick="{{ opt.toggle }}" style="{{ opt.style }}"><span style="{{ opt.dot }}"></span><span>{{ opt.label }}</span><span style="{{ opt.countStyle }}">{{ opt.count }}</span></button>
+              </sc-for>
+            </div>
+            <select value="{{ ideaSort }}" onChange="{{ setIdeaSort }}" style="border:1px solid #E2E2E2;padding:9px 12px;font-size:13px;font-weight:500;background:#fff;cursor:pointer;color:#0A0A0A">
+              <option value="recent">Zuletzt hinzugefügt</option>
+              <option value="potential">Höchstes Potential</option>
+              <option value="progress">Höchster Fortschritt</option>
+              <option value="title">Titel A–Z</option>
+            </select>
+          </div>
+
+          <sc-if value="{{ hasIdeasView }}" hint-placeholder-val="{{ true }}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:18px">
+              <sc-for list="{{ ideaCards }}" as="idea" hint-placeholder-count="3">
+                <article style="background:#fff;border:1px solid #E4E4E0;padding:18px 18px 15px;display:flex;flex-direction:column;gap:13px;transition:border-color .15s" style-hover="border-color:#0A0A0A">
+                  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+                    <h3 style="margin:0;font-family:'Archivo';font-weight:700;font-size:16px;letter-spacing:-.01em;line-height:1.25">{{ idea.title }}</h3>
+                    <div style="display:flex;gap:5px;flex:none">
+                      <button onClick="{{ idea.edit }}" title="Bearbeiten" style="width:28px;height:28px;border:1px solid #E2E2E2;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#6A6A66" style-hover="border-color:#0A0A0A;color:#0A0A0A">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l11-11-4-4L4 16z"/></svg>
+                      </button>
+                      <button onClick="{{ idea.remove }}" title="Löschen" style="width:28px;height:28px;border:1px solid #E2E2E2;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#6A6A66" style-hover="border-color:#D42E12;color:#D42E12">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div style="display:flex;flex-wrap:wrap;gap:6px">
+                    <span style="{{ idea.catStyle }}">{{ idea.catLabel }}</span>
+                    <span style="{{ idea.prioStyle }}"><span style="{{ idea.prioDot }}"></span>{{ idea.prioLabel }}</span>
+                    <sc-for list="{{ idea.statusBadges }}" as="b" hint-placeholder-count="1">
+                      <span style="{{ b.style }}"><span style="{{ b.dot }}"></span>{{ b.label }}</span>
+                    </sc-for>
+                  </div>
+
+                  <sc-if value="{{ idea.hasDesc }}" hint-placeholder-val="{{ false }}">
+                    <p style="margin:0;font-size:13px;line-height:1.5;color:#6A6A66">{{ idea.description }}</p>
+                  </sc-if>
+
+                  <div style="display:flex;flex-direction:column;gap:10px;padding-top:2px">
+                    <div>
+                      <div style="display:flex;justify-content:space-between;font-size:10.5px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em"><span style="color:#9A9A96;font-weight:600">Potential</span><span style="color:#FF5A00;font-weight:700;font-feature-settings:'tnum' 1">{{ idea.potLabel }}</span></div>
+                      <div style="height:6px;background:#EAEAE6;overflow:hidden"><div style="{{ idea.potBar }}"></div></div>
+                    </div>
+                    <div>
+                      <div style="display:flex;justify-content:space-between;font-size:10.5px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em"><span style="color:#9A9A96;font-weight:600">Fortschritt</span><span style="color:#0A0A0A;font-weight:700;font-feature-settings:'tnum' 1">{{ idea.progLabel }}</span></div>
+                      <div style="height:6px;background:#EAEAE6;overflow:hidden"><div style="{{ idea.progBar }}"></div></div>
+                    </div>
+                  </div>
+
+                  <sc-if value="{{ idea.hasFiles }}" hint-placeholder-val="{{ false }}">
+                    <div style="border-top:1px solid #EEEEEB;padding-top:12px;display:flex;flex-direction:column;gap:6px">
+                      <sc-for list="{{ idea.files }}" as="f" hint-placeholder-count="1">
+                        <button onClick="{{ f.download }}" style="display:flex;align-items:center;gap:9px;width:100%;text-align:left;background:#F7F7F5;border:1px solid #E4E4E0;padding:7px 10px;cursor:pointer;color:#4A4A46" style-hover="border-color:#FF5A00;color:#0A0A0A">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9A9A96" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M6 2h8l4 4v16H6z"/><path d="M14 2v4h4"/></svg>
+                          <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px">{{ f.name }}</span>
+                          <span style="font-feature-settings:'tnum' 1;font-size:10px;color:#9A9A96;flex:none">{{ f.size }}</span>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF5A00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+                        </button>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+
+                  <div style="display:flex;align-items:center;gap:14px;padding-top:12px;border-top:1px solid #EEEEEB;margin-top:auto;font-size:11px;color:#9A9A96">
+                    <span style="display:inline-flex;align-items:center;gap:6px">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                      {{ idea.updatedLabel }}
+                    </span>
+                    <sc-if value="{{ idea.hasFiles }}" hint-placeholder-val="{{ false }}">
+                      <span style="display:inline-flex;align-items:center;gap:6px">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v9a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V6a2 2 0 0 1 2-2h4l2 3h6a2 2 0 0 1 2 2z"/></svg>
+                        {{ idea.fileCountLabel }}
+                      </span>
+                    </sc-if>
+                  </div>
+                </article>
+              </sc-for>
+              <button onClick="{{ ideaOpenNew }}" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-height:220px;background:transparent;border:1px dashed #C9C9C4;cursor:pointer;color:#9A9A96;transition:border-color .15s,color .15s" style-hover="border-color:#FF5A00;color:#FF5A00">
+                <span style="width:42px;height:42px;background:#fff;border:1px solid #E4E4E0;display:flex;align-items:center;justify-content:center">
+                  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </span>
+                <span style="font-size:13px;font-weight:600">Weitere Idee</span>
+              </button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ ideaEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:72px 20px;margin-top:18px;border:1px dashed #C9C9C4;background:#fff">
+              <div style="width:54px;height:54px;background:#F4F4F2;border:1px solid #E4E4E0;display:flex;align-items:center;justify-content:center;margin-bottom:16px">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF5A00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 00-4 10.5c.6.6 1 1.3 1 2.5h6c0-1.2.4-1.9 1-2.5A6 6 0 0012 3z"/></svg>
+              </div>
+              <div style="font-family:'Archivo';font-weight:800;font-size:18px">{{ ideaEmptyTitle }}</div>
+              <div style="font-size:13.5px;color:#9A9A96;margin:8px 0 20px;max-width:340px;line-height:1.5">{{ ideaEmptyHint }}</div>
+              <button onClick="{{ ideaOpenNew }}" style="display:inline-flex;align-items:center;gap:8px;background:#FF5A00;color:#fff;border:none;padding:11px 18px;font-weight:600;font-size:13.5px;cursor:pointer" style-hover="background:#E85200">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Erste Idee anlegen
+              </button>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isEmpfehlungen }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Empfehlungen" style="max-width:1240px;margin:0 auto;padding:30px 40px 72px;animation:ppfade .25s ease">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;padding-bottom:20px;border-bottom:2px solid #0A0A0A">
+            <div>
+              <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9A96;margin-bottom:8px">Empfehlungen</div>
+              <h1 style="font-family:'Archivo';font-weight:800;font-size:30px;letter-spacing:-.02em;margin:0;line-height:1">Handlungsempfehlungen</h1>
+              <p style="margin:8px 0 0;font-size:13.5px;color:#6A6A66">{{ recSubtitle }}</p>
+            </div>
+            <sc-if value="{{ recHasDismissed }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ recRestore }}" style="display:inline-flex;align-items:center;gap:7px;background:#fff;color:#6A6A66;border:1px solid #E4E4E0;padding:9px 14px;font-size:12.5px;font-weight:600;cursor:pointer" style-hover="border-color:#0A0A0A;color:#0A0A0A">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 109-9 9 9 0 00-6.4 2.6L3 8"/><path d="M3 3v5h5"/></svg>
+                {{ recDismissedLabel }}
+              </button>
+            </sc-if>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px" class="pp-recsum">
+            <div style="background:#fff;border:1px solid #E4E4E0;border-left:3px solid #D42E12;padding:16px 18px">
+              <div style="font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9A9A96;margin-bottom:10px">Kritisch</div>
+              <div style="font-family:'Archivo';font-weight:800;font-size:28px;line-height:1;font-feature-settings:'tnum' 1;color:#D42E12">{{ recCrit }}</div>
+            </div>
+            <div style="background:#fff;border:1px solid #E4E4E0;border-left:3px solid #D8930A;padding:16px 18px">
+              <div style="font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9A9A96;margin-bottom:10px">Wichtig</div>
+              <div style="font-family:'Archivo';font-weight:800;font-size:28px;line-height:1;font-feature-settings:'tnum' 1;color:#D8930A">{{ recImp }}</div>
+            </div>
+            <div style="background:#fff;border:1px solid #E4E4E0;border-left:3px solid #6A6A66;padding:16px 18px">
+              <div style="font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9A9A96;margin-bottom:10px">Hinweis</div>
+              <div style="font-family:'Archivo';font-weight:800;font-size:28px;line-height:1;font-feature-settings:'tnum' 1;color:#6A6A66">{{ recHint }}</div>
+            </div>
+          </div>
+
+          <sc-if value="{{ recHasCards }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column;gap:14px;margin-top:20px">
+              <sc-for list="{{ recCards }}" as="rec" hint-placeholder-count="4">
+                <article style="display:flex;background:#fff;border:1px solid #E4E4E0" style-hover="border-color:#0A0A0A">
+                  <div style="{{ rec.barStyle }}"></div>
+                  <div style="flex:1;min-width:0;padding:17px 20px;display:flex;flex-direction:column;gap:11px">
+                    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap">
+                      <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+                        <span style="{{ rec.prioStyle }}">{{ rec.prioLabel }}</span>
+                        <span style="{{ rec.areaStyle }}">{{ rec.area }}</span>
+                        <span style="font-family:'Archivo';font-weight:700;font-size:15.5px;letter-spacing:-.01em">{{ rec.productName }}</span>
+                      </div>
+                      <div style="display:flex;gap:6px;flex:none">
+                        <button onClick="{{ rec.done }}" title="Als erledigt markieren" style="display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid #E2E2E2;padding:6px 11px;font-size:12px;font-weight:600;cursor:pointer;color:#6A6A66" style-hover="border-color:#1B7F4B;color:#1B7F4B">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/></svg>
+                          Erledigt
+                        </button>
+                        <button onClick="{{ rec.ignore }}" title="Ignorieren" style="display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid #E2E2E2;padding:6px 11px;font-size:12px;font-weight:600;cursor:pointer;color:#6A6A66" style-hover="border-color:#0A0A0A;color:#0A0A0A">
+                          Ignorieren
+                        </button>
+                      </div>
+                    </div>
+                    <div style="font-size:13px;line-height:1.55;color:#4A4A46">{{ rec.reason }}</div>
+                    <div style="display:flex;align-items:flex-start;gap:10px;padding:11px 14px;background:#FAFAF8;border:1px solid #EEEEEB">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF5A00" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+                      <div style="font-size:13px;line-height:1.5;font-weight:600;color:#0A0A0A;flex:1;min-width:0">{{ rec.action }}</div>
+                    </div>
+                    <div>
+                      <button onClick="{{ rec.open }}" style="background:none;border:none;padding:0;font-size:12.5px;font-weight:600;color:#FF5A00;cursor:pointer;display:inline-flex;align-items:center;gap:5px" style-hover="text-decoration:underline">Zum Produkt →</button>
+                    </div>
+                  </div>
+                </article>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ recEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:72px 20px;margin-top:20px;border:1px dashed #C9C9C4;background:#fff">
+              <div style="width:54px;height:54px;background:#EAF6EE;border:1px solid #CBE7D5;display:flex;align-items:center;justify-content:center;margin-bottom:16px">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B7F4B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/></svg>
+              </div>
+              <div style="font-family:'Archivo';font-weight:800;font-size:18px">{{ recEmptyTitle }}</div>
+              <div style="font-size:13.5px;color:#9A9A96;margin:8px 0 0;max-width:400px;line-height:1.5">{{ recEmptyHint }}</div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+    </main>
+  </div>
+
+  <sc-if value="{{ ideaModalOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ ideaClose }}" style="position:fixed;inset:0;background:rgba(10,10,10,.4);z-index:50;display:flex;justify-content:flex-end">
+      <div onClick="{{ stop }}" style="width:480px;max-width:100%;background:#fff;height:100%;overflow-y:auto;border-left:2px solid #0A0A0A;animation:ppfade .2s ease;display:flex;flex-direction:column" class="pp-scroll">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:22px 26px;border-bottom:2px solid #0A0A0A;position:sticky;top:0;background:#fff;z-index:2">
+          <div><div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9A96">{{ ideaModalKicker }}</div><h2 style="font-family:'Archivo';font-weight:800;font-size:21px;margin:4px 0 0">{{ ideaModalTitle }}</h2></div>
+          <button onClick="{{ ideaClose }}" style="background:none;border:1px solid #E2E2E2;width:34px;height:34px;cursor:pointer;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center">×</button>
+        </div>
+        <div style="padding:22px 26px 26px;flex:1">
+          <label style="display:block;margin-bottom:16px"><span style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96">Titel</span><input value="{{ fTitle }}" onInput="{{ setFTitle }}" placeholder="Wie heißt die Idee?" style="width:100%;border:1px solid #E2E2E2;padding:10px 12px;font-size:14px;margin-top:7px"></label>
+
+          <label style="display:block;margin-bottom:18px"><span style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96">Kurzbeschreibung</span><textarea value="{{ fDesc }}" onInput="{{ setFDesc }}" rows="3" placeholder="Worum geht es? In ein, zwei Sätzen." style="width:100%;border:1px solid #E2E2E2;padding:10px 12px;font-size:14px;line-height:1.5;margin-top:7px;resize:vertical"></textarea></label>
+
+          <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96;margin-bottom:10px">Kategorie</div>
+          <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px">
+            <sc-for list="{{ ideaCatOptions }}" as="c" hint-placeholder-count="4">
+              <button onClick="{{ c.toggle }}" style="{{ c.style }}"><span style="{{ c.dot }}"></span>{{ c.label }}</button>
+            </sc-for>
+          </div>
+
+          <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96;margin-bottom:10px">Status</div>
+          <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px">
+            <sc-for list="{{ ideaStatusOptions }}" as="s" hint-placeholder-count="4">
+              <button onClick="{{ s.toggle }}" style="{{ s.style }}"><span style="{{ s.dot }}"></span>{{ s.label }}</button>
+            </sc-for>
+          </div>
+
+          <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96;margin-bottom:10px">Priorität</div>
+          <div style="display:flex;gap:7px;margin-bottom:20px">
+            <sc-for list="{{ ideaPrioOptions }}" as="p" hint-placeholder-count="3">
+              <button onClick="{{ p.toggle }}" style="{{ p.style }}"><span style="{{ p.dot }}"></span>{{ p.label }}</button>
+            </sc-for>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96">Potential</span><span style="font-family:'Archivo';font-weight:800;font-size:15px;color:#FF5A00;font-feature-settings:'tnum' 1">{{ fPot }}%</span></div>
+              <input type="range" min="0" max="100" value="{{ fPot }}" onInput="{{ setFPot }}">
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96">Fortschritt</span><span style="font-family:'Archivo';font-weight:800;font-size:15px;font-feature-settings:'tnum' 1">{{ fProg }}%</span></div>
+              <input type="range" min="0" max="100" value="{{ fProg }}" onInput="{{ setFProg }}">
+            </div>
+          </div>
+
+          <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96;margin-bottom:10px">Dateien</div>
+          <label style="display:flex;align-items:center;justify-content:center;gap:9px;padding:14px;border:1px dashed #C9C9C4;cursor:pointer;color:#6A6A66;font-size:13px" style-hover="border-color:#FF5A00;color:#0A0A0A">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="M7 13l5-5 5 5"/><path d="M5 3h14"/></svg>
+            {{ ideaUploadLabel }}
+            <input type="file" multiple="" onChange="{{ onIdeaFilePick }}" style="display:none">
+          </label>
+          <sc-if value="{{ ideaHasFormFiles }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">
+              <sc-for list="{{ ideaFormFiles }}" as="f" hint-placeholder-count="1">
+                <div style="display:flex;align-items:center;gap:9px;background:#F7F7F5;border:1px solid #E4E4E0;padding:8px 10px">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9A9A96" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M6 2h8l4 4v16H6z"/><path d="M14 2v4h4"/></svg>
+                  <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px">{{ f.name }}</span>
+                  <span style="font-feature-settings:'tnum' 1;font-size:10px;color:#9A9A96">{{ f.size }}</span>
+                  <button onClick="{{ f.remove }}" style="width:22px;height:22px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;cursor:pointer;color:#9A9A96;flex:none" style-hover="color:#D42E12"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 26px;border-top:2px solid #0A0A0A;position:sticky;bottom:0;background:#fff">
+          <span style="font-size:11.5px;color:#9A9A96">{{ ideaUploadState }}</span>
+          <div style="display:flex;gap:9px">
+            <button onClick="{{ ideaClose }}" style="background:#fff;color:#6A6A66;border:1px solid #E2E2E2;padding:10px 16px;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="border-color:#0A0A0A;color:#0A0A0A">Abbrechen</button>
+            <button onClick="{{ saveIdea }}" style="display:inline-flex;align-items:center;gap:8px;background:#FF5A00;color:#fff;border:none;padding:10px 18px;font-size:13.5px;font-weight:700;cursor:pointer" style-hover="background:#E85200">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/></svg>
+              {{ ideaSaveLabel }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeModal }}" style="position:fixed;inset:0;background:rgba(10,10,10,.4);z-index:50;display:flex;justify-content:flex-end">
+      <div onClick="{{ stop }}" style="width:460px;max-width:100%;background:#fff;height:100%;overflow-y:auto;border-left:2px solid #0A0A0A;animation:ppfade .2s ease" class="pp-scroll">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:22px 26px;border-bottom:2px solid #0A0A0A;position:sticky;top:0;background:#fff;z-index:2">
+          <div><div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9A96">Neu</div><h2 style="font-family:'Archivo';font-weight:800;font-size:21px;margin:4px 0 0">Produkt anlegen</h2></div>
+          <button onClick="{{ closeModal }}" style="background:none;border:1px solid #E2E2E2;width:34px;height:34px;cursor:pointer;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center">×</button>
+        </div>
+        <div style="padding:22px 26px 40px">
+          <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96;margin-bottom:12px">Stammdaten</div>
+          <label style="display:block;margin-bottom:14px"><span style="font-size:12px;color:#7A7A76">Produktname</span><input value="{{ draft.name }}" onInput="{{ setDraftName }}" placeholder="z. B. Wackelturm Party XXL" style="width:100%;border:1px solid #E2E2E2;padding:10px 12px;font-size:14px;margin-top:6px"></label>
+          <label style="display:block;margin-bottom:14px"><span style="font-size:12px;color:#7A7A76">ASIN</span><input value="{{ draft.asin }}" onInput="{{ setDraftAsin }}" placeholder="B0..." style="width:100%;border:1px solid #E2E2E2;padding:10px 12px;font-size:14px;margin-top:6px;font-feature-settings:'tnum' 1"></label>
+          <label style="display:block;margin-bottom:14px"><span style="font-size:12px;color:#7A7A76">Amazon-Listing-Link</span><input value="{{ draft.amazonUrl }}" onInput="{{ setDraftUrl }}" placeholder="https://www.amazon.de/dp/B0..." style="width:100%;border:1px solid #E2E2E2;padding:10px 12px;font-size:14px;margin-top:6px"></label>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96;margin:22px 0 12px">Kalkulation</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <label style="display:block"><span style="font-size:12px;color:#7A7A76">Verkaufspreis €</span><input type="number" step="0.01" value="{{ draft.price }}" onInput="{{ setDraftPrice }}" style="width:100%;border:1px solid #E2E2E2;padding:10px 12px;font-size:14px;margin-top:6px"></label>
+            <label style="display:block"><span style="font-size:12px;color:#7A7A76">Produktionskosten €</span><input type="number" step="0.01" value="{{ draft.productionCost }}" onInput="{{ setDraftProd }}" style="width:100%;border:1px solid #E2E2E2;padding:10px 12px;font-size:14px;margin-top:6px"></label>
+            <label style="display:block"><span style="font-size:12px;color:#7A7A76">FBA-Gebühr €</span><input type="number" step="0.01" value="{{ draft.fbaFee }}" onInput="{{ setDraftFba }}" style="width:100%;border:1px solid #E2E2E2;padding:10px 12px;font-size:14px;margin-top:6px"></label>
+            <label style="display:block"><span style="font-size:12px;color:#7A7A76">Versand / Stk €</span><input type="number" step="0.01" value="{{ draft.shipping }}" onInput="{{ setDraftShip }}" style="width:100%;border:1px solid #E2E2E2;padding:10px 12px;font-size:14px;margin-top:6px"></label>
+          </div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96;margin:22px 0 12px">Logistik &amp; Werbung</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <label style="display:block"><span style="font-size:12px;color:#7A7A76">Lagerbestand (aktuell)</span><input type="number" value="{{ draft.stock }}" onInput="{{ setDraftStock }}" style="width:100%;border:1px solid #E2E2E2;padding:10px 12px;font-size:14px;margin-top:6px"></label>
+            <label style="display:block"><span style="font-size:12px;color:#7A7A76">Maße/Gewicht</span><input value="{{ draft.dims }}" onInput="{{ setDraftDims }}" placeholder="30×9×9 cm · 1,2 kg" style="width:100%;border:1px solid #E2E2E2;padding:10px 12px;font-size:14px;margin-top:6px"></label>
+            <label style="display:block"><span style="font-size:12px;color:#7A7A76">Lieferzeit (Tage)</span><input type="number" value="{{ draft.leadTime }}" onInput="{{ setDraftLead }}" style="width:100%;border:1px solid #E2E2E2;padding:10px 12px;font-size:14px;margin-top:6px"></label>
+            <label style="display:block"><span style="font-size:12px;color:#7A7A76">Sicherheitspuffer (Tage)</span><input type="number" value="{{ draft.safetyDays }}" onInput="{{ setDraftSafety }}" style="width:100%;border:1px solid #E2E2E2;padding:10px 12px;font-size:14px;margin-top:6px"></label>
+            <label style="display:block"><span style="font-size:12px;color:#7A7A76">Bewertung (Sterne 0–5)</span><input type="number" step="0.1" min="0" max="5" value="{{ draft.stars }}" onInput="{{ setDraftStars }}" style="width:100%;border:1px solid #E2E2E2;padding:10px 12px;font-size:14px;margin-top:6px"></label>
+            <label style="display:block"><span style="font-size:12px;color:#7A7A76">Ziel-ACOS %</span><input type="number" step="0.1" value="{{ draft.targetAcos }}" onInput="{{ setDraftTarget }}" style="width:100%;border:1px solid #E2E2E2;padding:10px 12px;font-size:14px;margin-top:6px"></label>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:26px">
+            <button onClick="{{ saveProduct }}" style="flex:1;background:#FF5A00;color:#fff;border:none;padding:13px;font-weight:600;font-size:14px;cursor:pointer" style-hover="background:#E85200">Produkt speichern</button>
+            <button onClick="{{ closeModal }}" style="background:#fff;color:#0A0A0A;border:1px solid #E2E2E2;padding:13px 18px;font-weight:600;font-size:14px;cursor:pointer">Abbrechen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ stockModalOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeStockModal }}" style="position:fixed;inset:0;background:rgba(10,10,10,.4);z-index:55;display:flex;align-items:center;justify-content:center;padding:20px">
+      <div onClick="{{ stop }}" style="width:400px;max-width:100%;background:#fff;border:2px solid #0A0A0A;animation:ppfade .2s ease">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:2px solid #0A0A0A">
+          <div><div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9A96">Inventur / Nachschub</div><h2 style="font-family:'Archivo';font-weight:800;font-size:19px;margin:4px 0 0">Lagerbestand aktualisieren</h2></div>
+          <button onClick="{{ closeStockModal }}" style="background:none;border:1px solid #E2E2E2;width:32px;height:32px;cursor:pointer;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center">×</button>
+        </div>
+        <div style="padding:22px 24px 26px">
+          <div style="font-size:13px;color:#7A7A76;line-height:1.5;margin-bottom:16px">{{ stockModalName }} · aktuell berechnet <b style="color:#0A0A0A">{{ stockModalCurrentStr }}</b>.<br>Letzter Abgleich: {{ stockModalSinceStr }}.</div>
+          <label style="display:block"><span style="font-size:12px;color:#7A7A76">Neuer gezählter Bestand (Stk)</span><input type="number" value="{{ stockModalValue }}" onInput="{{ setStockModalValue }}" style="width:100%;border:1px solid #E2E2E2;padding:11px 12px;font-size:15px;margin-top:6px;font-feature-settings:'tnum' 1"></label>
+          <div style="font-size:11.5px;color:#9A9A96;margin-top:10px;line-height:1.5">Wird als neuer Referenzpunkt mit heutigem Datum ({{ todayStr }}) gespeichert. Ab jetzt werden alle danach eingetragenen Verkäufe automatisch abgezogen.</div>
+          <div style="display:flex;gap:10px;margin-top:22px">
+            <button onClick="{{ saveAbgleich }}" style="flex:1;background:#FF5A00;color:#fff;border:none;padding:12px;font-weight:600;font-size:14px;cursor:pointer" style-hover="background:#E85200">Als neuen Referenzpunkt speichern</button>
+            <button onClick="{{ closeStockModal }}" style="background:#fff;color:#0A0A0A;border:1px solid #E2E2E2;padding:12px 16px;font-weight:600;font-size:14px;cursor:pointer">Abbrechen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ deleteModalOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ cancelDelete }}" style="position:fixed;inset:0;background:rgba(10,10,10,.4);z-index:60;display:flex;align-items:center;justify-content:center;padding:20px">
+      <div onClick="{{ stop }}" style="width:400px;max-width:100%;background:#fff;border:2px solid #0A0A0A;animation:ppfade .2s ease">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:2px solid #0A0A0A">
+          <div><div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#D42E12">Produkt löschen</div><h2 style="font-family:'Archivo';font-weight:800;font-size:19px;margin:4px 0 0">Wirklich löschen?</h2></div>
+          <button onClick="{{ cancelDelete }}" style="background:none;border:1px solid #E2E2E2;width:32px;height:32px;cursor:pointer;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center">×</button>
+        </div>
+        <div style="padding:22px 24px 26px">
+          <div style="font-size:13.5px;color:#7A7A76;line-height:1.55"><b style="color:#0A0A0A">{{ deleteModalName }}</b> wird mit allen Monatswerten, Zielen und Lagerdaten unwiderruflich entfernt.</div>
+          <div style="display:flex;gap:10px;margin-top:22px">
+            <button onClick="{{ confirmDelete }}" style="flex:1;background:#D42E12;color:#fff;border:none;padding:12px;font-weight:600;font-size:14px;cursor:pointer" style-hover="background:#B72610">Endgültig löschen</button>
+            <button onClick="{{ cancelDelete }}" style="background:#fff;color:#0A0A0A;border:1px solid #E2E2E2;padding:12px 16px;font-weight:600;font-size:14px;cursor:pointer">Abbrechen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    const months = this._buildMonths();
+    this.months = months;
+    this._monthNames = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem('partypeak_v4') || 'null'); } catch(e){}
+    const seed = saved || this._seed();
+    seed.ideas = (seed.ideas || []).map(i => this._normIdea(i));
+    // data range from seeded/saved monthly keys
+    let dmin=null,dmax=null;
+    seed.products.forEach(p=>Object.keys(p.monthly||{}).forEach(ym=>{ if(dmin===null||ym<dmin)dmin=ym; if(dmax===null||ym>dmax)dmax=ym; }));
+    this.state = {
+      module:'cockpit', productId:null,
+      sort:{key:'revenue', dir:'desc'},
+      products: seed.products,
+      ideas: seed.ideas,
+      narrow: (typeof window!=='undefined' && window.innerWidth < 900),
+      modalOpen:false,
+      stockModal:null,
+      deleteModal:null,
+      detailAddYm:'',
+      draft:this._blankDraft(),
+      scenario:null,
+      ideaModalOpen:false,
+      ideaEditingId:null,
+      ideaForm:this._blankIdea(),
+      ideaFilters:[],
+      ideaSort:'recent',
+      ideaSearch:'',
+      ideaUploading:false,
+      recDismissed:(saved && saved.recDismissed) || {},
+      detailYear:null,
+      period:{preset:'gesamt', from:dmin||'2025-07', to:dmax||'2026-07'},
+      chartYear:String(new Date().getFullYear())
+    };
+  }
+  componentDidMount(){ this._onResize = ()=> this.setState({narrow: window.innerWidth < 900}); window.addEventListener('resize', this._onResize); this._sbInit(); }
+  componentWillUnmount(){ window.removeEventListener('resize', this._onResize); try{ if(this._sb && this._sbChannel) this._sb.removeChannel(this._sbChannel); }catch(e){} }
+  _persist(){ try { localStorage.setItem('partypeak_v4', JSON.stringify(this._snapshot())); } catch(e){} this._sbPush(); }
+
+  /* ============================================================
+     PARTY PEAK · SUPABASE-SYNC  — START
+     Haelt products / ideas / recDismissed live zwischen mehreren
+     Personen synchron. Aendert NICHTS an der uebrigen Logik.
+     ============================================================ */
+  _snapshot(){ return { products:this.state.products, ideas:this.state.ideas, recDismissed:this.state.recDismissed }; }
+  // stabile Signatur (Reihenfolge der Keys egal) -> verhindert Sync-Schleifen
+  _stableStringify(v){
+    if(v===null || typeof v!=='object') return JSON.stringify(v);
+    if(Array.isArray(v)) return '['+v.map(x=>this._stableStringify(x)).join(',')+']';
+    return '{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+this._stableStringify(v[k])).join(',')+'}';
+  }
+  _loadScript(src){ return new Promise((res,rej)=>{ if(window.supabase) return res(); const s=document.createElement('script'); s.src=src; s.onload=()=>res(); s.onerror=()=>rej(new Error('Script laden fehlgeschlagen: '+src)); document.head.appendChild(s); }); }
+  async _sbInit(){
+    const cfg = window.PP_SUPABASE || {};
+    if(!cfg.url || cfg.url.indexOf('DEIN-PROJEKT')>=0 || !cfg.key){ console.warn('[Party Peak] Supabase nicht konfiguriert – es wird nur lokal gespeichert.'); return; }
+    try{
+      await this._loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2');
+      this._sb = window.supabase.createClient(cfg.url, cfg.key);
+      this._sbTable = cfg.table || 'dashboard';
+      this._sbRow   = cfg.row   || 'main';
+      this._sbReady = true;
+      await this._sbPull();  // beim Start: Stand vom Server holen
+      // Realtime: bei jeder Aenderung der Zeile frisch nachladen
+      this._sbChannel = this._sb
+        .channel('pp-dashboard-'+this._sbRow)
+        .on('postgres_changes', { event:'*', schema:'public', table:this._sbTable, filter:'id=eq.'+this._sbRow }, ()=>{ this._sbPull(); })
+        .subscribe();
+    }catch(e){ console.warn('[Party Peak] Supabase-Init fehlgeschlagen:', e); }
+  }
+  async _sbPull(){
+    if(!this._sbReady) return;
+    try{
+      const { data, error } = await this._sb.from(this._sbTable).select('data').eq('id', this._sbRow).maybeSingle();
+      if(error){ console.warn('[Party Peak] Laden fehlgeschlagen:', error.message); return; }
+      if(data && data.data){
+        this._sbApplyRemote(data.data);
+      } else {
+        // Noch keine Zeile vorhanden -> aktuellen lokalen Stand als Startwert anlegen
+        const snap = this._snapshot();
+        this._lastSyncedSig = this._stableStringify(snap);
+        await this._sb.from(this._sbTable).upsert({ id:this._sbRow, data:snap, updated_at:new Date().toISOString() });
+      }
+    }catch(e){ console.warn('[Party Peak] Laden-Ausnahme:', e); }
+  }
+  _sbApplyRemote(remote){
+    try{
+      const sig = this._stableStringify(remote);
+      if(sig === this._lastSyncedSig) return; // eigenes Echo oder identisch -> ignorieren
+      this._lastSyncedSig = sig;
+      const products = Array.isArray(remote.products) ? remote.products : this.state.products;
+      const ideas    = Array.isArray(remote.ideas)    ? remote.ideas.map(i=>this._normIdea(i)) : this.state.ideas;
+      const recDismissed = remote.recDismissed || this.state.recDismissed;
+      this.setState({ products, ideas, recDismissed }); // WICHTIG: ohne _persist() -> keine Schleife
+      try{ localStorage.setItem('partypeak_v4', JSON.stringify({products, ideas, recDismissed})); }catch(e){}
+    }catch(e){ console.warn('[Party Peak] Uebernahme fehlgeschlagen:', e); }
+  }
+  _sbPush(){
+    if(!this._sbReady) return;
+    const snap = this._snapshot();
+    const sig = this._stableStringify(snap);
+    if(sig === this._lastSyncedSig) return; // nichts wirklich geaendert
+    this._lastSyncedSig = sig;
+    clearTimeout(this._sbPushT);
+    this._sbPushT = setTimeout(async ()=>{
+      try{
+        const { error } = await this._sb.from(this._sbTable).upsert({ id:this._sbRow, data:snap, updated_at:new Date().toISOString() });
+        if(error) console.warn('[Party Peak] Speichern fehlgeschlagen:', error.message);
+      }catch(e){ console.warn('[Party Peak] Speichern-Ausnahme:', e); }
+    }, 500); // kurzes Debounce, damit Slider/Tippen nicht bei jedem Zeichen sendet
+  }
+  /* PARTY PEAK · SUPABASE-SYNC — ENDE */
+
+  _buildMonths(){ const a=[]; for(let y=2025;y<=2030;y++){ for(let m=1;m<=12;m++){ a.push(y+'-'+String(m).padStart(2,'0')); } } return a; }
+  _season(){ return [0.9,0.8,0.85,1.0,1.35,1.9,0.7,0.8,0.9,1.0,1.05,1.15]; }
+  _todayISO(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  _curYm(){ return this._todayISO().slice(0,7); }
+  _genMonthly(base, conv, price, acosPct, ppcShare){ const s=this._season(); const o={}; this.months.forEach(ym=>{ if(ym<'2025-07'||ym>'2026-07') return; const mi=+ym.slice(5)-1; let u=Math.round(base*s[mi]); if(ym==='2026-07') u=Math.round(u*0.55); const ppc=Math.round(u*(ppcShare||0.4)); const adCost=Math.round(ppc*(price||0)*((acosPct||18)/100)); o[ym]={units:u, views:Math.round(u/conv), unitsPpc:ppc, adCost:adCost}; }); return o; }
+  _blankDraft(){ return {name:'',asin:'',amazonUrl:'',price:'',productionCost:'',fbaFee:'',shipping:'',stock:'',dims:'',leadTime:'45',safetyDays:'14',targetAcos:'',stars:''}; }
+  _seed(){
+    const P = (o)=>({ id:'p'+Math.random().toString(36).slice(2,8), listingRating:'green', aplusRating:'green', amazonUrl: o.asin ? ('https://www.amazon.de/dp/'+o.asin) : '', ...o });
+    const products = [
+      P({name:'Wackelturm Party XXL', asin:'B0C1PARTY1', price:24.99, productionCost:6.20, fbaFee:4.35, shipping:1.10, dims:'30×9×9 cm · 1,2 kg', stock:210, leadTime:45, safetyDays:14, dailyBudget:8, targetAcos:18, monthly:this._genMonthly(40,0.12,24.99,18,0.45)}),
+      P({name:'Trinkspiel Roulette Deluxe', asin:'B0C2PARTY2', price:19.99, productionCost:4.10, fbaFee:3.85, shipping:0.95, dims:'22×22×6 cm · 0,6 kg', stock:90, leadTime:40, safetyDays:14, dailyBudget:6.5, targetAcos:16, monthly:this._genMonthly(62,0.14,19.99,16,0.4)}),
+      P({name:'Familien-Quiz „Wer weiß es?"', asin:'B0C3PARTY3', price:29.99, productionCost:5.60, fbaFee:4.10, shipping:1.20, dims:'20×13×5 cm · 0,5 kg', stock:480, leadTime:50, safetyDays:21, dailyBudget:3.5, targetAcos:15, monthly:this._genMonthly(30,0.11,29.99,15,0.35)}),
+      P({name:'Ballon-Party Komplettset', asin:'B0C4PARTY4', price:14.99, productionCost:3.30, fbaFee:3.40, shipping:0.80, dims:'25×18×8 cm · 0,4 kg', stock:38, leadTime:35, safetyDays:10, dailyBudget:2.2, targetAcos:20, monthly:this._genMonthly(26,0.10,14.99,20,0.5)}),
+      P({name:'Pärchen-Fragen Kartenspiel', asin:'B0C5PARTY5', price:12.99, productionCost:2.40, fbaFee:3.10, shipping:0.70, dims:'10×7×3 cm · 0,2 kg', stock:620, leadTime:42, safetyDays:14, dailyBudget:4.5, targetAcos:14, monthly:this._genMonthly(78,0.16,12.99,14,0.45)})
+    ];
+    const ratingSeed=[['yellow','red'],['green','yellow'],['green','green'],['red','yellow'],['green','red']];
+    const bases=[40,62,30,26,78]; const tmult=[1.1,0.95,1.0,1.25,0.9]; const s=this._season();
+    const starSeed=[4.6,4.2,4.8,3.9,4.4];
+    products.forEach((p,i)=>{
+      if(ratingSeed[i]){ p.listingRating=ratingSeed[i][0]; p.aplusRating=ratingSeed[i][1]; }
+      p.stars = starSeed[i]!=null?starSeed[i]:4.3;
+      // monthly targets 2025-07 .. 2026-12
+      const t={}; this.months.forEach(ym=>{ if(ym<'2025-07'||ym>'2026-12') return; const mi=+ym.slice(5)-1; t[ym]=Math.round(bases[i]*s[mi]*tmult[i]); }); p.targets=t;
+      // stock reference at 2026-05-01: value chosen so computed stock == original seed stock
+      p.stockRef={value:0, date:'2026-05-01'};
+      p.stockRef.value=Math.round((+p.stock||0)+this._soldSince(p));
+    });
+    const ideas = [
+      {id:'i1', title:'Bundle: Wackelturm + Trinkspiel', description:'Zwei Bestseller als Vorteils-Set bündeln — höherer Warenkorb, weniger Retouren.', category:'produkt', statuses:['In Prüfung'], priority:'Hoch', potential:82, progress:35, files:[], created_at:Date.now()-2*86400000, updated_at:Date.now()-3600000},
+      {id:'i2', title:'A+ Content für Familien-Quiz', description:'Neue Bildstrecke mit Lifestyle-Fotos und Vergleichstabelle.', category:'listing', statuses:['Umsetzung'], priority:'Mittel', potential:64, progress:70, files:[], created_at:Date.now()-5*86400000, updated_at:Date.now()-7200000},
+      {id:'i3', title:'Reels-Kampagne TikTok Party-Nische', description:'Kurzclips mit Creator-Kooperation, Fokus Zielgruppe 18–29.', category:'marketing', statuses:['Inbox'], priority:'Mittel', potential:58, progress:0, files:[], created_at:Date.now()-1*86400000, updated_at:Date.now()-1*86400000},
+      {id:'i4', title:'Neues Motiv Pärchen-Fragen (Valentinstag)', description:'Saisonales Kartendeck, Launch Anfang Januar.', category:'produkt', statuses:['Inbox','In Prüfung'], priority:'Niedrig', potential:47, progress:10, files:[], created_at:Date.now()-8*86400000, updated_at:Date.now()-4*86400000},
+      {id:'i5', title:'Ballon-Set: Foto-Shooting neu', description:'Frische Produktbilder für bessere Klickrate im Hauptbild.', category:'listing', statuses:['Inbox'], priority:'Niedrig', potential:39, progress:0, files:[], created_at:Date.now()-11*86400000, updated_at:Date.now()-11*86400000},
+      {id:'i6', title:'Preis-Test Quiz auf 27,99 €', description:'A/B-Preistest über vier Wochen — Marge gegen Absatz prüfen.', category:'sonstiges', statuses:['Verworfen'], priority:'Niedrig', potential:22, progress:0, files:[], created_at:Date.now()-20*86400000, updated_at:Date.now()-14*86400000}
+    ];
+    return {products, ideas};
+  }
+
+  // ---------- formatting ----------
+  _eur(n,d=0){ return (isFinite(n)?n:0).toLocaleString('de-DE',{minimumFractionDigits:d,maximumFractionDigits:d})+' €'; }
+  _num(n){ return Math.round(isFinite(n)?n:0).toLocaleString('de-DE'); }
+  _pct(n,d=1){ return (isFinite(n)?n:0).toLocaleString('de-DE',{minimumFractionDigits:d,maximumFractionDigits:d})+' %'; }
+  _mlabel(ym){ const [y,m]=ym.split('-'); return this._monthNames[+m-1]+' '+y.slice(2); }
+  _fmtDate(iso){ if(!iso) return '—'; const [y,m,d]=iso.split('-'); return d+'.'+m+'.'+y; }
+
+  // ---------- range helpers ----------
+  _rangeDays(from,to){ const [fy,fm]=from.split('-').map(Number); const [ty,tm]=to.split('-').map(Number); const a=new Date(fy,fm-1,1), b=new Date(ty,tm,0); return Math.max(1, Math.round((b-a)/86400000)+1); }
+  _dataRange(){ let min=null,max=null; this.state.products.forEach(p=>{ Object.keys(p.monthly||{}).forEach(ym=>{ if(min===null||ym<min)min=ym; if(max===null||ym>max)max=ym; }); }); return {min:min||'2025-07', max:max||this._curYm()}; }
+
+  // ---------- stock (auto book-keeping) ----------
+  _soldSince(p){ if(!p.stockRef) return 0; const rd=String(p.stockRef.date); const refYm=rd.slice(0,7); const refDay=+rd.slice(8,10)||1; let sold=0; this.months.forEach(ym=>{ const m=p.monthly[ym]; if(!m) return; const u=+m.units||0; if(!u) return; if(ym>refYm){ sold+=u; } else if(ym===refYm){ const parts=ym.split('-'); const yy=+parts[0], mm=+parts[1]; const dim=new Date(yy,mm,0).getDate(); sold += u*((dim-refDay+1)/dim); } }); return sold; }
+  _stockOf(p){ if(!p.stockRef) return +p.stock||0; return (+p.stockRef.value||0)-this._soldSince(p); }
+
+  // ---------- core calculation engine (single source of truth) ----------
+  derive(p, from, to){
+    const dr=this._dataRange();
+    from = from || dr.min; to = to || dr.max;
+    if(from>to){ const t=from; from=to; to=t; }
+    const vat = (p.price - p.fbaFee)*0.19;
+    const net = p.price - vat;
+    const unitProfit = net - p.fbaFee - p.shipping - p.productionCost;
+    const marginPct = p.price>0 ? unitProfit/p.price : 0;
+    let units=0, views=0, unitsPpc=0, adSpend=0;
+    this.months.forEach(ym=>{ if(ym<from||ym>to) return; const m=p.monthly[ym]; if(m){ units+=(+m.units||0); views+=(+m.views||0); unitsPpc+=Math.min(+m.units||0,+m.unitsPpc||0); adSpend+=(+m.adCost||0); } });
+    const revenue = units*p.price;
+    const grossProfit = units*unitProfit;
+    const days = this._rangeDays(from,to);
+    const estProfit = grossProfit - adSpend;
+    const conversion = views>0 ? units/views : 0;
+    const breakEvenAcos = marginPct*100;
+    const organicUnits = Math.max(0, units-unitsPpc);
+    const organicRate = units>0 ? organicUnits/units : 0;
+    const ppcRevenue = unitsPpc*p.price;
+    const actualAcos = ppcRevenue>0 ? adSpend/ppcRevenue*100 : 0;
+    const tacos = revenue>0 ? adSpend/revenue*100 : 0;
+    const maxCpc = unitProfit*conversion;
+    const stock = this._stockOf(p);
+    const dataMonths = this.months.filter(ym=>p.monthly[ym]);
+    const last3 = dataMonths.slice(-3).reduce((s,ym)=> s + (+p.monthly[ym].units||0), 0);
+    const velocity = last3/90;
+    const cover = velocity>0 ? stock/velocity : Infinity;
+    const threshold = (+p.leadTime||0) + (+p.safetyDays||0);
+    let status = 'green';
+    if(velocity<=0) status='none';
+    else if(cover < threshold) status='red';
+    else if(cover < threshold*1.5) status='yellow';
+    const reorderQty = velocity>0 ? Math.max(0, Math.ceil(velocity*(threshold+30) - stock)) : 0;
+    return {units,views,revenue,vat,net,unitProfit,marginPct,grossProfit,estProfit,conversion,breakEvenAcos,actualAcos,velocity,cover,threshold,status,reorderQty,adSpend,days,stock,unitsPpc,organicUnits,organicRate,ppcRevenue,tacos,maxCpc};
+  }
+  aggregate(from,to){
+    let revenue=0,units=0,ad=0,grossProfit=0,estProfit=0,views=0,contribution=0,ppcRev=0;
+    this.state.products.forEach(p=>{ const d=this.derive(p,from,to); revenue+=d.revenue; units+=d.units; ad+=d.adSpend; grossProfit+=d.grossProfit; estProfit+=d.estProfit; views+=d.views; contribution+=d.grossProfit; ppcRev+=d.ppcRevenue; });
+    const avgMargin = revenue>0 ? grossProfit/revenue : 0;
+    const acos = ppcRev>0 ? ad/ppcRev : 0;
+    const tacos = revenue>0 ? ad/revenue : 0;
+    const conversion = views>0 ? units/views : 0;
+    return {revenue,units,ad,grossProfit,estProfit,views,avgMargin,acos,tacos,conversion,contribution};
+  }
+  yearRevenueSeries(year){
+    const arr=[];
+    for(let m=1;m<=12;m++){ const ym=year+'-'+String(m).padStart(2,'0'); let v=0; this.state.products.forEach(p=>{ const mo=p.monthly[ym]; if(mo) v+=(+mo.units||0)*p.price; }); arr.push({ym, label:this._monthNames[m-1], value:v}); }
+    return arr;
+  }
+
+  // ---------- charts ----------
+  _goalRing(pct, tone){
+    const r=52, c=2*Math.PI*r, p=Math.min(1,Math.max(0,pct)), off=c*(1-p);
+    return React.createElement('svg',{viewBox:'0 0 140 140',style:{width:'138px',height:'138px',display:'block'}},
+      React.createElement('circle',{cx:70,cy:70,r:r,fill:'none',stroke:'#EEEEEB',strokeWidth:14}),
+      React.createElement('circle',{cx:70,cy:70,r:r,fill:'none',stroke:tone,strokeWidth:14,strokeDasharray:c,strokeDashoffset:off,strokeLinecap:'butt',transform:'rotate(-90 70 70)'}),
+      React.createElement('text',{x:70,y:67,textAnchor:'middle',fontSize:27,fontWeight:800,fill:'#0A0A0A',fontFamily:'Archivo'}, Math.round(pct*100)+'%'),
+      React.createElement('text',{x:70,y:88,textAnchor:'middle',fontSize:11,fill:'#9A9A96',fontFamily:'IBM Plex Sans'},'vom Ziel')
+    );
+  }
+  _lineChart(series, {color='#FF5A00', h=230, unit='€'}={}){
+    const W=760, H=h, padL=54, padR=18, padT=18, padB=34;
+    const max = Math.max(1, ...series.map(s=>s.value));
+    const niceMax = Math.ceil(max/ (max>2000?500:100)) * (max>2000?500:100) || max;
+    const iw=W-padL-padR, ih=H-padT-padB;
+    const x=i=> padL + (series.length<=1?0:(i/(series.length-1))*iw);
+    const y=v=> padT + ih - (v/niceMax)*ih;
+    const line = series.map((s,i)=> (i?'L':'M')+x(i).toFixed(1)+' '+y(s.value).toFixed(1)).join(' ');
+    const area = 'M'+x(0).toFixed(1)+' '+(padT+ih)+' '+series.map((s,i)=>'L'+x(i).toFixed(1)+' '+y(s.value).toFixed(1)).join(' ')+' L'+x(series.length-1).toFixed(1)+' '+(padT+ih)+' Z';
+    const grid=[0,0.5,1].map(t=>{ const gy=padT+ih-t*ih; const val=niceMax*t; return React.createElement('g',{key:'g'+t},
+      React.createElement('line',{x1:padL,x2:W-padR,y1:gy,y2:gy,stroke:'#EEEEEB',strokeWidth:1}),
+      React.createElement('text',{x:padL-8,y:gy+4,textAnchor:'end',fontSize:11,fill:'#B0B0AC',fontFamily:'IBM Plex Sans'}, unit==='€'? (val>=1000?(val/1000).toLocaleString('de-DE',{maximumFractionDigits:1})+'k':Math.round(val)) : Math.round(val)) ); });
+    const labels=series.map((s,i)=> (i%2===0||i===series.length-1) ? React.createElement('text',{key:'l'+i,x:x(i),y:H-12,textAnchor:'middle',fontSize:10.5,fill:'#B0B0AC',fontFamily:'IBM Plex Sans'}, s.label) : null);
+    const dots=series.map((s,i)=> React.createElement('circle',{key:'d'+i,cx:x(i),cy:y(s.value),r:2.5,fill:'#fff',stroke:color,strokeWidth:1.6}));
+    return React.createElement('svg',{viewBox:'0 0 '+W+' '+H,style:{width:'100%',height:'auto',display:'block'}},
+      grid,
+      React.createElement('path',{d:area,fill:color,opacity:0.08}),
+      React.createElement('path',{d:line,fill:'none',stroke:color,strokeWidth:2.2,strokeLinejoin:'round',strokeLinecap:'round'}),
+      dots, labels);
+  }
+  _barChart(series,{color='#0A0A0A', h=210}={}){
+    const W=520,H=h,padL=34,padR=10,padT=14,padB=30; const max=Math.max(1,...series.map(s=>s.value));
+    const iw=W-padL-padR, ih=H-padT-padB; const bw=iw/series.length*0.6; const gap=iw/series.length;
+    const bars=series.map((s,i)=>{ const bh=(s.value/max)*ih; const bx=padL+i*gap+(gap-bw)/2; const by=padT+ih-bh; const last=i>=series.length-3;
+      return React.createElement('g',{key:i},
+        React.createElement('rect',{x:bx,y:by,width:bw,height:Math.max(1,bh),fill:last?'#FF5A00':'#0A0A0A'}),
+        (i%2===0||i===series.length-1)?React.createElement('text',{x:bx+bw/2,y:H-10,textAnchor:'middle',fontSize:10,fill:'#B0B0AC',fontFamily:'IBM Plex Sans'},s.label):null); });
+    return React.createElement('svg',{viewBox:'0 0 '+W+' '+H,style:{width:'100%',height:'auto',display:'block'}},
+      React.createElement('line',{x1:padL,x2:W-padR,y1:padT+ih,y2:padT+ih,stroke:'#EEEEEB'}), bars);
+  }
+  _waterfall(p){
+    const d=this.derive(p);
+    const steps=[
+      {label:'Verkaufspreis', value:p.price, type:'base'},
+      {label:'− MwSt 19%', value:-d.vat, type:'sub'},
+      {label:'− FBA-Gebühr', value:-p.fbaFee, type:'sub'},
+      {label:'− Versand', value:-p.shipping, type:'sub'},
+      {label:'− Produktion', value:-p.productionCost, type:'sub'},
+      {label:'Nettomarge', value:d.unitProfit, type:'net'}
+    ];
+    const W=560,H=300,padL=8,padR=8,padT=46,padB=54; const iw=W-padL-padR, ih=H-padT-padB;
+    const max=p.price*1.12; const y=v=> padT+ih-(v/max)*ih; const gap=iw/steps.length; const bw=gap*0.56;
+    let cum=0; const els=[];
+    steps.forEach((s,i)=>{ const bx=padL+i*gap+(gap-bw)/2; let top,bot,fill;
+      if(s.type==='base'){ top=y(p.price); bot=y(0); fill='#0A0A0A'; cum=p.price; }
+      else if(s.type==='net'){ top=y(d.unitProfit); bot=y(0); fill='#FF5A00'; }
+      else { const start=cum; cum=cum+s.value; top=y(start); bot=y(cum); fill='#C9C9C4'; }
+      const yy=Math.min(top,bot), hh=Math.max(2,Math.abs(bot-top));
+      els.push(React.createElement('rect',{key:'r'+i,x:bx,y:yy,width:bw,height:hh,fill}));
+      els.push(React.createElement('text',{key:'v'+i,x:bx+bw/2,y:yy-20,textAnchor:'middle',fontSize:11.5,fontWeight:700,fill:s.type==='net'?'#FF5A00':'#0A0A0A',fontFamily:'Archivo'}, (s.value).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2})));
+      const pctOf = p.price>0 ? Math.abs(s.value)/p.price*100 : 0;
+      els.push(React.createElement('text',{key:'p'+i,x:bx+bw/2,y:yy-7,textAnchor:'middle',fontSize:10,fontWeight:600,fill:'#9A9A96',fontFamily:'IBM Plex Sans'}, (s.type==='base'?'100':pctOf.toLocaleString('de-DE',{maximumFractionDigits:0}))+' %'));
+      const words=s.label.split(' ');
+      els.push(React.createElement('text',{key:'l'+i,x:bx+bw/2,y:H-32,textAnchor:'middle',fontSize:10.5,fill:'#7A7A76',fontFamily:'IBM Plex Sans'}, words.slice(0,2).join(' ')));
+      if(words.length>2) els.push(React.createElement('text',{key:'l2'+i,x:bx+bw/2,y:H-18,textAnchor:'middle',fontSize:10.5,fill:'#7A7A76',fontFamily:'IBM Plex Sans'}, words.slice(2).join(' ')));
+    });
+    return React.createElement('svg',{viewBox:'0 0 '+W+' '+H,style:{width:'100%',height:'auto',display:'block'}},
+      React.createElement('line',{x1:padL,x2:W-padR,y1:y(0),y2:y(0),stroke:'#E4E4E0'}), els);
+  }
+
+  _starsEl(val, size){ val=Math.max(0,Math.min(5,+val||0)); size=size||16; const path='M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17.8 5.7 21l1.3-6.7-5-4.6 6.8-.8z'; const stars=[]; for(let i=0;i<5;i++){ const fill=Math.max(0,Math.min(1,val-i)); const gid='ppstar'+i+'_'+Math.round(val*10); stars.push(React.createElement('svg',{key:i,width:size,height:size,viewBox:'0 0 24 24',style:{display:'block'}}, React.createElement('defs',null, React.createElement('linearGradient',{id:gid,x1:'0',y1:'0',x2:'1',y2:'0'}, React.createElement('stop',{offset:(fill*100)+'%',stopColor:'#FF5A00'}), React.createElement('stop',{offset:(fill*100)+'%',stopColor:'#E4E4E0'}))), React.createElement('path',{d:path,fill:'url(#'+gid+')'}))); } return React.createElement('div',{style:{display:'flex',gap:'3px',alignItems:'center'}}, stars); }
+
+  // ---------- navigation ----------
+  _go(m){ this.setState({module:m, productId:null}); window.scrollTo(0,0); }
+  _open(id){ this.setState({module:'produkte', productId:id}); window.scrollTo(0,0); }
+
+  // ---------- mutations ----------
+  _update(id, patch){ this.setState(s=>({products:s.products.map(p=> p.id===id?{...p,...patch}:p)}), ()=>this._persist()); }
+  _setMonth(id, ym, field, val){ this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const mo={...p.monthly}; mo[ym]={...(mo[ym]||{units:0,views:0}), [field]: Math.max(0,+val||0)}; return {...p,monthly:mo}; })}), ()=>this._persist()); }
+  _setTarget(id, ym, val){ this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const t={...(p.targets||{})}; t[ym]=Math.max(0,Math.round(+val||0)); return {...p,targets:t}; })}), ()=>this._persist()); }
+  _addMonth(id){ this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const keys=Object.keys(p.monthly).sort(); let last=keys[keys.length-1]||'2026-06'; let [y,m]=last.split('-').map(Number); m++; if(m>12){m=1;y++;} const nk=y+'-'+String(m).padStart(2,'0'); if(p.monthly[nk]) return p; const mo={...p.monthly, [nk]:{units:0,views:0}}; if(!this.months.includes(nk)) this.months=[...this.months,nk]; return {...p,monthly:mo}; })}), ()=>this._persist()); }
+  _deleteProduct(id){ this.setState(s=>({products:s.products.filter(p=>p.id!==id), productId:null, module:'produkte', deleteModal:null}), ()=>this._persist()); if(typeof window!=='undefined') window.scrollTo(0,0); }
+  _addMonthYm(id, ym){ if(!ym) return; this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; if(p.monthly[ym]) return p; const mo={...p.monthly,[ym]:{units:0,views:0,unitsPpc:0,adCost:0}}; if(!this.months.includes(ym)){ this.months=[...this.months,ym].sort(); } return {...p,monthly:mo}; }), detailAddYm:''}), ()=>this._persist()); }
+  _moveIdea(id, dir){ const order=['inbox','pruefung','umsetzung','verworfen']; this.setState(s=>({ideas:s.ideas.map(it=>{ if(it.id!==id) return it; let i=order.indexOf(it.status)+dir; i=Math.max(0,Math.min(order.length-1,i)); return {...it,status:order[i]}; })}), ()=>this._persist()); }
+  _blankIdea(){ return {title:'',description:'',category:'produkt',statuses:[],priority:'Mittel',potential:50,progress:0,files:[]}; }
+  _normIdea(i){
+    if(Array.isArray(i.statuses)) return {description:'',category:'sonstiges',priority:'Mittel',potential:0,progress:0,files:[],created_at:Date.now(),updated_at:Date.now(),...i};
+    const map={inbox:'Inbox',pruefung:'In Prüfung',umsetzung:'Umsetzung',verworfen:'Verworfen'};
+    return {id:i.id,title:i.title,description:i.description||'',category:i.category||'sonstiges',statuses:i.status?[map[i.status]||'Inbox']:[],priority:i.priority||'Mittel',potential:i.potential||0,progress:i.progress||0,files:i.files||[],created_at:i.created_at||Date.now(),updated_at:i.updated_at||Date.now()};
+  }
+  _openIdeaNew(){ this.setState({ideaModalOpen:true, ideaEditingId:null, ideaForm:this._blankIdea()}); }
+  _openIdeaEdit(id){ const it=this.state.ideas.find(i=>i.id===id); if(!it) return; this.setState({ideaModalOpen:true, ideaEditingId:id, ideaForm:{title:it.title,description:it.description||'',category:it.category||'produkt',statuses:[...(it.statuses||[])],priority:it.priority||'Mittel',potential:it.potential||0,progress:it.progress||0,files:[...(it.files||[])]}}); }
+  _setIdeaForm(patch){ this.setState(s=>({ideaForm:{...s.ideaForm,...patch}})); }
+  _toggleIdeaFormStatus(s){ this.setState(st=>{ const has=st.ideaForm.statuses.includes(s); return {ideaForm:{...st.ideaForm, statuses: has?st.ideaForm.statuses.filter(x=>x!==s):[...st.ideaForm.statuses,s]}}; }); }
+  _toggleIdeaFilter(s){ this.setState(st=>({ideaFilters: st.ideaFilters.includes(s)?st.ideaFilters.filter(x=>x!==s):[...st.ideaFilters,s]})); }
+  _removeIdeaFormFile(idx){ this.setState(s=>({ideaForm:{...s.ideaForm, files:s.ideaForm.files.filter((_,i)=>i!==idx)}})); }
+  _readDataUrl(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
+  async _onIdeaFilePick(e){ const files=Array.from(e.target.files||[]); e.target.value=''; if(!files.length) return; this.setState({ideaUploading:true}); const added=[]; for(const f of files){ try{ const dataUrl=await this._readDataUrl(f); added.push({name:f.name,size:f.size,type:f.type,dataUrl}); }catch(err){ console.warn('Upload:',err); } } this.setState(s=>({ideaForm:{...s.ideaForm,files:[...s.ideaForm.files,...added]}, ideaUploading:false})); }
+  _downloadIdeaFile(file){ try{ const url=file.dataUrl; if(!url) return; const a=document.createElement('a'); a.href=url; a.download=file.name||'datei'; document.body.appendChild(a); a.click(); a.remove(); }catch(err){ console.warn(err); } }
+  _humanSize(b){ if(b==null) return ''; if(b<1024) return b+' B'; if(b<1048576) return (b/1024).toFixed(0)+' KB'; return (b/1048576).toFixed(1)+' MB'; }
+  _ideaTimeAgo(ts){ if(!ts) return 'gerade angelegt'; const t=typeof ts==='number'?ts:new Date(ts).getTime(); const d=Date.now()-t; const m=60000,h=3600000,day=86400000; if(d<m) return 'gerade eben'; if(d<h) return 'vor '+Math.floor(d/m)+' Min'; if(d<day) return 'vor '+Math.floor(d/h)+' Std'; if(d<7*day) return 'vor '+Math.floor(d/day)+' Tg'; return new Date(t).toLocaleDateString('de-DE',{day:'numeric',month:'short'}); }
+  _saveIdea(){ const f=this.state.ideaForm; if(!f.title.trim()) return; const base={title:f.title.trim(),description:(f.description||'').trim(),category:f.category||'produkt',statuses:[...f.statuses],priority:f.priority||'Mittel',potential:+f.potential||0,progress:+f.progress||0,files:[...f.files]}; this.setState(s=>{ let ideas; if(s.ideaEditingId){ ideas=s.ideas.map(i=>i.id===s.ideaEditingId?{...i,...base,updated_at:Date.now()}:i); } else { ideas=[{id:'i'+Math.random().toString(36).slice(2,7),created_at:Date.now(),updated_at:Date.now(),...base},...s.ideas]; } return {ideas, ideaModalOpen:false}; }, ()=>this._persist()); }
+  _removeIdea(id){ this.setState(s=>({ideas:s.ideas.filter(i=>i.id!==id)}), ()=>this._persist()); }
+  _openAbgleich(p){ this.setState({stockModal:{productId:p.id, value:String(Math.max(0,Math.round(this._stockOf(p))))}}); }
+  _saveAbgleich(){ const sm=this.state.stockModal; if(!sm) return; const v=Math.max(0,Math.round(+sm.value||0)); const iso=this._todayISO(); this.setState(s=>({products:s.products.map(p=> p.id===sm.productId?{...p,stockRef:{value:v,date:iso}}:p), stockModal:null}), ()=>this._persist()); }
+  _setPreset(preset){ const dr=this._dataRange(); const y=this._curYm().slice(0,4); let from,to; if(preset==='last30'){ from=this._curYm(); to=this._curYm(); } else if(preset==='thisYear'){ from=y+'-01'; to=y+'-12'; } else if(preset==='lastYear'){ const py=(+y-1); from=py+'-01'; to=py+'-12'; } else { preset='gesamt'; from=dr.min; to=dr.max; } this.setState({period:{preset,from,to}}); }
+  _scenDefaults(p){ const d=this.derive(p); const dm=this.months.filter(ym=>p.monthly[ym]).length||1; const avg=Math.max(0,Math.round(d.units/12)); return {productId:p.id, price:+(+p.price).toFixed(2), adSpend:Math.round(d.adSpend/dm), units:avg, prodCost:+(+p.productionCost).toFixed(2)}; }
+
+  _recommendations(){
+    const recs=[];
+    const P=(n,d=1)=> (isFinite(n)?n:0).toLocaleString('de-DE',{minimumFractionDigits:d,maximumFractionDigits:d});
+    this.state.products.forEach(p=>{
+      const d=this.derive(p);
+      const nm=p.name;
+      const acos=d.actualAcos, be=d.breakEvenAcos, tgt=+p.targetAcos||0;
+      // Werbung
+      if(d.ppcRevenue>0 && acos>be){
+        recs.push({key:p.id+':ad_over_be', productId:p.id, productName:nm, area:'Werbung', priority:'kritisch', sev:acos-be,
+          reason:`Ist-ACOS ${P(acos)} % liegt über dem Break-Even von ${P(be)} % — jede beworbene Bestellung ist defizitär.`,
+          action:'Tagesbudget senken oder Kampagne pausieren und Suchbegriffe prüfen.'});
+      } else if(d.ppcRevenue>0 && tgt>0 && acos>tgt){
+        recs.push({key:p.id+':ad_over_target', productId:p.id, productName:nm, area:'Werbung', priority:'wichtig', sev:acos-tgt,
+          reason:`Ist-ACOS ${P(acos)} % über Ziel-ACOS ${P(tgt)} % (Break-Even ${P(be)} %).`,
+          action:'Gebote senken und ineffiziente Keywords ausschließen.'});
+      } else if(d.ppcRevenue>0 && tgt>0 && acos>0 && acos < tgt*0.75){
+        recs.push({key:p.id+':ad_headroom', productId:p.id, productName:nm, area:'Werbung', priority:'hinweis', sev:tgt-acos,
+          reason:`Ist-ACOS ${P(acos)} % liegt deutlich unter Ziel ${P(tgt)} % — Luft bis Break-Even ${P(be)} %.`,
+          action:'Budget bzw. Gebote erhöhen — Wachstumspotenzial noch nicht ausgeschöpft.'});
+      }
+      // Lager
+      if(d.status==='red'){
+        recs.push({key:p.id+':stock_red', productId:p.id, productName:nm, area:'Lager', priority:'kritisch', sev:2000-(isFinite(d.cover)?d.cover:2000),
+          reason:`Reichweite ${isFinite(d.cover)?Math.round(d.cover):'∞'} Tg unter Wiederbeschaffung (${d.threshold} Tg Vorlauf + Puffer).`,
+          action:`Nachbestellung jetzt auslösen — empfohlene Menge ca. ${this._num(d.reorderQty)} Stk.`});
+      } else if(d.status==='yellow'){
+        recs.push({key:p.id+':stock_yellow', productId:p.id, productName:nm, area:'Lager', priority:'wichtig', sev:1000-(isFinite(d.cover)?d.cover:1000),
+          reason:`Reichweite ${Math.round(d.cover)} Tg — der Sicherheitspuffer wird knapp.`,
+          action:`Nachbestellung vorbereiten (~${this._num(d.reorderQty)} Stk).`});
+      } else if(d.status==='green' && isFinite(d.cover) && d.cover>200 && d.velocity>0){
+        recs.push({key:p.id+':stock_high', productId:p.id, productName:nm, area:'Lager', priority:'hinweis', sev:d.cover,
+          reason:`Reichweite ${Math.round(d.cover)} Tg bei nur ${P(d.velocity)} verkauften/Tag — ungewöhnlich hoch.`,
+          action:'Lagerbestand prüfen — Kapitalbindung und Langzeit-Lagergebühren im Blick behalten.'});
+      }
+      // Verkaufsziel (letzte Datenmonate mit Ziel)
+      const dm=this.months.filter(ym=>p.monthly[ym] && (+((p.targets||{})[ym]||0)>0)).slice(-3);
+      if(dm.length>=2){
+        let miss=0; dm.forEach(ym=>{ const a=+p.monthly[ym].units||0; const t=+p.targets[ym]||0; if(t>0 && a < t*0.8) miss++; });
+        if(miss>=2){
+          recs.push({key:p.id+':goal', productId:p.id, productName:nm, area:'Verkaufsziel', priority:'wichtig', sev:miss,
+            reason:`In ${miss} der letzten ${dm.length} Monate unter 80 % der Zielvorgabe.`,
+            action:'Ziel realistisch anpassen oder Ursache (Nachfrage, Wettbewerb, Lieferengpass) prüfen.'});
+        }
+      }
+      // Conversion
+      if(d.conversion>0 && d.conversion<0.05 && d.views>=400){
+        recs.push({key:p.id+':conv', productId:p.id, productName:nm, area:'Conversion', priority:'wichtig', sev:0.05-d.conversion,
+          reason:`Conversion ${P(d.conversion*100)} % im roten Bereich bei ${this._num(d.views)} Klicks.`,
+          action:'Listing prüfen — Hauptbild, Titel, Preis und A+ Content testen.'});
+      }
+      // Marge
+      if(d.marginPct>0 && d.marginPct<0.20){
+        recs.push({key:p.id+':margin', productId:p.id, productName:nm, area:'Marge', priority:'wichtig', sev:0.20-d.marginPct,
+          reason:`Marge ${P(d.marginPct*100)} % niedrig — Deckungsbeitrag pro Stück nur ${this._eur(d.unitProfit,2)}.`,
+          action:'Kostenstruktur prüfen (Produktionskosten / FBA-Gebühren gestiegen?) oder Preis anheben.'});
+      }
+      // Organischer Anteil
+      if(d.units>0 && d.organicRate<0.40 && d.tacos>12){
+        recs.push({key:p.id+':organic', productId:p.id, productName:nm, area:'Organik', priority:'hinweis', sev:0.40-d.organicRate,
+          reason:`Organik-Anteil nur ${P(d.organicRate*100,0)} % bei TACOS ${P(d.tacos)} % — hohe PPC-Abhängigkeit.`,
+          action:'Externe Traffic-Quellen erschließen und Vine-Reviews forcieren.'});
+      }
+      // Bewertungen
+      const stars=+p.stars||0;
+      if(stars>0 && stars<4.2){
+        recs.push({key:p.id+':stars', productId:p.id, productName:nm, area:'Bewertungen', priority:'hinweis', sev:4.2-stars,
+          reason:`Bewertung ${P(stars,1)}★ unter dem Sortiment-Zielwert von 4,2★.`,
+          action:'Reviews im Blick behalten, negative Bewertungen auswerten und Ursache klären.'});
+      }
+    });
+    const order={kritisch:0,wichtig:1,hinweis:2};
+    recs.sort((a,b)=> (order[a.priority]-order[b.priority]) || (b.sev-a.sev) || a.productName.localeCompare(b.productName));
+    return recs;
+  }
+  _dismissRec(key,mode){ this.setState(s=>({recDismissed:{...s.recDismissed,[key]:mode}}), ()=>this._persist()); }
+  _restoreRecs(){ this.setState({recDismissed:{}}, ()=>this._persist()); }
+
+  renderVals(){
+    const st=this.state, mod=st.module, pid=st.productId;
+    const isDetail = mod==='produkte' && pid;
+    const orange='#FF5A00', green='#1B7F4B', yellow='#D8930A', red='#D42E12', ink='#0A0A0A';
+    const statusColor=(s)=> s==='red'?red : s==='yellow'?yellow : s==='green'?green : '#9A9A96';
+    const statusLabel=(s)=> s==='red'?'Kritisch' : s==='yellow'?'Beobachten' : s==='green'?'Bestand ok' : 'Keine Daten';
+    const convColor=(c)=> (!(c>0))?ink : c<0.05?red : c<0.10?yellow : green;
+
+    // period
+    let from=st.period.from, to=st.period.to; if(from>to){ const t=from; from=to; to=t; }
+    const per=st.period;
+
+    const navBase='display:flex;align-items:center;gap:11px;padding:10px 13px;border:none;background:none;font-size:13.5px;font-weight:500;cursor:pointer;text-align:left;width:100%;color:#6A6A66;transition:background .12s';
+    const navActive='display:flex;align-items:center;gap:11px;padding:10px 13px;border:none;font-size:13.5px;font-weight:600;cursor:pointer;text-align:left;width:100%;color:#0A0A0A;background:#FFF3EC;box-shadow:inset 3px 0 0 #FF5A00';
+    const nv=(m)=> mod===m?navActive:navBase;
+    const tabBase='padding:7px 12px;border:1px solid #E4E4E0;background:#fff;font-size:12.5px;font-weight:500;cursor:pointer;white-space:nowrap;color:#6A6A66';
+    const tabActive='padding:7px 12px;border:1px solid #0A0A0A;background:#0A0A0A;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;color:#fff';
+    const tb=(m)=> mod===m?tabActive:tabBase;
+
+    const V = {
+      narrow:st.narrow, wide:!st.narrow,
+      isCockpit: mod==='cockpit', isProdukteList: mod==='produkte' && !pid, isProdukteDetail: isDetail,
+      isLager: mod==='lager', isWerbung: mod==='werbung', isSzenarien: mod==='szenarien', isIdeen: mod==='ideen', isEmpfehlungen: mod==='empfehlungen',
+      goCockpit:()=>this._go('cockpit'), goProdukte:()=>this._go('produkte'), goLager:()=>this._go('lager'),
+      goWerbung:()=>this._go('werbung'), goSzenarien:()=>this._go('szenarien'), goIdeen:()=>this._go('ideen'), goEmpfehlungen:()=>this._go('empfehlungen'),
+      nav0:nv('cockpit'), nav1:nv('produkte'), nav2:nv('lager'), nav3:nv('werbung'), nav4:nv('szenarien'), nav5:nv('ideen'), nav6:nv('empfehlungen'),
+      tabStyle0:tb('cockpit'), tabStyle1:tb('produkte'), tabStyle2:tb('lager'), tabStyle3:tb('werbung'), tabStyle4:tb('szenarien'), tabStyle5:tb('ideen'), tabStyle6:tb('empfehlungen'),
+      productCount: st.products.length, dataStamp:'Juli 2026',
+      periodLabel: this._mlabel(from)+' – '+this._mlabel(to), periodDays: this._num(this._rangeDays(from,to)),
+      periodFrom: per.from, periodTo: per.to,
+      todayStr: this._fmtDate(this._todayISO()),
+      stop:(e)=>{ e.stopPropagation(); }
+    };
+
+    // period presets + selects
+    const presetStyle=(k)=> per.preset===k?'padding:7px 12px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12px;font-weight:600;cursor:pointer':'padding:7px 12px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12px;font-weight:500;cursor:pointer';
+    V.presetStyle0=presetStyle('last30'); V.presetStyle1=presetStyle('thisYear'); V.presetStyle2=presetStyle('lastYear'); V.presetStyle3=presetStyle('gesamt');
+    V.presetLast30=()=>this._setPreset('last30'); V.presetThisYear=()=>this._setPreset('thisYear'); V.presetLastYear=()=>this._setPreset('lastYear'); V.presetGesamt=()=>this._setPreset('gesamt');
+    V.monthOptions=this.months.map(ym=>({ym, label:this._mlabel(ym)}));
+    V.setPeriodFrom=(e)=>{ const v=e.target.value; this.setState(s=>({period:{...s.period, from:v, preset:'custom'}})); };
+    V.setPeriodTo=(e)=>{ const v=e.target.value; this.setState(s=>({period:{...s.period, to:v, preset:'custom'}})); };
+
+    // ---- Cockpit KPIs (period) ----
+    const agg=this.aggregate(from,to);
+    V.kpiRevenue=this._eur(agg.revenue); V.kpiUnits=this._num(agg.units); V.kpiMargin=this._pct(agg.avgMargin*100);
+    V.kpiProfit=this._eur(agg.estProfit); V.kpiAdSpend=this._eur(agg.ad); V.kpiAcos=this._pct(agg.acos*100);
+    V.kpiConversion=this._pct(agg.conversion*100); V.kpiContribution=this._eur(agg.contribution);
+    V.profitColor = agg.estProfit>=0?ink:red;
+    V.acosColor = agg.acos*100 > agg.avgMargin*100 ? red : ink;
+
+    // period revenue delta (last two months in period)
+    const pmonths=this.months.filter(ym=>ym>=from&&ym<=to);
+    const revP=pmonths.map(ym=>{ let v=0; st.products.forEach(p=>{ const m=p.monthly[ym]; if(m) v+=(+m.units||0)*p.price; }); return v; });
+    const unitsP=pmonths.map(ym=>{ let v=0; st.products.forEach(p=>{ const m=p.monthly[ym]; if(m) v+=(+m.units||0); }); return v; });
+    const lr=revP[revP.length-1]||0, pr=revP[revP.length-2]||0; const rdp=pr>0?((lr-pr)/pr*100):0;
+    const lu=unitsP[unitsP.length-1]||0, pu=unitsP[unitsP.length-2]||0; const udp=pu>0?((lu-pu)/pu*100):0;
+    V.revDelta=(rdp>=0?'▲ +':'▼ ')+this._pct(Math.abs(rdp),1)+' ggü. Vormonat'; V.revDeltaColor=rdp>=0?green:red;
+    V.unitsDelta=(udp>=0?'▲ +':'▼ ')+this._pct(Math.abs(udp),1)+' ggü. Vormonat'; V.unitsDeltaColor=udp>=0?green:red;
+
+    // revenue chart (own year)
+    const chartSeries=this.yearRevenueSeries(st.chartYear);
+    const peak=chartSeries.reduce((a,b)=>b.value>a.value?b:a,chartSeries[0]);
+    V.chartYear=st.chartYear;
+    V.peakMonth = peak && peak.value>0 ? (peak.label+' '+st.chartYear.slice(2)+' · '+this._eur(peak.value)) : '—';
+    V.revenueChartEl = this._lineChart(chartSeries,{unit:'€'});
+    V.chartYears=['2025','2026','2027','2028','2029','2030'].map(y=>({ label:y, select:()=>this.setState({chartYear:y}), style:(y===st.chartYear?'padding:5px 10px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-feature-settings:\'tnum\' 1':'padding:5px 10px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12px;font-weight:500;cursor:pointer;font-feature-settings:\'tnum\' 1') }));
+
+    // cockpit table (period)
+    let rows = st.products.map(p=>({p, d:this.derive(p,from,to)}));
+    const sk=st.sort.key, dir=st.sort.dir==='asc'?1:-1;
+    const val=({p,d})=> sk==='units'?d.units : sk==='revenue'?d.revenue : sk==='margin'?d.marginPct : sk==='velocity'?d.velocity : sk==='conversion'?d.conversion : sk==='acos'?d.actualAcos : d.revenue;
+    rows.sort((a,b)=> (val(a)-val(b))*dir);
+    V.cockpitRows = rows.map(({p,d})=>({
+      id:p.id, name:p.name, asin:p.asin,
+      unitsStr:this._num(d.units), revenueStr:this._eur(d.revenue),
+      marginStr:this._pct(d.marginPct*100), marginColor: d.marginPct<0.2?red:ink,
+      velocityStr:d.velocity.toLocaleString('de-DE',{maximumFractionDigits:1})+' /Tag',
+      conversionStr:this._pct(d.conversion*100), conversionColor: convColor(d.conversion),
+      acosStr:d.ppcRevenue>0?this._pct(d.actualAcos):'—', acosColor:d.actualAcos>d.breakEvenAcos?red:ink,
+      open:()=>this._open(p.id)
+    }));
+    const arrow=(k)=> sk===k?(st.sort.dir==='asc'?'↑':'↓'):'';
+    V.arrUnits=arrow('units'); V.arrRevenue=arrow('revenue'); V.arrMargin=arrow('margin'); V.arrVelocity=arrow('velocity'); V.arrConversion=arrow('conversion'); V.arrAcos=arrow('acos');
+    const setSort=(k)=> this.setState(s=>({sort:{key:k, dir: s.sort.key===k && s.sort.dir==='desc'?'asc':'desc'}}));
+    V.sortUnits=()=>setSort('units'); V.sortRevenue=()=>setSort('revenue'); V.sortMargin=()=>setSort('margin'); V.sortVelocity=()=>setSort('velocity'); V.sortConversion=()=>setSort('conversion'); V.sortAcos=()=>setSort('acos');
+
+    // ---- Cockpit: Produkt-Status-Übersicht (live aus st.products) ----
+    const cyS=this._curYm();
+    const nowS=new Date(); const dimS=new Date(nowS.getFullYear(),nowS.getMonth()+1,0).getDate(); const dayS=Math.min(dimS,Math.max(1,nowS.getDate()));
+    V.cockpitStatus = st.products.map(p=>{ const d=this.derive(p);
+      // Verkaufsziel-Status (laufender Monat, on pace)
+      const tv=+((p.targets||{})[cyS]||0); const gm=p.monthly[cyS]; const gact=gm?(+gm.units||0):0; const exp=tv*dayS/dimS;
+      let goalS,goalT;
+      if(tv<=0){ goalS='none'; goalT='Kein Ziel'; }
+      else if(gact>=tv){ goalS='green'; goalT='Ziel erreicht'; }
+      else { const ratio=exp>0?gact/exp:0; if(ratio>=0.9){ goalS='green'; goalT='Auf Kurs'; } else if(ratio>=0.8){ goalS='yellow'; goalT='Leicht hinter'; } else { goalS='red'; goalT='Hinter Ziel'; } }
+      // Lagerbestand-Status
+      const stS=d.status; const stT= stS==='red'?'Kritisch':stS==='yellow'?'Wird knapp':stS==='green'?'Ausreichend':'Keine Daten';
+      // Werbekosten-Status
+      let adS,adT; if(d.ppcRevenue<=0){ adS='none'; adT='Keine PPC-Daten'; }
+      else if(d.actualAcos<=(+p.targetAcos||0)){ adS='green'; adT='Im Soll'; }
+      else if(d.actualAcos<=d.breakEvenAcos){ adS='yellow'; adT='Über Ziel'; }
+      else { adS='red'; adT='Über Break-Even'; }
+      return { id:p.id, name:p.name, asin:p.asin, open:()=>this._open(p.id),
+        goalColor:statusColor(goalS), goalText:goalT, stockColor:statusColor(stS), stockText:stT, adColor:statusColor(adS), adText:adT }; });
+
+    // ---- Produkte list ----
+    V.productCards = st.products.map(p=>{ const d=this.derive(p); return {
+      id:p.id, name:p.name, asin:p.asin, amazonUrl:p.amazonUrl||'', hasUrl:!!p.amazonUrl, priceStr:this._eur(p.price,2), marginStr:this._pct(d.marginPct*100), marginColor:d.marginPct<0.2?red:ink,
+      stockStr:this._num(d.stock), stockLabel:statusLabel(d.status), dotColor:statusColor(d.status), open:()=>this._open(p.id), stopBubble:(e)=>e.stopPropagation()
+    }; });
+    V.openNewProduct=()=> this.setState({modalOpen:true, draft:this._blankDraft()});
+
+    // ---- Produkte detail ----
+    if(isDetail){
+      const p=st.products.find(x=>x.id===pid);
+      if(p){ const d=this.derive(p);
+        const recs=[];
+        if(d.marginPct<0.2) recs.push({tone:red,title:'Marge unter 20 %',body:'Deckungsbeitrag knapp – Preis anheben oder Produktionskosten senken. Aktuell '+this._pct(d.marginPct*100)+'.'});
+        if(d.conversion>0 && d.conversion<0.10) recs.push({tone:orange,title:'Conversion niedrig',body:'Nur '+this._pct(d.conversion*100)+' der Aufrufe kaufen. Hauptbild & Titel testen.'});
+        if(d.actualAcos>d.breakEvenAcos) recs.push({tone:red,title:'ACOS über Break-Even',body:'Ist-ACOS '+this._pct(d.actualAcos)+' > Break-Even '+this._pct(d.breakEvenAcos)+'. Tagesbudget senken.'});
+        else recs.push({tone:green,title:'Werbung profitabel',body:'ACOS-Spielraum bis '+this._pct(d.breakEvenAcos)+'. Budget kann getestet werden.'});
+        if(d.status==='red') recs.push({tone:red,title:'Lager kritisch',body:'Reichweite '+ (isFinite(d.cover)?Math.round(d.cover):'∞') +' Tage < Wiederbeschaffung '+d.threshold+' Tage. '+this._num(d.reorderQty)+' Stk nachbestellen.'});
+        else if(d.status==='yellow') recs.push({tone:orange,title:'Nachbestellung planen',body:'Reichweite '+Math.round(d.cover)+' Tage. Bald ordern ('+this._num(d.reorderQty)+' Stk).'});
+        if(recs.length<3) recs.push({tone:green,title:'Solide Kennzahlen',body:'Preis-Test für Margenausbau möglich (+1 € ≈ '+this._eur(d.units)+' Zusatzgewinn/Jahr).'});
+        const parse=(e)=> parseFloat(String(e.target.value).replace(',','.'))||0;
+        const yearsPresent = [...new Set(this.months.filter(ym=>p.monthly[ym]).map(ym=>ym.slice(0,4)))].sort();
+        const curYear = String(new Date().getFullYear());
+        let activeYear = st.detailYear;
+        if(!activeYear || !yearsPresent.includes(activeYear)) activeYear = yearsPresent.includes(curYear)?curYear:(yearsPresent[yearsPresent.length-1]||curYear);
+        const yearMonths = this.months.filter(ym=>p.monthly[ym] && ym.slice(0,4)===activeYear);
+        const detailYears = yearsPresent.map(y=>({ label:y, style:(y===activeYear?'padding:6px 13px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-feature-settings:\'tnum\' 1':'padding:6px 13px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12px;font-weight:500;cursor:pointer;font-feature-settings:\'tnum\' 1'), select:()=>this.setState({detailYear:y}) }));
+        const monthRows = yearMonths.map(ym=>{ const m=p.monthly[ym]; const conv=(+m.views>0)?(+m.units/+m.views):0; const tv=+((p.targets||{})[ym]||0); const un=+m.units||0; const ppcu=Math.min(un,+m.unitsPpc||0); const orgu=Math.max(0,un-ppcu); const ach=tv>0?un/tv:0; return {
+          label:this._mlabel(ym), units:un, ppc:+m.unitsPpc||0, adCost:+m.adCost||0, views:+m.views||0, target:tv||'',
+          orgRateStr: un>0?this._pct(orgu/un*100,0):'—',
+          convStr:this._pct(conv*100), convColor: convColor(conv),
+          achStr: tv>0?this._pct(ach*100,0):'—', achColor: tv<=0?'#9A9A96': (ach>=1?green: ach>=0.8?yellow:red),
+          setUnits:(e)=>this._setMonth(p.id,ym,'units',e.target.value), setViews:(e)=>this._setMonth(p.id,ym,'views',e.target.value), setTarget:(e)=>this._setTarget(p.id,ym,e.target.value),
+          setPpc:(e)=>this._setMonth(p.id,ym,'unitsPpc',e.target.value), setAdCost:(e)=>this._setMonth(p.id,ym,'adCost',e.target.value)
+        }; });
+        const ratingMeta={green:{tone:green,label:'Grün',desc:'Kein Handlungsbedarf'},yellow:{tone:yellow,label:'Gelb',desc:'Ausbaufähig'},red:{tone:red,label:'Rot',desc:'Kritisch'}};
+        const mkRating=(key,fieldLabel)=>{ const cur=p[key]||'green'; const m=ratingMeta[cur]; return {
+          label:fieldLabel, tone:m.tone, statusText:m.desc,
+          buttons:['green','yellow','red'].map(v=>{ const active=v===cur; const mm=ratingMeta[v]; return {
+            label:mm.label, select:()=>this._update(p.id,{[key]:v}), dotColor:(active?'#fff':mm.tone),
+            style:(active?('flex:1;padding:9px 6px;border:1px solid '+mm.tone+';background:'+mm.tone+';color:#fff;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px'):'flex:1;padding:9px 6px;border:1px solid #E4E4E0;background:#fff;color:#9A9A96;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px') }; }) }; };
+        const qualityRows=[ mkRating('listingRating','Listing'), mkRating('aplusRating','A+ Content') ];
+        const addMonthOptions=this.months.filter(ym=>!p.monthly[ym]).map(ym=>({ym, label:this._mlabel(ym)}));
+        V.sel={ name:p.name, asin:p.asin, dims:p.dims, amazonUrl:p.amazonUrl||'', hasUrl:!!p.amazonUrl, price:p.price, productionCost:p.productionCost, fbaFee:p.fbaFee, shipping:p.shipping,
+          qualityRows, activeYear,
+          unitProfitStr:this._eur(d.unitProfit,2), unitProfitColor:d.unitProfit<0?red:ink, marginStr:this._pct(d.marginPct*100),
+          conversionStr:this._pct(d.conversion*100), conversionColor:convColor(d.conversion), revenueStr:this._eur(d.revenue), vatStr:this._eur(d.vat,2),
+          unitsStr:this._num(d.units), acosStr:d.ppcRevenue>0?this._pct(d.actualAcos):'—', acosColor:d.actualAcos>d.breakEvenAcos?red:ink,
+          tacosStr:this._pct(d.tacos), stockStr:this._num(d.stock), stockColor:d.stock<0?red:ink,
+          coverStr:isFinite(d.cover)?Math.round(d.cover)+' Tage':'∞', coverColor:statusColor(d.status),
+          maxCpcStr:this._eur(d.maxCpc,2), organicRateStr:this._pct(d.organicRate*100,0),
+          starsVal:p.stars!=null?p.stars:'', starsStr:(+(p.stars!=null?p.stars:0)).toLocaleString('de-DE',{minimumFractionDigits:1,maximumFractionDigits:1}),
+          addMonthOptions,
+          statusColor:statusColor(d.status), statusLabel:statusLabel(d.status), recs, monthRows, detailYears };
+        V.starEl=this._starsEl(p.stars!=null?p.stars:0, 22);
+        V.editStars=(e)=>{ let v=parseFloat(String(e.target.value).replace(',','.')); if(!isFinite(v)) v=0; v=Math.max(0,Math.min(5,v)); this._update(p.id,{stars:v}); };
+        V.editUrl=(e)=>{ let v=(e.target.value||'').trim(); if(v && !/^https?:\/\//i.test(v)) v='https://'+v; this._update(p.id,{amazonUrl:v}); };
+        V.detailAddYm=st.detailAddYm||''; V.setDetailAddYm=(e)=>{ const v=e.target.value; this.setState({detailAddYm:v}); };
+        V.addSelectedMonth=()=>{ this._addMonthYm(p.id, st.detailAddYm); };
+        V.askDelete=()=>this.setState({deleteModal:{productId:p.id, name:p.name}});
+        V.waterfallEl=this._waterfall(p); V.salesChartEl=this._barChart(yearMonths.map(ym=>({label:this._mlabel(ym),value:+p.monthly[ym].units||0})));
+        V.editPrice=(e)=>this._update(p.id,{price:parse(e)}); V.editProdCost=(e)=>this._update(p.id,{productionCost:parse(e)});
+        V.editFba=(e)=>this._update(p.id,{fbaFee:parse(e)}); V.editShip=(e)=>this._update(p.id,{shipping:parse(e)});
+        V.addMonthRow=()=>this._addMonth(p.id);
+        // ---- Monatsziel (current month) ----
+        const cy=this._curYm();
+        const gTarget=+((p.targets||{})[cy]||0);
+        const gm=p.monthly[cy]; const gActual=gm?(+gm.units||0):0;
+        const now=new Date(); const dim=new Date(now.getFullYear(),now.getMonth()+1,0).getDate(); const dayEl=Math.min(dim,Math.max(1,now.getDate())); const dayRem=Math.max(0,dim-dayEl);
+        const gpct=gTarget>0?gActual/gTarget:0;
+        const expected=gTarget*dayEl/dim;
+        const curVel=gActual/dayEl;
+        const reqVel=dayRem>0?Math.max(0,(gTarget-gActual)/dayRem):0;
+        let gTone,gLabel;
+        if(gTarget<=0){ gTone='#9A9A96'; gLabel='Kein Ziel gesetzt'; }
+        else if(gActual>=gTarget){ gTone=green; gLabel='Ziel erreicht'; }
+        else if(gActual>=expected){ gTone=green; gLabel='Auf Kurs'; }
+        else { gTone=red; gLabel='Hinter Ziel'; }
+        V.goal={ monthLabel:this._mlabel(cy), tone:gTone, statusLabel:gLabel, ringEl:this._goalRing(gpct, gTarget<=0?'#C9C9C4':gTone),
+          actualStr:this._num(gActual), targetStr:gTarget>0?this._num(gTarget):'—', remainingStr:gTarget>0?this._num(Math.max(0,gTarget-gActual))+' Stk':'—',
+          curVelStr:curVel.toLocaleString('de-DE',{maximumFractionDigits:1}), reqVelStr:gTarget>0?reqVel.toLocaleString('de-DE',{maximumFractionDigits:1}):'—',
+          reqColor:(gTarget>0&&reqVel>curVel*1.15)?red:ink, dayStr:dayEl+'/'+dim,
+          targetInput:gTarget||'', setTarget:(e)=>this._setTarget(p.id,cy,e.target.value) };
+      }
+    }
+    if(!V.sel) V.sel={name:'',asin:'',dims:'',amazonUrl:'',hasUrl:false,price:0,productionCost:0,fbaFee:0,shipping:0,activeYear:'',unitProfitStr:'',unitProfitColor:ink,marginStr:'',conversionStr:'',conversionColor:ink,revenueStr:'',vatStr:'',unitsStr:'',acosStr:'',acosColor:ink,tacosStr:'',stockStr:'',stockColor:ink,coverStr:'',coverColor:'#9A9A96',maxCpcStr:'',organicRateStr:'',starsVal:'',starsStr:'',addMonthOptions:[],statusColor:'#9A9A96',statusLabel:'',recs:[],monthRows:[],detailYears:[],qualityRows:[]};
+    if(!V.starEl) V.starEl=null; if(!V.editStars) V.editStars=()=>{}; if(!V.editUrl) V.editUrl=()=>{}; if(!V.askDelete) V.askDelete=()=>{};
+    if(V.detailAddYm===undefined) V.detailAddYm=''; if(!V.setDetailAddYm) V.setDetailAddYm=()=>{}; if(!V.addSelectedMonth) V.addSelectedMonth=()=>{};
+    if(!V.goal) V.goal={monthLabel:'',tone:'#9A9A96',statusLabel:'',ringEl:null,actualStr:'',targetStr:'',remainingStr:'',curVelStr:'',reqVelStr:'',reqColor:ink,dayStr:'',targetInput:'',setTarget:()=>{}};
+
+    // ---- modal (new product) ----
+    V.modalOpen=st.modalOpen; V.draft=st.draft; V.closeModal=()=>this.setState({modalOpen:false});
+    const sd=(f)=>(e)=>this.setState(s=>({draft:{...s.draft,[f]:e.target.value}}));
+    V.setDraftName=sd('name'); V.setDraftAsin=sd('asin'); V.setDraftUrl=sd('amazonUrl'); V.setDraftPrice=sd('price'); V.setDraftProd=sd('productionCost');
+    V.setDraftFba=sd('fbaFee'); V.setDraftShip=sd('shipping'); V.setDraftStock=sd('stock'); V.setDraftDims=sd('dims');
+    V.setDraftLead=sd('leadTime'); V.setDraftSafety=sd('safetyDays'); V.setDraftStars=sd('stars'); V.setDraftTarget=sd('targetAcos');
+    V.saveProduct=()=>{ const dft=st.draft; if(!dft.name) return; const iso=this._todayISO(); const stock=+dft.stock||0; let url=(dft.amazonUrl||'').trim(); if(url && !/^https?:\/\//i.test(url)) url='https://'+url; const np={ id:'p'+Math.random().toString(36).slice(2,8), name:dft.name, asin:dft.asin||'—', amazonUrl:url, price:+dft.price||0, productionCost:+dft.productionCost||0, fbaFee:+dft.fbaFee||0, shipping:+dft.shipping||0, stock:stock, dims:dft.dims||'—', leadTime:+dft.leadTime||45, safetyDays:+dft.safetyDays||14, targetAcos:+dft.targetAcos||15, stars:(parseFloat(String(dft.stars).replace(',','.'))||0), listingRating:'green', aplusRating:'green', monthly:{}, targets:{}, stockRef:{value:stock,date:iso} }; this.setState(s=>({products:[...s.products,np], modalOpen:false}), ()=>this._persist()); };
+
+    // ---- stock modal ----
+    V.stockModalOpen=!!st.stockModal;
+    if(st.stockModal){ const sp=st.products.find(x=>x.id===st.stockModal.productId);
+      V.stockModalValue=st.stockModal.value; V.stockModalName=sp?sp.name:'';
+      V.stockModalCurrentStr= sp? this._num(this._stockOf(sp))+' Stk' : '';
+      V.stockModalSinceStr= sp&&sp.stockRef? (this._fmtDate(sp.stockRef.date)+' (Ref '+this._num(sp.stockRef.value)+' Stk)') : '—';
+    } else { V.stockModalValue=''; V.stockModalName=''; V.stockModalCurrentStr=''; V.stockModalSinceStr=''; }
+    V.setStockModalValue=(e)=>{ const v=e.target.value; this.setState(s=>({stockModal:{...s.stockModal, value:v}})); };
+    V.saveAbgleich=()=>this._saveAbgleich(); V.closeStockModal=()=>this.setState({stockModal:null});
+
+    // ---- delete confirm modal ----
+    V.deleteModalOpen=!!st.deleteModal; V.deleteModalName=st.deleteModal?st.deleteModal.name:'';
+    V.confirmDelete=()=>{ if(st.deleteModal) this._deleteProduct(st.deleteModal.productId); };
+    V.cancelDelete=()=>this.setState({deleteModal:null});
+
+    // ---- Lager ----
+    const lagerRows = st.products.map(p=>{ const d=this.derive(p); return {
+      name:p.name, asin:p.asin,
+      stockStr:this._num(d.stock), stockColor: d.stock<0?red:ink,
+      refValueStr: p.stockRef?this._num(p.stockRef.value):this._num(p.stock),
+      soldSinceStr: this._num(this._soldSince(p)),
+      refDateStr: p.stockRef?this._fmtDate(p.stockRef.date):'—',
+      velocityStr:d.velocity.toLocaleString('de-DE',{maximumFractionDigits:1})+' /Tag',
+      coverStr:isFinite(d.cover)?Math.round(d.cover)+' Tage':'∞', coverColor:statusColor(d.status),
+      dotColor:statusColor(d.status), statusLabel:statusLabel(d.status),
+      reorderStr:d.reorderQty>0?this._num(d.reorderQty)+' Stk':'—', reorderColor:d.reorderQty>0?(d.status==='red'?red:orange):'#9A9A96',
+      reorderVal:d.reorderQty*((+p.productionCost||0)+(+p.shipping||0)),
+      openAbgleich:()=>this._openAbgleich(p)
+    }; });
+    V.lagerRows=lagerRows;
+    V.lagerRed=st.products.filter(p=>this.derive(p).status==='red').length;
+    V.lagerYellow=st.products.filter(p=>this.derive(p).status==='yellow').length;
+    V.lagerGreen=st.products.filter(p=>this.derive(p).status==='green').length;
+    V.lagerReorderValue=this._eur(lagerRows.reduce((s,r)=>s+r.reorderVal,0));
+
+    // ---- Werbung (manual monthly ad cost, period-aggregated) ----
+    let avgAct=0, actCount=0; st.products.forEach(p=>{ const dd=this.derive(p,from,to); if(dd.ppcRevenue>0){ avgAct+=dd.actualAcos; actCount++; } });
+    V.werbeAvgActual= actCount>0 ? this._pct(avgAct/actCount) : '—';
+    V.adRows=st.products.map(p=>{ const d=this.derive(p,from,to); const be=d.breakEvenAcos, act=d.actualAcos, tgt=+p.targetAcos||0; const hasAcos=d.ppcRevenue>0;
+      const scaleMax=Math.max(be,act,tgt,1)*1.18; let recTone,recText,recBg,fillColor;
+      if(!hasAcos){ recTone='#9A9A96'; recText='Keine PPC-Verkäufe im Zeitraum erfasst'; recBg='#F4F4F2'; fillColor='#C9C9C4'; }
+      else if(act>be){ recTone=red; recText='Verlustzone – Werbekosten senken'; recBg='#FBEDEB'; fillColor=red; }
+      else if(act>tgt){ recTone=orange; recText='Über Ziel – Gebote optimieren'; recBg='#FFF3EC'; fillColor=orange; }
+      else { recTone=green; recText='Potenzial – Budget kann erhöht werden'; recBg='#ECF5EF'; fillColor=green; }
+      return { name:p.name, asin:p.asin, adSpendStr:this._eur(d.adSpend), targetAcos:tgt, daysStr:this._num(d.days),
+        tacosStr:this._pct(d.tacos), maxCpcStr:this._eur(d.maxCpc,2), ppcUnitsStr:this._num(d.unitsPpc),
+        setTarget:(e)=>this._update(p.id,{targetAcos:parseFloat(String(e.target.value).replace(',','.'))||0}),
+        openProduct:()=>this._open(p.id),
+        actualStr:hasAcos?this._pct(act):'—', breakStr:this._pct(be), targetStr:this._pct(tgt),
+        actualW:Math.min(100,act/scaleMax*100).toFixed(1)+'%', breakL:Math.min(100,be/scaleMax*100).toFixed(1)+'%', targetL:Math.min(100,tgt/scaleMax*100).toFixed(1)+'%',
+        fillColor, recTone, recText, recBg }; });
+
+    // ---- Szenarien ----
+    const scp = st.products.find(x=>x.id===(st.scenario&&st.scenario.productId)) || st.products[0];
+    if(scp){
+      const sv = (st.scenario && st.scenario.productId===scp.id) ? st.scenario : this._scenDefaults(scp);
+      const base = this._scenDefaults(scp);
+      const calc=(price,ad,units,prod)=>{ const vat=(price-(+scp.fbaFee||0))*0.19; const net=price-vat; const up=net-(+scp.fbaFee||0)-(+scp.shipping||0)-prod; const mp=price>0?up/price:0; const rev=units*price; const profit=units*up-ad; const acos=rev>0?ad/rev*100:0; return {up,mp,rev,profit,acos,be:mp*100}; };
+      const cur=calc(sv.price,sv.adSpend,sv.units,sv.prodCost);
+      const bas=calc(base.price,base.adSpend,base.units,base.prodCost);
+      const dProfit=cur.profit-bas.profit, dUp=cur.up-bas.up;
+      let verdict,verdictTone,verdictBg;
+      if(cur.acos>cur.be){ verdictTone=red; verdictBg='#FBEDEB'; verdict='ACOS über Break-Even – Werbung unrentabel.'; }
+      else if(dProfit>0.5){ verdictTone=green; verdictBg='#ECF5EF'; verdict='Gewinnsteigerung: '+this._eur(dProfit)+' / Monat gegenüber heute.'; }
+      else if(dProfit<-0.5){ verdictTone=red; verdictBg='#FBEDEB'; verdict='Gewinnrückgang: '+this._eur(dProfit)+' / Monat gegenüber heute.'; }
+      else { verdictTone=orange; verdictBg='#FFF3EC'; verdict='Stabil – kaum Effekt auf den Monatsgewinn.'; }
+      V.scen={ name:scp.name, price:sv.price, adSpend:sv.adSpend, units:sv.units, prodCost:sv.prodCost,
+        priceStr:this._eur(sv.price,2), adStr:this._eur(sv.adSpend), unitsStr:this._num(sv.units), prodStr:this._eur(sv.prodCost,2),
+        priceMin:Math.max(0.5,+(scp.price*0.5).toFixed(1)), priceMax:+(scp.price*1.8).toFixed(1), adMax:Math.max(100,Math.round(base.adSpend*3)+50), unitsMax:Math.max(20,base.units*3), prodMax:Math.max(1,+(scp.price*0.7).toFixed(1)),
+        unitProfitStr:this._eur(cur.up,2), marginColor:cur.up<0?red:ink, marginPctStr:this._pct(cur.mp*100), breakStr:this._pct(cur.be),
+        marginDelta:(dUp>=0?'▲ +':'▼ ')+this._eur(Math.abs(dUp),2)+' / Stk', marginDeltaColor:dUp>=0?green:red,
+        profitStr:this._eur(cur.profit), profitColor:cur.profit<0?red:ink, profitDelta:(dProfit>=0?'▲ +':'▼ ')+this._eur(Math.abs(dProfit))+' / Monat', profitDeltaColor:dProfit>=0?green:red,
+        acosStr:this._pct(cur.acos), acosColor:cur.acos>cur.be?red:ink, revenueStr:this._eur(cur.rev),
+        verdict, verdictTone, verdictBg };
+      const setScen=(f)=>(e)=>{ const v=parseFloat(String(e.target.value).replace(',','.'))||0; this.setState(s=>{ const cs=(s.scenario&&s.scenario.productId===scp.id)?s.scenario:this._scenDefaults(scp); return {scenario:{...cs,productId:scp.id,[f]:v}}; }); };
+      V.scenSetPrice=setScen('price'); V.scenSetAd=setScen('adSpend'); V.scenSetUnits=setScen('units'); V.scenSetProd=setScen('prodCost');
+      V.scenarioReset=()=>this.setState({scenario:this._scenDefaults(scp)});
+      V.scenarioProducts=st.products.map(p=>({ name:p.name, style:(p.id===scp.id?'padding:8px 14px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12.5px;font-weight:600;cursor:pointer':'padding:8px 14px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12.5px;font-weight:500;cursor:pointer'), select:()=>this.setState({scenario:this._scenDefaults(p)}) }));
+    } else { V.scen={name:'',priceStr:'',adStr:'',unitsStr:'',prodStr:'',price:0,adSpend:0,units:0,prodCost:0,priceMin:0,priceMax:1,adMax:1,unitsMax:1,prodMax:1,unitProfitStr:'',marginColor:ink,marginPctStr:'',breakStr:'',marginDelta:'',marginDeltaColor:ink,profitStr:'',profitColor:ink,profitDelta:'',profitDeltaColor:ink,acosStr:'',acosColor:ink,revenueStr:'',verdict:'',verdictTone:'#9A9A96',verdictBg:'#F4F4F2'}; V.scenarioProducts=[]; V.scenSetPrice=V.scenSetAd=V.scenSetUnits=V.scenSetProd=()=>{}; V.scenarioReset=()=>{}; }
+
+    // ---- Ideen ----
+    const catMap={produkt:{label:'Produkt',color:orange}, marketing:{label:'Marketing',color:ink}, listing:{label:'Listing',color:green}, sonstiges:{label:'Sonstiges',color:'#9A9A96'}};
+    const STI=['Inbox','In Prüfung','Umsetzung','Verworfen'];
+    const PRI=['Niedrig','Mittel','Hoch'];
+    const statusColI=(s)=>({'Inbox':'#6A6A66','In Prüfung':yellow,'Umsetzung':orange,'Verworfen':'#9A9A96'}[s]||'#9A9A96');
+    const prioColI=(p)=>({'Niedrig':'#9A9A96','Mittel':yellow,'Hoch':red}[p]||yellow);
+    const dotS=(c)=>`width:6px;height:6px;background:${c};flex:none`;
+    const badgeS=(c)=>`display:inline-flex;align-items:center;gap:6px;padding:3px 8px;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:${c};background:${c}14;border:1px solid ${c}44`;
+    const catTagS=(c)=>`display:inline-flex;align-items:center;padding:3px 8px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:${c}`;
+    const allIdeas=st.ideas||[];
+    const iq=(st.ideaSearch||'').trim().toLowerCase();
+    let ilist=allIdeas.filter(i=>{
+      if(iq && !((i.title||'').toLowerCase().includes(iq)||(i.description||'').toLowerCase().includes(iq))) return false;
+      if(st.ideaFilters.length && !st.ideaFilters.some(f=>(i.statuses||[]).includes(f))) return false;
+      return true;
+    });
+    const isort=st.ideaSort;
+    ilist=ilist.slice().sort((a,b)=>{
+      if(isort==='potential') return (b.potential||0)-(a.potential||0);
+      if(isort==='progress') return (b.progress||0)-(a.progress||0);
+      if(isort==='title') return (a.title||'').localeCompare(b.title||'');
+      return (b.created_at||0)-(a.created_at||0);
+    });
+    V.ideaCards=ilist.map(i=>{
+      const cat=catMap[i.category]||catMap.sonstiges;
+      const pc=prioColI(i.priority||'Mittel');
+      const pot=i.potential||0, prog=i.progress||0, fc=(i.files||[]).length;
+      return { id:i.id, title:i.title, description:i.description||'', hasDesc:!!(i.description&&i.description.trim()),
+        catLabel:cat.label, catStyle:catTagS(cat.color),
+        prioLabel:i.priority||'Mittel', prioStyle:badgeS(pc), prioDot:dotS(pc),
+        statusBadges:(i.statuses||[]).map(s=>{const c=statusColI(s);return {label:s,style:badgeS(c),dot:dotS(c)};}),
+        potLabel:pot+'%', progLabel:prog+'%',
+        potBar:`height:100%;width:${pot}%;background:${orange}`, progBar:`height:100%;width:${prog}%;background:${ink}`,
+        hasFiles:fc>0, fileCountLabel:fc+(fc===1?' Datei':' Dateien'),
+        files:(i.files||[]).map(f=>({name:f.name,size:this._humanSize(f.size),download:()=>this._downloadIdeaFile(f)})),
+        updatedLabel:this._ideaTimeAgo(i.updated_at||i.created_at),
+        edit:()=>this._openIdeaEdit(i.id), remove:()=>this._removeIdea(i.id) };
+    });
+    V.hasIdeasView=V.ideaCards.length>0; V.ideaEmpty=V.ideaCards.length===0;
+    const itotal=allIdeas.length;
+    const iavg=(k)=> itotal?Math.round(allIdeas.reduce((a,i)=>a+(i[k]||0),0)/itotal):0;
+    V.ideaKpiTotal=itotal; V.ideaKpiPot=iavg('potential'); V.ideaKpiProg=iavg('progress');
+    V.ideaKpiImpl=allIdeas.filter(i=>(i.statuses||[]).includes('Umsetzung')).length;
+    V.ideaSubtitle= itotal? (ilist.length===itotal? itotal+' Ideen' : ilist.length+' von '+itotal+' Ideen') : 'Noch keine Ideen erfasst';
+    V.ideaEmptyTitle=(iq||st.ideaFilters.length)?'Keine Treffer':'Noch keine Ideen';
+    V.ideaEmptyHint=(iq||st.ideaFilters.length)?'Passe Suche oder Filter an, um Ideen zu sehen.':'Lege deine erste Idee an — mit Beschreibung, Status, Potential und Dateien.';
+    V.ideaSearch=st.ideaSearch; V.onIdeaSearch=(e)=>this.setState({ideaSearch:e.target.value});
+    V.ideaSort=st.ideaSort; V.setIdeaSort=(e)=>this.setState({ideaSort:e.target.value});
+    V.ideaFilterOptions=STI.map(s=>{
+      const c=statusColI(s), active=st.ideaFilters.includes(s);
+      const count=allIdeas.filter(i=>(i.statuses||[]).includes(s)).length;
+      return { label:s, count, toggle:()=>this._toggleIdeaFilter(s), dot:dotS(c),
+        style: active
+          ? `display:inline-flex;align-items:center;gap:7px;padding:7px 11px;font-size:12px;font-weight:600;cursor:pointer;color:#0A0A0A;background:${c}18;border:1.5px solid ${c}`
+          : `display:inline-flex;align-items:center;gap:7px;padding:7px 11px;font-size:12px;font-weight:500;cursor:pointer;color:#6A6A66;background:#fff;border:1px solid #E4E4E0`,
+        countStyle:`font-feature-settings:'tnum' 1;font-size:11px;font-weight:600;color:${active?c:'#9A9A96'}` };
+    });
+    const iform=st.ideaForm;
+    const chipS=(active,c)=> active
+      ? `display:inline-flex;align-items:center;gap:8px;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;color:#0A0A0A;background:${c}18;border:1.5px solid ${c}`
+      : `display:inline-flex;align-items:center;gap:8px;padding:8px 12px;font-size:12.5px;font-weight:500;cursor:pointer;color:#6A6A66;background:#fff;border:1px solid #E4E4E0`;
+    V.ideaModalOpen=st.ideaModalOpen;
+    V.ideaModalKicker=st.ideaEditingId?'Bearbeiten':'Neu';
+    V.ideaModalTitle=st.ideaEditingId?'Idee bearbeiten':'Neue Idee';
+    V.ideaSaveLabel=st.ideaEditingId?'Speichern':'Idee anlegen';
+    V.ideaClose=()=>this.setState({ideaModalOpen:false});
+    V.ideaOpenNew=()=>this._openIdeaNew();
+    V.fTitle=iform.title; V.fDesc=iform.description; V.fPot=iform.potential; V.fProg=iform.progress;
+    V.setFTitle=(e)=>this._setIdeaForm({title:e.target.value});
+    V.setFDesc=(e)=>this._setIdeaForm({description:e.target.value});
+    V.setFPot=(e)=>this._setIdeaForm({potential:+e.target.value});
+    V.setFProg=(e)=>this._setIdeaForm({progress:+e.target.value});
+    V.ideaCatOptions=Object.keys(catMap).map(k=>{ const active=(iform.category||'produkt')===k; const c=catMap[k].color; return {label:catMap[k].label, toggle:()=>this._setIdeaForm({category:k}), dot:dotS(c), style:chipS(active,c)}; });
+    V.ideaStatusOptions=STI.map(s=>{ const c=statusColI(s), active=iform.statuses.includes(s); return {label:s, toggle:()=>this._toggleIdeaFormStatus(s), dot:dotS(c), style:chipS(active,c)}; });
+    V.ideaPrioOptions=PRI.map(p=>{ const c=prioColI(p), active=(iform.priority||'Mittel')===p; return {label:p, toggle:()=>this._setIdeaForm({priority:p}), dot:dotS(c), style:chipS(active,c)}; });
+    V.ideaFormFiles=iform.files.map((f,idx)=>({name:f.name,size:this._humanSize(f.size),remove:()=>this._removeIdeaFormFile(idx)}));
+    V.ideaHasFormFiles=iform.files.length>0;
+    V.onIdeaFilePick=(e)=>this._onIdeaFilePick(e);
+    V.ideaUploadLabel='Dateien auswählen';
+    V.ideaUploadState= st.ideaUploading?'Lädt…':(iform.files.length? iform.files.length+' Datei(en) angehängt':'');
+    V.saveIdea=()=>this._saveIdea();
+
+    // ---- Empfehlungen (regelbasiert, live aus Datenstand) ----
+    const recPrioMeta={kritisch:{label:'Kritisch',color:red}, wichtig:{label:'Wichtig',color:yellow}, hinweis:{label:'Hinweis',color:'#6A6A66'}};
+    const allRecs=this._recommendations();
+    const activeRecs=allRecs.filter(r=>!st.recDismissed[r.key]);
+    V.recCards=activeRecs.map(r=>{ const m=recPrioMeta[r.priority]; return {
+      key:r.key, productName:r.productName, area:r.area, reason:r.reason, action:r.action, prioLabel:m.label,
+      barStyle:`width:4px;flex:none;background:${m.color}`,
+      prioStyle:`display:inline-flex;align-items:center;padding:3px 9px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:${m.color}`,
+      areaStyle:`display:inline-flex;align-items:center;padding:3px 9px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#6A6A66;background:#F4F4F2;border:1px solid #E4E4E0`,
+      open:()=>this._open(r.productId), done:()=>this._dismissRec(r.key,'done'), ignore:()=>this._dismissRec(r.key,'ignore') };
+    });
+    V.recCrit=activeRecs.filter(r=>r.priority==='kritisch').length;
+    V.recImp=activeRecs.filter(r=>r.priority==='wichtig').length;
+    V.recHint=activeRecs.filter(r=>r.priority==='hinweis').length;
+    const recDismissedCount=Object.keys(st.recDismissed).length;
+    V.recDismissedCount=recDismissedCount;
+    V.recHasDismissed=recDismissedCount>0;
+    V.recDismissedLabel=`${recDismissedCount} ausgeblendet — zurücksetzen`;
+    V.recRestore=()=>this._restoreRecs();
+    V.recHasCards=activeRecs.length>0;
+    V.recEmpty=activeRecs.length===0;
+    V.recSubtitle=activeRecs.length? `${activeRecs.length} offene Empfehlung${activeRecs.length===1?'':'en'} · automatisch aus dem aktuellen Datenstand` : 'Automatisch aus dem aktuellen Datenstand berechnet';
+    V.recEmptyTitle= recDismissedCount>0 ? 'Nichts Offenes' : 'Keine offenen Empfehlungen';
+    V.recEmptyHint= recDismissedCount>0 ? 'Alle aktuellen Empfehlungen sind als erledigt oder ignoriert markiert. Sobald sich Kennzahlen ändern, erscheinen neue automatisch.' : 'Aktuell liegen alle Kennzahlen im grünen Bereich. Neue Empfehlungen erscheinen automatisch, sobald sich Werte verändern.';
+
+    return V;
+  }
+}
+</script>
+</body>
+</html>
