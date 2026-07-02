@@ -263,7 +263,14 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                 <div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:3px">Monatlicher Umsatz · {{ chartYear }}</div>
               </div>
               <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+                <sc-if value="{{ chartYoyOn }}" hint-placeholder-val="{{ false }}">
+                  <div style="text-align:right"><div style="font-size:11px;color:#9A9A96">Vorjahresvergleich</div><div style="font-family:'Archivo';font-weight:700;font-size:14px;color:{{ yoyDeltaColor }}">{{ yoyDeltaText }}</div></div>
+                </sc-if>
                 <div style="text-align:right"><div style="font-size:11px;color:#9A9A96">Spitzenmonat</div><div style="font-family:'Archivo';font-weight:700;font-size:14px">{{ peakMonth }}</div></div>
+                <button onClick="{{ toggleChartYoy }}" style="{{ yoyToggleStyle }}">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>
+                  Vorjahresvergleich
+                </button>
                 <div style="display:flex;align-items:center;gap:4px" class="pp-yearchips"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em;margin-right:2px">Jahr</span><sc-for list="{{ chartYears }}" as="y" hint-placeholder-count="6"><button onClick="{{ y.select }}" style="{{ y.style }}">{{ y.label }}</button></sc-for></div>
               </div>
             </div>
@@ -412,6 +419,24 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
               <span style="font-size:12px;color:#7A7A76">Ziel {{ goal.monthLabel }}</span>
               <input type="number" value="{{ goal.targetInput }}" onChange="{{ goal.setTarget }}" onFocus="{{ editFocus }}" onBlur="{{ editBlur }}" style="width:92px;border:1px solid #E2E2E2;padding:7px 9px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1">
               <span style="font-size:12px;color:#9A9A96">Stk · Ziele je Monat editierbar in der Tabelle unten</span>
+            </div>
+            <div style="padding:14px 22px;border-top:1px solid #EEEEEB;background:#FAFAF8;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
+              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                <div style="width:26px;height:26px;background:#FFF3EC;border:1px solid #FFD9C2;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FF5A00" stroke-width="2.2"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96">Smarter Vorschlag · {{ goalNext.nextLabel }}</div>
+                  <div style="font-size:12.5px;color:#5A5A56;margin-top:2px">{{ goalNext.reasonText }}</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+                <div style="text-align:right">
+                  <div style="font-family:'Archivo';font-weight:800;font-size:20px;font-feature-settings:'tnum' 1">{{ goalNext.valueStr }}</div>
+                  <div style="font-size:10.5px;color:#9A9A96">aktuell: {{ goalNext.currentStr }}</div>
+                </div>
+                <button onClick="{{ goalNext.apply }}" style="padding:9px 15px;border:none;background:#0A0A0A;color:#fff;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:#FF5A00">Übernehmen</button>
+              </div>
             </div>
           </div>
 
@@ -1166,7 +1191,8 @@ class Component extends DCLogic {
       detailScope:'gesamt',
       reportMonth:this._curYm(),
       period:{preset:'thisYear', from:(String(new Date().getFullYear())+'-01'), to:this._curYm()},
-      chartYear:String(new Date().getFullYear())
+      chartYear:String(new Date().getFullYear()),
+      chartYoy:false
     };
   }
   componentDidMount(){ this._onResize = ()=> this.setState({narrow: window.innerWidth < 900}); window.addEventListener('resize', this._onResize); this._sbInit(); }
@@ -1394,6 +1420,37 @@ class Component extends DCLogic {
       React.createElement('text',{x:70,y:88,textAnchor:'middle',fontSize:11,fill:'#9A9A96',fontFamily:'IBM Plex Sans'},'vom Ziel')
     );
   }
+  // Mehrfach-Linienchart (z.B. laufendes Jahr vs. Vorjahr) — gleiche Skala, eine X-Achse, Legende oben rechts
+  _lineChartMulti(seriesList, {h=230, unit='€'}={}){
+    const W=760, H=h, padL=54, padR=18, padT=26, padB=34;
+    const n = Math.max(1, ...seriesList.map(s=>s.data.length));
+    const max = Math.max(1, ...seriesList.flatMap(s=>s.data.map(d=>d.value)));
+    const niceMax = Math.ceil(max/(max>2000?500:100)) * (max>2000?500:100) || max;
+    const iw=W-padL-padR, ih=H-padT-padB;
+    const x=i=> padL + (n<=1?0:(i/(n-1))*iw);
+    const y=v=> padT + ih - (v/niceMax)*ih;
+    const grid=[0,0.5,1].map(t=>{ const gy=padT+ih-t*ih; const val=niceMax*t; return React.createElement('g',{key:'g'+t},
+      React.createElement('line',{x1:padL,x2:W-padR,y1:gy,y2:gy,stroke:'#EEEEEB',strokeWidth:1}),
+      React.createElement('text',{x:padL-8,y:gy+4,textAnchor:'end',fontSize:11,fill:'#B0B0AC',fontFamily:'IBM Plex Sans'}, unit==='€'? (val>=1000?(val/1000).toLocaleString('de-DE',{maximumFractionDigits:1})+'k':Math.round(val)) : Math.round(val)) ); });
+    const labelSrc = seriesList.find(s=>s.data.length===n) || seriesList[0];
+    const labels = labelSrc.data.map((s,i)=> (i%2===0||i===n-1) ? React.createElement('text',{key:'l'+i,x:x(i),y:H-12,textAnchor:'middle',fontSize:10.5,fill:'#B0B0AC',fontFamily:'IBM Plex Sans'}, s.label) : null);
+    const els=[];
+    seriesList.forEach((s,si)=>{
+      const d=s.data; if(!d.length) return;
+      const line=d.map((pt,i)=> (i?'L':'M')+x(i).toFixed(1)+' '+y(pt.value).toFixed(1)).join(' ');
+      if(s.fill){ const area='M'+x(0).toFixed(1)+' '+(padT+ih)+' '+d.map((pt,i)=>'L'+x(i).toFixed(1)+' '+y(pt.value).toFixed(1)).join(' ')+' L'+x(d.length-1).toFixed(1)+' '+(padT+ih)+' Z';
+        els.push(React.createElement('path',{key:'a'+si,d:area,fill:s.color,opacity:0.08})); }
+      els.push(React.createElement('path',{key:'p'+si,d:line,fill:'none',stroke:s.color,strokeWidth:2.2,strokeLinejoin:'round',strokeLinecap:'round',strokeDasharray:s.dashed?'5,4':undefined}));
+      els.push(React.createElement('g',{key:'d'+si}, d.map((pt,i)=>React.createElement('circle',{key:i,cx:x(i),cy:y(pt.value),r:2.5,fill:'#fff',stroke:s.color,strokeWidth:1.6}))));
+    });
+    const legend = React.createElement('g',{key:'legend'}, seriesList.map((s,si)=>{
+      const lx=W-padR-seriesList.length*72+si*72, ly=8;
+      return React.createElement('g',{key:'lg'+si},
+        React.createElement('line',{x1:lx,x2:lx+16,y1:ly,y2:ly,stroke:s.color,strokeWidth:2.4,strokeDasharray:s.dashed?'5,4':undefined}),
+        React.createElement('text',{x:lx+21,y:ly+3.5,fontSize:10.5,fill:'#6A6A66',fontFamily:'IBM Plex Sans',fontWeight:600}, s.label));
+    }));
+    return React.createElement('svg',{viewBox:'0 0 '+W+' '+H,style:{width:'100%',height:'auto',display:'block'}}, grid, els, labels, legend);
+  }
   _lineChart(series, {color='#FF5A00', h=230, unit='€'}={}){
     const W=760, H=h, padL=54, padR=18, padT=18, padB=34;
     const max = Math.max(1, ...series.map(s=>s.value));
@@ -1589,6 +1646,42 @@ class Component extends DCLogic {
     const order={kritisch:0,wichtig:1,hinweis:2};
     recs.sort((a,b)=> (order[a.priority]-order[b.priority]) || (b.sev-a.sev) || a.productName.localeCompare(b.productName));
     return recs;
+  }
+  // Smarter Zielvorschlag: kombiniert jüngsten Trend (Ø letzte bis zu 3 abgeschlossene Monate)
+  // mit dem Vorjahresmonat (Saisonalität), falls vorhanden. Wachstum wird auf ein plausibles
+  // Band begrenzt (-15% .. +30%), damit einzelne Ausreißer keine absurden Vorschläge erzeugen.
+  _suggestTarget(p, targetYm){
+    const priorYm = this._shiftYm(targetYm,-1);
+    const dataMonths = this.months.filter(ym=> ym<targetYm && p.monthly[ym]).sort();
+    if(!dataMonths.length) return null;
+    const last = dataMonths.slice(-3);
+    const lastUnits = last.map(ym=>+p.monthly[ym].units||0);
+    const avg3 = lastUnits.reduce((a,b)=>a+b,0)/lastUnits.length;
+    const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
+
+    // Trend: Ø der Monat-zu-Monat-Wachstumsraten der letzten Datenpunkte
+    let trendGrowth=null;
+    if(last.length>=2){
+      const steps=[];
+      for(let i=1;i<last.length;i++){ const prev=lastUnits[i-1], cur=lastUnits[i]; if(prev>0) steps.push(clamp((cur-prev)/prev,-0.5,0.5)); }
+      if(steps.length) trendGrowth = steps.reduce((a,b)=>a+b,0)/steps.length;
+    }
+    // Saisonalität: Wachstum des letzten abgeschlossenen Monats ggü. demselben Monat im Vorjahr
+    let yoyGrowth=null;
+    const priorLY=this._shiftYm(priorYm,-12);
+    if(p.monthly[priorLY] && p.monthly[priorYm]){
+      const a=+p.monthly[priorLY].units||0, b=+p.monthly[priorYm].units||0;
+      if(a>0) yoyGrowth=clamp((b-a)/a,-0.5,0.5);
+    }
+    let growth, basisLabel;
+    if(trendGrowth!=null && yoyGrowth!=null){ growth=(trendGrowth+yoyGrowth)/2; basisLabel='Trend &amp; Vorjahresmonat'; }
+    else if(trendGrowth!=null){ growth=trendGrowth; basisLabel='Trend letzte '+last.length+' Monate'; }
+    else if(yoyGrowth!=null){ growth=yoyGrowth; basisLabel='Vorjahresmonat'; }
+    else { growth=0.05; basisLabel='Basiswachstum (wenig Daten)'; }
+    growth=clamp(growth,-0.15,0.30);
+    const base = avg3>0?avg3:lastUnits[lastUnits.length-1];
+    const value = Math.max(0, Math.round(base*(1+growth)));
+    return { value, growthPct:growth*100, basisLabel, baseUnits:Math.round(base), monthsUsed:last.length };
   }
   _dismissRec(key,mode){ this.setState(s=>({recDismissed:{...s.recDismissed,[key]:mode}}), ()=>this._persist()); }
   _restoreRecs(){ this.setState({recDismissed:{}}, ()=>this._persist()); }
@@ -1804,12 +1897,28 @@ class Component extends DCLogic {
     V.unitsDelta = prevWin.u>0 ? ((udp>=0?'▲ +':'▼ ')+this._pct(Math.abs(udp),1)+' '+cmpLabel) : '— kein Vergleichswert';
     V.unitsDeltaColor = prevWin.u>0 ? (udp>=0?green:red) : '#8A8A86';
 
-    // revenue chart (own year)
+    // revenue chart (own year, optional Vorjahresvergleich)
     const chartSeries=this.yearRevenueSeries(st.chartYear);
     const peak=chartSeries.reduce((a,b)=>b.value>a.value?b:a,chartSeries[0]);
     V.chartYear=st.chartYear;
     V.peakMonth = peak && peak.value>0 ? (peak.label+' '+st.chartYear.slice(2)+' · '+this._eur(peak.value)) : '—';
-    V.revenueChartEl = this._lineChart(chartSeries,{unit:'€'});
+    V.chartYoyOn = !!st.chartYoy;
+    V.toggleChartYoy = ()=> this.setState({chartYoy: !st.chartYoy});
+    V.yoyToggleStyle = st.chartYoy ? 'padding:5px 12px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px' : 'padding:5px 12px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px';
+    if(st.chartYoy){
+      const prevYear=String(+st.chartYear-1);
+      const prevSeries=this.yearRevenueSeries(prevYear);
+      const curSum=chartSeries.reduce((s,m)=>s+m.value,0), prevSum=prevSeries.reduce((s,m)=>s+m.value,0);
+      V.yoyDeltaText = prevSum>0 ? ((curSum>=prevSum?'▲ +':'▼ ')+this._pct(Math.abs((curSum-prevSum)/prevSum*100),1)+' ggü. '+prevYear) : (curSum>0?'kein Vorjahreswert':'—');
+      V.yoyDeltaColor = prevSum>0 ? (curSum>=prevSum?green:red) : '#8A8A86';
+      V.revenueChartEl = this._lineChartMulti([
+        {label:st.chartYear, color:orange, fill:true, data:chartSeries},
+        {label:prevYear, color:'#B0B0AC', dashed:true, data:prevSeries}
+      ], {unit:'€'});
+    } else {
+      V.yoyDeltaText=''; V.yoyDeltaColor='#8A8A86';
+      V.revenueChartEl = this._lineChart(chartSeries,{unit:'€'});
+    }
     V.chartYears=['2025','2026','2027','2028','2029','2030'].map(y=>({ label:y, select:()=>this.setState({chartYear:y}), style:(y===st.chartYear?'padding:5px 10px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-feature-settings:\'tnum\' 1':'padding:5px 10px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12px;font-weight:500;cursor:pointer;font-feature-settings:\'tnum\' 1') }));
 
     // cockpit table (period)
@@ -1953,12 +2062,27 @@ class Component extends DCLogic {
           curVelStr:curVel.toLocaleString('de-DE',{maximumFractionDigits:1}), reqVelStr:gTarget>0?reqVel.toLocaleString('de-DE',{maximumFractionDigits:1}):'—',
           reqColor:(gTarget>0&&reqVel>curVel*1.15)?red:ink, dayStr:dayEl+'/'+dim,
           targetInput:gTarget||'', setTarget:(e)=>this._setTarget(p.id,cy,e.target.value) };
+        // ---- Smarter Zielvorschlag (nächster Monat) ----
+        const nextYm=this._shiftYm(cy,1);
+        const sug=this._suggestTarget(p,nextYm);
+        const nextCur=+((p.targets||{})[nextYm]||0);
+        if(sug){
+          const gSign = sug.growthPct>=0?'+':'';
+          V.goalNext={ has:true, nextLabel:this._mlabel(nextYm),
+            valueStr:this._num(sug.value), reasonText:gSign+sug.growthPct.toLocaleString('de-DE',{maximumFractionDigits:0})+' % ggü. '+sug.basisLabel+' (Ø '+this._num(sug.baseUnits)+' Stk)',
+            currentStr: nextCur>0?this._num(nextCur)+' Stk':'noch kein Ziel gesetzt',
+            isSame: nextCur===sug.value,
+            apply:()=>this._setTarget(p.id,nextYm,sug.value) };
+        } else {
+          V.goalNext={ has:false, nextLabel:this._mlabel(nextYm), valueStr:'—', reasonText:'Noch keine Verkaufsdaten erfasst — Vorschlag erst ab dem ersten Monat mit Werten möglich.', currentStr:'—', isSame:false, apply:()=>{} };
+        }
       }
     }
     if(!V.sel) V.sel={name:'',asin:'',dims:'',amazonUrl:'',hasUrl:false,price:0,productionCost:0,fbaFee:0,shipping:0,activeYear:'',unitProfitStr:'',unitProfitColor:ink,marginStr:'',conversionStr:'',conversionColor:ink,revenueStr:'',vatStr:'',unitsStr:'',acosStr:'',acosColor:ink,tacosStr:'',stockStr:'',stockColor:ink,coverStr:'',coverColor:'#9A9A96',maxCpcStr:'',organicRateStr:'',starsVal:'',starsStr:'',addMonthOptions:[],statusColor:'#9A9A96',statusLabel:'',recs:[],monthRows:[],detailYears:[],qualityRows:[]};
     if(!V.starEl) V.starEl=null; if(!V.editStars) V.editStars=()=>{}; if(!V.editUrl) V.editUrl=()=>{}; if(!V.askDelete) V.askDelete=()=>{};
     if(V.detailAddYm===undefined) V.detailAddYm=''; if(!V.setDetailAddYm) V.setDetailAddYm=()=>{}; if(!V.addSelectedMonth) V.addSelectedMonth=()=>{};
     if(!V.goal) V.goal={monthLabel:'',tone:'#9A9A96',statusLabel:'',ringEl:null,actualStr:'',targetStr:'',remainingStr:'',curVelStr:'',reqVelStr:'',reqColor:ink,dayStr:'',targetInput:'',setTarget:()=>{}};
+    if(!V.goalNext) V.goalNext={has:false,nextLabel:'',valueStr:'—',reasonText:'',currentStr:'—',isSame:false,apply:()=>{}};
 
     // ---- modal (new product) ----
     V.modalOpen=st.modalOpen; V.draft=st.draft; V.closeModal=()=>this.setState({modalOpen:false});
