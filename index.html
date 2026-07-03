@@ -49,6 +49,25 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
 .pp-scroll::-webkit-scrollbar{height:8px;width:8px}
 .pp-scroll::-webkit-scrollbar-thumb{background:#D2D2CE}
 @keyframes ppfade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+/* --- Buero-Szene: koordinierte Loops (Truck+Kevin 24s, Roth 18s, Tom 30s) --- */
+@keyframes ppTruck{0%,55%{transform:translateX(0)}68%,82%{transform:translateX(-620px)}95%,100%{transform:translateX(0)}}
+@keyframes ppKev{0%,6%{transform:translate(330px,330px)}20%{transform:translate(206px,300px)}36%{transform:translate(206px,300px)}50%,100%{transform:translate(330px,330px)}}
+@keyframes ppKevBox{0%,7%{opacity:0}9%,33%{opacity:1}36%,100%{opacity:0}}
+@keyframes ppKevBub{0%,21%{opacity:0}25%,48%{opacity:1}54%,100%{opacity:0}}
+@keyframes ppRoth{0%,8%{transform:translate(952px,330px)}22%{transform:translate(1044px,214px)}72%{transform:translate(1044px,214px)}88%,100%{transform:translate(952px,330px)}}
+@keyframes ppRothBub{0%,26%{opacity:0}30%,66%{opacity:1}72%,100%{opacity:0}}
+@keyframes ppTom{0%,4%{transform:translate(742px,520px)}16%{transform:translate(430px,478px)}24%{transform:translate(430px,478px)}38%{transform:translate(316px,214px)}46%{transform:translate(316px,214px)}62%{transform:translate(646px,170px)}70%{transform:translate(646px,170px)}86%{transform:translate(908px,486px)}94%,100%{transform:translate(742px,520px)}}
+@keyframes ppTomBub{0%,17%{opacity:0}19%,23%{opacity:1}26%,39%{opacity:0}41%,45%{opacity:1}48%,63%{opacity:0}65%,69%{opacity:1}72%,100%{opacity:0}}
+@keyframes ppWalk{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.6px)}}
+.pp-truck{animation:ppTruck 24s linear infinite}
+.pp-kev{animation:ppKev 24s linear infinite}
+.pp-kev-box{animation:ppKevBox 24s linear infinite}
+.pp-kev-bub{animation:ppKevBub 24s linear infinite}
+.pp-roth{animation:ppRoth 18s linear infinite}
+.pp-roth-bub{animation:ppRothBub 18s linear infinite}
+.pp-tom{animation:ppTom 30s linear infinite}
+.pp-tom-bub{animation:ppTomBub 30s linear infinite}
+.pp-bob{animation:ppWalk 0.8s ease-in-out infinite}
 /* Kalkulations-Felder: jedes Label reserviert 2 Zeilen -> Eingabefelder bleiben in einer Reihe buendig */
 .pp-calcgrid > label > span{display:block;min-height:2.4em;line-height:1.25}
 /* ===== Mobile-Anpassungen ===== */
@@ -86,6 +105,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
         <button onClick="{{ goIdeen }}" style="{{ tabStyle5 }}">Ideen</button>
         <button onClick="{{ goEmpfehlungen }}" style="{{ tabStyle6 }}">Empfehlungen</button>
         <button onClick="{{ goBerichte }}" style="{{ tabStyle7 }}">Berichte</button>
+        <button onClick="{{ goBuero }}" style="{{ tabStyle8 }}">Büro</button>
       </div>
     </div>
   </sc-if>
@@ -133,6 +153,10 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
           <button onClick="{{ goBerichte }}" style="{{ nav7 }}">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 3h7l5 5v13a0 0 0 01 0 0H7a1 1 0 01-1-1V4a1 1 0 011-1z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6M9 9h2"/></svg>
             <span>Berichte</span>
+          </button>
+          <button onClick="{{ goBuero }}" style="{{ nav8 }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21V8l7-5 7 5v13"/><path d="M17 21V11l4 2v8"/><path d="M8 21v-5h4v5"/><path d="M8 11h4"/></svg>
+            <span>Büro</span>
           </button>
         </nav>
         <div style="padding:16px 20px;border-top:1px solid #EEEEEB">
@@ -996,6 +1020,33 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
         </div>
       </sc-if>
 
+      <sc-if value="{{ isBuero }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Buero" style="max-width:1240px;margin:0 auto;padding:30px 40px 72px;animation:ppfade .25s ease">
+          <div style="padding-bottom:20px;border-bottom:2px solid #0A0A0A;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px">
+            <div>
+              <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9A96;margin-bottom:8px">Büro</div>
+              <h1 style="font-family:'Archivo';font-weight:800;font-size:30px;letter-spacing:-.02em;margin:0;line-height:1">Das Party-Peak-Team bei der Arbeit</h1>
+              <div style="font-size:13.5px;color:#8A8A86;margin-top:10px;max-width:640px;line-height:1.55">Live-Blick in Lager &amp; Büro — das Team kommentiert die echten Zahlen aus dem Dashboard. Berichtsmonat: <b style="color:#0A0A0A">{{ bueroMonthLabel }}</b></div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #E4E4E0;margin-top:26px;overflow:hidden">
+            {{ bueroSceneEl }}
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:#E4E4E0;border:1px solid #E4E4E0;margin-top:26px">
+            <sc-for list="{{ bueroTeam }}" as="tm" hint-placeholder-count="3">
+              <div style="background:#fff;padding:18px 20px">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:10px;height:10px;background:{{ tm.accent }}"></div>
+                  <div style="font-family:'Archivo';font-weight:800;font-size:15px">{{ tm.name }}</div>
+                  <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96">{{ tm.role }}</div>
+                </div>
+                <div style="font-size:12.5px;color:#6A6A66;margin-top:8px;line-height:1.55">{{ tm.desc }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
     </main>
   </div>
 
@@ -1192,7 +1243,8 @@ class Component extends DCLogic {
       reportMonth:this._curYm(),
       period:{preset:'thisYear', from:(String(new Date().getFullYear())+'-01'), to:this._curYm()},
       chartYear:String(new Date().getFullYear()),
-      chartYoy:false
+      chartYoy:false,
+      bueroTick:0
     };
   }
   componentDidMount(){ this._onResize = ()=> this.setState({narrow: window.innerWidth < 900}); window.addEventListener('resize', this._onResize); this._sbInit(); }
@@ -1525,7 +1577,10 @@ class Component extends DCLogic {
   _starsEl(val, size){ val=Math.max(0,Math.min(5,+val||0)); size=size||16; const path='M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17.8 5.7 21l1.3-6.7-5-4.6 6.8-.8z'; const stars=[]; for(let i=0;i<5;i++){ const fill=Math.max(0,Math.min(1,val-i)); const gid='ppstar'+i+'_'+Math.round(val*10); stars.push(React.createElement('svg',{key:i,width:size,height:size,viewBox:'0 0 24 24',style:{display:'block'}}, React.createElement('defs',null, React.createElement('linearGradient',{id:gid,x1:'0',y1:'0',x2:'1',y2:'0'}, React.createElement('stop',{offset:(fill*100)+'%',stopColor:'#FF5A00'}), React.createElement('stop',{offset:(fill*100)+'%',stopColor:'#E4E4E0'}))), React.createElement('path',{d:path,fill:'url(#'+gid+')'}))); } return React.createElement('div',{style:{display:'flex',gap:'3px',alignItems:'center'}}, stars); }
 
   // ---------- navigation ----------
-  _go(m){ this.setState({module:m, productId:null}); window.scrollTo(0,0); }
+  _go(m){ this.setState({module:m, productId:null}); window.scrollTo(0,0);
+    // Buero-Sprechblasen: Texte rotieren alle 8s, aber nur solange der Reiter offen ist
+    clearInterval(this._bueroT);
+    if(m==='buero'){ this._bueroT=setInterval(()=>this.setState(s=>({bueroTick:(s.bueroTick||0)+1})), 8000); } }
   _open(id){ this.setState({module:'produkte', productId:id}); window.scrollTo(0,0); }
 
   // ---------- mutations ----------
@@ -1826,6 +1881,110 @@ class Component extends DCLogic {
     this._openPrintWindow('Party Peak · Geschäftsbericht '+this._mlabel(ym), body);
   }
 
+  // ---------- Buero-Szene (animiertes KI-Lager/Buero) ----------
+  _bFigure({name, variant}){
+    const E=React.createElement, ink='#0A0A0A', orange='#FF5A00';
+    const parts=[
+      // Beine
+      E('rect',{key:'l1',x:-7,y:6,width:5,height:11,fill:ink}),
+      E('rect',{key:'l2',x:2,y:6,width:5,height:11,fill:ink}),
+      // Koerper: schwarzes Oberteil
+      E('rect',{key:'b',x:-10,y:-15,width:20,height:23,fill:ink}),
+      // Brust-Logo: oranges Quadrat + "PP"
+      E('rect',{key:'lg',x:-4.5,y:-9,width:9,height:9,fill:orange}),
+      E('text',{key:'pp',x:0,y:-2.4,textAnchor:'middle',fontSize:6,fontWeight:800,fill:'#fff',fontFamily:'Archivo'},'PP'),
+      // Kopf
+      E('circle',{key:'h',cx:0,cy:-23,r:7.5,fill:'#E9D8C6',stroke:ink,strokeWidth:1.6}),
+    ];
+    if(variant==='vest'){ parts.push(E('rect',{key:'v',x:-10,y:-13,width:20,height:3.5,fill:orange})); parts.push(E('rect',{key:'v2',x:-10,y:-5,width:20,height:3.5,fill:orange})); }
+    if(variant==='suit'){ parts.push(E('path',{key:'rv',d:'M -3 -15 L 0 -8 L 3 -15 Z',fill:'#fff'})); parts.push(E('rect',{key:'tie',x:-1.2,y:-13,width:2.4,height:8,fill:orange})); parts.push(E('rect',{key:'bag',x:11,y:-4,width:9,height:8,fill:ink,stroke:'#fff',strokeWidth:0.8})); }
+    if(variant==='glasses'){ parts.push(E('rect',{key:'g1',x:-6.5,y:-25.5,width:5.4,height:4.4,fill:'none',stroke:ink,strokeWidth:1.5})); parts.push(E('rect',{key:'g2',x:1.1,y:-25.5,width:5.4,height:4.4,fill:'none',stroke:ink,strokeWidth:1.5})); parts.push(E('line',{key:'g3',x1:-1.1,x2:1.1,y1:-23.5,y2:-23.5,stroke:ink,strokeWidth:1.5})); parts.push(E('rect',{key:'cb',x:-19,y:-8,width:8,height:11,fill:'#fff',stroke:ink,strokeWidth:1.4})); parts.push(E('line',{key:'cl',x1:-17,x2:-13,y1:-4,y2:-4,stroke:orange,strokeWidth:1.4})); }
+    parts.push(E('text',{key:'nm',x:0,y:31,textAnchor:'middle',fontSize:9,fontWeight:700,fill:'#9A9A96',fontFamily:'Archivo',letterSpacing:'.06em'},name.toUpperCase()));
+    return parts;
+  }
+  _bBubble(lines, color, cls){
+    const E=React.createElement;
+    const w=Math.max(120, 8+Math.max(...lines.map(l=>l.length))*5.6), h=lines.length*13+14;
+    const x=-w/2, y=-46-h;
+    return E('g',{className:cls, style:{opacity:0}},
+      E('rect',{x,y,width:w,height:h,fill:'#fff',stroke:color,strokeWidth:1.6}),
+      E('path',{d:'M -5 '+(y+h)+' L 5 '+(y+h)+' L 0 '+(y+h+7)+' Z',fill:'#fff',stroke:color,strokeWidth:1.6}),
+      E('rect',{x,y,width:4,height:h,fill:color}),
+      lines.map((l,i)=>E('text',{key:i,x:x+11,y:y+16+i*13,fontSize:10,fill:'#0A0A0A',fontFamily:'IBM Plex Sans',fontWeight:i===0?600:400},l))
+    );
+  }
+  _bSplit(txt, max){ max=max||34; if(txt.length<=max) return [txt];
+    let cut=txt.lastIndexOf(' ',max); if(cut<12) cut=max;
+    const rest=txt.slice(cut+ (txt[cut]===' '?1:0));
+    return [txt.slice(0,cut), rest.length>max? rest.slice(0,max-1)+'…' : rest]; }
+  _officeScene(b){
+    const E=React.createElement, ink='#0A0A0A', orange='#FF5A00', wall='#E4E4E0', floor='#FFFFFF';
+    const box=(x,y,s)=>E('g',{key:'bx'+x+'_'+y},E('rect',{x,y,width:s,height:s,fill:ink}),E('rect',{x:x+s*0.3,y:y+s*0.3,width:s*0.4,height:s*0.4,fill:orange}));
+    const desk=(x,y)=>E('g',{key:'dk'+x},E('rect',{x,y,width:64,height:34,fill:'#F1F1EE',stroke:wall}),E('rect',{x:x+20,y:y+7,width:24,height:15,fill:ink}),E('rect',{x:x+29,y:y+22,width:6,height:5,fill:'#C9C9C4'}));
+    const shelf=(x,y,w)=>{ const kids=[E('rect',{key:'s',x,y,width:w,height:44,fill:'#F1F1EE',stroke:'#D8D8D3'}),E('line',{key:'m',x1:x,x2:x+w,y1:y+22,y2:y+22,stroke:'#D8D8D3'})];
+      for(let i=0;i<Math.floor(w/34);i++){ kids.push(box(x+6+i*34,y+4,14)); if(i%2===0) kids.push(box(x+6+i*34+16,y+26,14)); }
+      return E('g',{key:'sh'+x+'_'+y},kids); };
+    // Statische Halle
+    const scene=[
+      E('rect',{key:'bg',x:0,y:0,width:1200,height:640,fill:'#FAFAF8'}),
+      E('rect',{key:'hall',x:24,y:24,width:1152,height:592,fill:floor,stroke:ink,strokeWidth:2}),
+      // Bodenmarkierungen
+      E('g',{key:'grid'},[1,2,3,4,5].map(i=>E('line',{key:i,x1:24,x2:1176,y1:24+i*99,y2:24+i*99,stroke:'#F4F4F1'}))),
+      // Tor links (Rampe)
+      E('rect',{key:'gate',x:24,y:214,width:6,height:150,fill:orange}),
+      E('g',{key:'gatestripes'},[0,1,2,3].map(i=>E('rect',{key:i,x:32,y:222+i*36,width:16,height:6,fill:'#D8D8D3'}))),
+      E('text',{key:'gatetxt',x:44,y:206,fontSize:9,fontWeight:700,letterSpacing:'.1em',fill:'#B0B0AC',fontFamily:'Archivo'},'VERLADERAMPE'),
+      // Fahrbahn-Markierung
+      E('line',{key:'lane',x1:36,x2:250,y1:318,y2:318,stroke:'#E4E4E0',strokeWidth:2,strokeDasharray:'8,7'}),
+      // Packstation
+      E('rect',{key:'pack',x:262,y:284,width:74,height:36,fill:'#F1F1EE',stroke:'#D8D8D3'}),
+      box(276,262,18), box(300,262,18), box(288,244,18),
+      E('text',{key:'packtxt',x:299,y:338,fontSize:9,fontWeight:700,letterSpacing:'.1em',fill:'#B0B0AC',fontFamily:'Archivo',textAnchor:'middle'},'PACKSTATION'),
+      // Regale Mitte
+      shelf(420,96,300), shelf(420,404,300),
+      E('text',{key:'lagertxt',x:570,y:86,fontSize:9,fontWeight:700,letterSpacing:'.1em',fill:'#B0B0AC',fontFamily:'Archivo',textAnchor:'middle'},'LAGER'),
+      // Buero rechts: Trennlinie, Schreibtische, Whiteboard, Pinnwand
+      E('line',{key:'div',x1:868,x2:868,y1:24,y2:616,stroke:wall,strokeWidth:2,strokeDasharray:'4,6'}),
+      E('text',{key:'buerotxt',x:1020,y:66,fontSize:9,fontWeight:700,letterSpacing:'.1em',fill:'#B0B0AC',fontFamily:'Archivo',textAnchor:'middle'},'BÜRO'),
+      desk(900,300), desk(1080,300), desk(990,470),
+      // Whiteboard mit Chart-Kritzeln
+      E('rect',{key:'wb',x:990,y:96,width:120,height:64,fill:'#fff',stroke:ink,strokeWidth:1.8}),
+      E('path',{key:'wbl',d:'M 1002 146 L 1026 126 L 1046 136 L 1072 112 L 1096 120',fill:'none',stroke:orange,strokeWidth:2}),
+      E('line',{key:'wbx',x1:1002,x2:1098,y1:150,y2:150,stroke:'#C9C9C4'}),
+      // Pinnwand
+      E('rect',{key:'pin',x:890,y:96,width:70,height:52,fill:'#F1F1EE',stroke:'#D8D8D3'}),
+      E('rect',{key:'p1',x:898,y:104,width:12,height:12,fill:orange}),E('rect',{key:'p2',x:916,y:110,width:12,height:12,fill:'#0A0A0A'}),E('rect',{key:'p3',x:936,y:102,width:12,height:12,fill:orange}),
+      // Laster (animiert): Aufbau + Fahrerhaus + Raeder + Aufschrift
+      E('g',{key:'truck',className:'pp-truck'},
+        E('g',{transform:'translate(66,246)'},
+          E('rect',{x:0,y:0,width:138,height:64,fill:ink}),
+          E('text',{x:69,y:30,textAnchor:'middle',fontSize:12,fontWeight:800,fill:orange,fontFamily:'Archivo',letterSpacing:'.04em'},'PARTY PEAK'),
+          E('text',{x:69,y:46,textAnchor:'middle',fontSize:7,fontWeight:600,fill:'#fff',fontFamily:'IBM Plex Sans',letterSpacing:'.14em'},'LOGISTIK'),
+          E('rect',{x:-34,y:18,width:34,height:46,fill:ink}),
+          E('rect',{x:-28,y:24,width:16,height:14,fill:'#C9C9C4'}),
+          E('circle',{cx:-16,cy:66,r:9,fill:ink,stroke:'#fff',strokeWidth:2.4}),
+          E('circle',{cx:28,cy:66,r:9,fill:ink,stroke:'#fff',strokeWidth:2.4}),
+          E('circle',{cx:108,cy:66,r:9,fill:ink,stroke:'#fff',strokeWidth:2.4}))),
+      // Kevin (Lager): traegt Kiste, Sprechblase beim Verladen
+      E('g',{key:'kev',className:'pp-kev'},
+        E('g',{className:'pp-bob'},
+          this._bFigure({name:'Kevin',variant:'vest'}),
+          E('g',{className:'pp-kev-box',style:{opacity:0}},E('rect',{x:-9,y:-40,width:18,height:13,fill:ink}),E('rect',{x:-3.5,y:-36.5,width:7,height:6,fill:orange})),
+          this._bBubble(b.kevinLines,b.kevinColor,'pp-kev-bub'))),
+      // Herr Roth (Finanzen)
+      E('g',{key:'roth',className:'pp-roth'},
+        E('g',{className:'pp-bob'},
+          this._bFigure({name:'Hr. Roth',variant:'suit'}),
+          this._bBubble(b.rothLines,b.rothColor,'pp-roth-bub'))),
+      // Tom (Empfehlungen)
+      E('g',{key:'tom',className:'pp-tom'},
+        E('g',{className:'pp-bob'},
+          this._bFigure({name:'Tom',variant:'glasses'}),
+          this._bBubble(b.tomLines,b.tomColor,'pp-tom-bub')))
+    ];
+    return E('svg',{viewBox:'0 0 1200 640',style:{width:'100%',height:'auto',display:'block'}},scene);
+  }
+
   renderVals(){
     const st=this.state, mod=st.module, pid=st.productId;
     const isDetail = mod==='produkte' && pid;
@@ -1848,11 +2007,11 @@ class Component extends DCLogic {
     const V = {
       narrow:st.narrow, wide:!st.narrow,
       isCockpit: mod==='cockpit', isProdukteList: mod==='produkte' && !pid, isProdukteDetail: isDetail,
-      isLager: mod==='lager', isWerbung: mod==='werbung', isSzenarien: mod==='szenarien', isIdeen: mod==='ideen', isEmpfehlungen: mod==='empfehlungen', isBerichte: mod==='berichte',
+      isLager: mod==='lager', isWerbung: mod==='werbung', isSzenarien: mod==='szenarien', isIdeen: mod==='ideen', isEmpfehlungen: mod==='empfehlungen', isBerichte: mod==='berichte', isBuero: mod==='buero',
       goCockpit:()=>this._go('cockpit'), goProdukte:()=>this._go('produkte'), goLager:()=>this._go('lager'),
-      goWerbung:()=>this._go('werbung'), goSzenarien:()=>this._go('szenarien'), goIdeen:()=>this._go('ideen'), goEmpfehlungen:()=>this._go('empfehlungen'), goBerichte:()=>this._go('berichte'),
-      nav0:nv('cockpit'), nav1:nv('produkte'), nav2:nv('lager'), nav3:nv('werbung'), nav4:nv('szenarien'), nav5:nv('ideen'), nav6:nv('empfehlungen'), nav7:nv('berichte'),
-      tabStyle0:tb('cockpit'), tabStyle1:tb('produkte'), tabStyle2:tb('lager'), tabStyle3:tb('werbung'), tabStyle4:tb('szenarien'), tabStyle5:tb('ideen'), tabStyle6:tb('empfehlungen'), tabStyle7:tb('berichte'),
+      goWerbung:()=>this._go('werbung'), goSzenarien:()=>this._go('szenarien'), goIdeen:()=>this._go('ideen'), goEmpfehlungen:()=>this._go('empfehlungen'), goBerichte:()=>this._go('berichte'), goBuero:()=>this._go('buero'),
+      nav0:nv('cockpit'), nav1:nv('produkte'), nav2:nv('lager'), nav3:nv('werbung'), nav4:nv('szenarien'), nav5:nv('ideen'), nav6:nv('empfehlungen'), nav7:nv('berichte'), nav8:nv('buero'),
+      tabStyle0:tb('cockpit'), tabStyle1:tb('produkte'), tabStyle2:tb('lager'), tabStyle3:tb('werbung'), tabStyle4:tb('szenarien'), tabStyle5:tb('ideen'), tabStyle6:tb('empfehlungen'), tabStyle7:tb('berichte'), tabStyle8:tb('buero'),
       productCount: st.products.length, dataStamp:'Juli 2026',
       periodLabel: this._mlabel(from)+' – '+this._mlabel(to), periodDays: this._num(this._rangeDays(from,to)),
       periodFrom: per.from, periodTo: per.to,
@@ -1976,6 +2135,47 @@ class Component extends DCLogic {
     V.repProductCount = st.products.length;
     V.genProductReport = ()=> this._reportProductData();
     V.genBusinessReport = ()=> this._reportBusiness(this.state.reportMonth || this._curYm());
+
+    // ---- Buero (animierte Szene) ----
+    if(mod==='buero'){
+      const tick=st.bueroTick||0;
+      const bcy=this._curYm(), bprev=this._shiftYm(bcy,-1);
+      const bAgg=this.aggregate(bcy,bcy), bPrev=this.aggregate(bprev,bprev);
+      // Kevin: Verkaufszahlen beim Verladen
+      const tgtSum=st.products.reduce((s,p)=>s+(+((p.targets||{})[bcy]||0)),0);
+      const boxNo=(tick%9)+1;
+      let kevinTxt, kevinColor;
+      if(tgtSum>0 && bAgg.units>=tgtSum){ kevinTxt='Läuft richtig gut — '+this._num(bAgg.units)+' Verkäufe diesen Monat! Kiste Nr. '+boxNo+' geht raus.'; kevinColor=green; }
+      else if(tgtSum>0 && bAgg.units<tgtSum*0.5){ kevinTxt='Erst '+this._num(bAgg.units)+' diesen Monat — ruhiger als sonst. Kiste Nr. '+boxNo+' ist verladen.'; kevinColor=yellow; }
+      else { kevinTxt=this._num(bAgg.units)+' Stück diesen Monat verkauft — Kiste Nr. '+boxNo+' geht raus!'; kevinColor=ink; }
+      // Herr Roth: Finanz-Rotation
+      const rd = bPrev.revenue>0 ? (bAgg.revenue-bPrev.revenue)/bPrev.revenue*100 : null;
+      const rdTxt = rd===null ? 'kein Vormonatswert' : ((rd>=0?'+':'')+this._pct(rd,1)+' ggü. Vormonat');
+      const rothMsgs=[
+        {t:'Umsatz diesen Monat: '+this._eur(bAgg.revenue)+' — '+rdTxt+'.', c: rd===null?ink:(rd>=0?green:red)},
+        {t:'Geschätzter Gewinn: '+this._eur(bAgg.estProfit)+', Marge '+this._pct(bAgg.avgMargin*100)+'.', c: bAgg.estProfit>=0?ink:red},
+        {t:'Werbung: '+this._eur(bAgg.ad)+' eingesetzt — ACOS '+(bAgg.ad>0?this._pct(bAgg.acos*100):'—')+', TACOS '+(bAgg.revenue>0?this._pct(bAgg.tacos*100,1):'—')+'.', c:ink},
+        {t:'Organik-Quote: '+(bAgg.units>0?this._pct(bAgg.organicRate*100,0):'—')+' der Verkäufe ohne Werbung.', c:green}
+      ];
+      const rm=rothMsgs[tick%rothMsgs.length];
+      // Tom: Empfehlungs-Rotation
+      const recs=this._recommendations();
+      let tomTxt, tomColor;
+      if(recs.length){ const r=recs[tick%recs.length];
+        tomTxt=r.productName+': '+r.action; tomColor = r.priority==='kritisch'?red : r.priority==='wichtig'?yellow : green;
+        if(tomTxt.length>70) tomTxt=tomTxt.slice(0,69)+'…'; }
+      else { tomTxt='Alles im grünen Bereich — keine akuten To-dos.'; tomColor=green; }
+      const buero={ kevinLines:this._bSplit(kevinTxt), kevinColor,
+        rothLines:this._bSplit(rm.t), rothColor:rm.c,
+        tomLines:this._bSplit(tomTxt), tomColor };
+      V.bueroSceneEl=this._officeScene(buero);
+      V.bueroMonthLabel=this._mlabel(bcy);
+      V.bueroTeam=[
+        {name:'Kevin', role:'Lager & Versand', desc:'Verlädt die Bestellungen und meldet die Verkaufszahlen des Monats.', accent:orange},
+        {name:'Herr Roth', role:'Finanzen', desc:'Gibt am Whiteboard den Überblick über Umsatz, Gewinn, Marge und Werbekosten.', accent:ink},
+        {name:'Tom', role:'Empfehlungen', desc:'Läuft durch die Halle und weist auf offene Handlungsempfehlungen hin.', accent:'#9A9A96'}
+      ];
+    } else { V.bueroSceneEl=null; V.bueroMonthLabel=''; V.bueroTeam=[]; }
 
     // ---- Produkte detail ----
     if(isDetail){
