@@ -49,25 +49,44 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
 .pp-scroll::-webkit-scrollbar{height:8px;width:8px}
 .pp-scroll::-webkit-scrollbar-thumb{background:#D2D2CE}
 @keyframes ppfade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-/* --- Buero-Szene: koordinierte Loops (Truck+Kevin 24s, Roth 18s, Tom 30s) --- */
-@keyframes ppTruck{0%,55%{transform:translateX(0)}68%,82%{transform:translateX(-620px)}95%,100%{transform:translateX(0)}}
-@keyframes ppKev{0%,6%{transform:translate(330px,330px)}20%{transform:translate(206px,300px)}36%{transform:translate(206px,300px)}50%,100%{transform:translate(330px,330px)}}
-@keyframes ppKevBox{0%,7%{opacity:0}9%,33%{opacity:1}36%,100%{opacity:0}}
-@keyframes ppKevBub{0%,21%{opacity:0}25%,48%{opacity:1}54%,100%{opacity:0}}
-@keyframes ppRoth{0%,8%{transform:translate(952px,330px)}22%{transform:translate(1044px,214px)}72%{transform:translate(1044px,214px)}88%,100%{transform:translate(952px,330px)}}
-@keyframes ppRothBub{0%,26%{opacity:0}30%,66%{opacity:1}72%,100%{opacity:0}}
-@keyframes ppTom{0%,4%{transform:translate(742px,520px)}16%{transform:translate(430px,478px)}24%{transform:translate(430px,478px)}38%{transform:translate(316px,214px)}46%{transform:translate(316px,214px)}62%{transform:translate(646px,170px)}70%{transform:translate(646px,170px)}86%{transform:translate(908px,486px)}94%,100%{transform:translate(742px,520px)}}
-@keyframes ppTomBub{0%,17%{opacity:0}19%,23%{opacity:1}26%,39%{opacity:0}41%,45%{opacity:1}48%,63%{opacity:0}65%,69%{opacity:1}72%,100%{opacity:0}}
-@keyframes ppWalk{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.6px)}}
-.pp-truck{animation:ppTruck 24s linear infinite}
-.pp-kev{animation:ppKev 24s linear infinite}
-.pp-kev-box{animation:ppKevBox 24s linear infinite}
-.pp-kev-bub{animation:ppKevBub 24s linear infinite}
-.pp-roth{animation:ppRoth 18s linear infinite}
-.pp-roth-bub{animation:ppRothBub 18s linear infinite}
-.pp-tom{animation:ppTom 30s linear infinite}
-.pp-tom-bub{animation:ppTomBub 30s linear infinite}
-.pp-bob{animation:ppWalk 0.8s ease-in-out infinite}
+/* --- Buero-Szene (Pixel-Art): Truck 28s · Figuren mit eigenen Loops · Sprechblasen lange sichtbar --- */
+@keyframes ppTruck{0%,58%{transform:translateX(0)}70%,84%{transform:translateX(-760px)}96%,100%{transform:translateX(0)}}
+@keyframes ppKev{0%,6%{transform:translate(520px,470px)}18%{transform:translate(330px,450px)}26%{transform:translate(228px,430px)}44%{transform:translate(228px,430px)}56%{transform:translate(330px,450px)}66%,100%{transform:translate(520px,470px)}}
+@keyframes ppKevBox{0%,7%{opacity:0}10%,42%{opacity:1}46%,100%{opacity:0}}
+@keyframes ppRoth{0%,10%{transform:translate(990px,430px)}22%{transform:translate(1128px,250px)}78%{transform:translate(1128px,250px)}92%,100%{transform:translate(990px,430px)}}
+@keyframes ppTom{0%,4%{transform:translate(750px,700px)}14%{transform:translate(440px,650px)}26%{transform:translate(440px,650px)}38%{transform:translate(340px,310px)}52%{transform:translate(340px,310px)}64%{transform:translate(660px,250px)}76%{transform:translate(660px,250px)}90%{transform:translate(910px,650px)}96%,100%{transform:translate(750px,700px)}}
+@keyframes ppSarah{0%,10%{transform:translate(1205px,430px)}24%{transform:translate(878px,330px)}72%{transform:translate(878px,330px)}88%,100%{transform:translate(1205px,430px)}}
+@keyframes ppMax{0%,42%{transform:translate(1258px,610px)}54%{transform:translate(1150px,660px)}80%{transform:translate(1150px,660px)}92%,100%{transform:translate(1258px,610px)}}
+@keyframes ppLina{0%,44%{transform:translate(978px,255px)}56%{transform:translate(925px,315px)}82%{transform:translate(925px,315px)}94%,100%{transform:translate(978px,255px)}}
+@keyframes ppBen{0%,38%{transform:translate(1318px,790px)}52%{transform:translate(1085px,655px)}80%{transform:translate(1085px,655px)}92%,100%{transform:translate(1318px,790px)}}
+@keyframes ppNils{0%,20%{transform:translate(792px,470px)}32%{transform:translate(610px,260px)}54%{transform:translate(610px,260px)}66%{transform:translate(610px,630px)}86%{transform:translate(610px,630px)}96%,100%{transform:translate(792px,470px)}}
+/* Sprechblasen: lange Standzeit (~60-70% des Zyklus), sanftes Ein-/Ausblenden */
+@keyframes ppBubA{0%,20%{opacity:0}25%,88%{opacity:1}95%,100%{opacity:0}}
+@keyframes ppBubB{0%,14%{opacity:0}19%,90%{opacity:1}97%,100%{opacity:0}}
+@keyframes ppBubC{0%,8%{opacity:0}13%,44%{opacity:1}49%,55%{opacity:0}60%,92%{opacity:1}98%,100%{opacity:0}}
+/* Lauf-Frames: zwei Bein-Stellungen im Wechsel (Pixel-Look) */
+@keyframes ppF1{0%,49.9%{opacity:1}50%,100%{opacity:0}}
+@keyframes ppF2{0%,49.9%{opacity:0}50%,100%{opacity:1}}
+.pp-truck{animation:ppTruck 28s linear infinite}
+.pp-kev{animation:ppKev 28s linear infinite}
+.pp-kev-box{animation:ppKevBox 28s linear infinite}
+.pp-kev-bub{animation:ppBubA 28s linear infinite}
+.pp-roth{animation:ppRoth 24s linear infinite}
+.pp-roth-bub{animation:ppBubB 24s linear infinite}
+.pp-tom{animation:ppTom 36s linear infinite}
+.pp-tom-bub{animation:ppBubC 36s linear infinite}
+.pp-sarah{animation:ppSarah 26s linear infinite}
+.pp-sarah-bub{animation:ppBubB 26s linear infinite}
+.pp-max{animation:ppMax 22s linear infinite}
+.pp-max-bub{animation:ppBubA 22s linear infinite}
+.pp-lina{animation:ppLina 20s linear infinite}
+.pp-lina-bub{animation:ppBubB 20s linear infinite}
+.pp-ben{animation:ppBen 23s linear infinite}
+.pp-ben-bub{animation:ppBubA 23s linear infinite}
+.pp-nils{animation:ppNils 25s linear infinite}
+.pp-nils-bub{animation:ppBubC 25s linear infinite}
+.pp-f1{animation:ppF1 .55s steps(1) infinite}
+.pp-f2{animation:ppF2 .55s steps(1) infinite}
 /* Kalkulations-Felder: jedes Label reserviert 2 Zeilen -> Eingabefelder bleiben in einer Reihe buendig */
 .pp-calcgrid > label > span{display:block;min-height:2.4em;line-height:1.25}
 /* ===== Mobile-Anpassungen ===== */
@@ -1021,7 +1040,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
       </sc-if>
 
       <sc-if value="{{ isBuero }}" hint-placeholder-val="{{ false }}">
-        <div data-screen-label="Buero" style="max-width:1240px;margin:0 auto;padding:30px 40px 72px;animation:ppfade .25s ease">
+        <div data-screen-label="Buero" style="max-width:1560px;margin:0 auto;padding:30px 28px 72px;animation:ppfade .25s ease">
           <div style="padding-bottom:20px;border-bottom:2px solid #0A0A0A;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px">
             <div>
               <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9A96;margin-bottom:8px">Büro</div>
@@ -1580,7 +1599,7 @@ class Component extends DCLogic {
   _go(m){ this.setState({module:m, productId:null}); window.scrollTo(0,0);
     // Buero-Sprechblasen: Texte rotieren alle 8s, aber nur solange der Reiter offen ist
     clearInterval(this._bueroT);
-    if(m==='buero'){ this._bueroT=setInterval(()=>this.setState(s=>({bueroTick:(s.bueroTick||0)+1})), 8000); } }
+    if(m==='buero'){ this._bueroT=setInterval(()=>this.setState(s=>({bueroTick:(s.bueroTick||0)+1})), 12000); } }
   _open(id){ this.setState({module:'produkte', productId:id}); window.scrollTo(0,0); }
 
   // ---------- mutations ----------
@@ -1881,108 +1900,185 @@ class Component extends DCLogic {
     this._openPrintWindow('Party Peak · Geschäftsbericht '+this._mlabel(ym), body);
   }
 
-  // ---------- Buero-Szene (animiertes KI-Lager/Buero) ----------
-  _bFigure({name, variant}){
-    const E=React.createElement, ink='#0A0A0A', orange='#FF5A00';
-    const parts=[
-      // Beine
-      E('rect',{key:'l1',x:-7,y:6,width:5,height:11,fill:ink}),
-      E('rect',{key:'l2',x:2,y:6,width:5,height:11,fill:ink}),
-      // Koerper: schwarzes Oberteil
-      E('rect',{key:'b',x:-10,y:-15,width:20,height:23,fill:ink}),
-      // Brust-Logo: oranges Quadrat + "PP"
-      E('rect',{key:'lg',x:-4.5,y:-9,width:9,height:9,fill:orange}),
-      E('text',{key:'pp',x:0,y:-2.4,textAnchor:'middle',fontSize:6,fontWeight:800,fill:'#fff',fontFamily:'Archivo'},'PP'),
-      // Kopf
-      E('circle',{key:'h',cx:0,cy:-23,r:7.5,fill:'#E9D8C6',stroke:ink,strokeWidth:1.6}),
-    ];
-    if(variant==='vest'){ parts.push(E('rect',{key:'v',x:-10,y:-13,width:20,height:3.5,fill:orange})); parts.push(E('rect',{key:'v2',x:-10,y:-5,width:20,height:3.5,fill:orange})); }
-    if(variant==='suit'){ parts.push(E('path',{key:'rv',d:'M -3 -15 L 0 -8 L 3 -15 Z',fill:'#fff'})); parts.push(E('rect',{key:'tie',x:-1.2,y:-13,width:2.4,height:8,fill:orange})); parts.push(E('rect',{key:'bag',x:11,y:-4,width:9,height:8,fill:ink,stroke:'#fff',strokeWidth:0.8})); }
-    if(variant==='glasses'){ parts.push(E('rect',{key:'g1',x:-6.5,y:-25.5,width:5.4,height:4.4,fill:'none',stroke:ink,strokeWidth:1.5})); parts.push(E('rect',{key:'g2',x:1.1,y:-25.5,width:5.4,height:4.4,fill:'none',stroke:ink,strokeWidth:1.5})); parts.push(E('line',{key:'g3',x1:-1.1,x2:1.1,y1:-23.5,y2:-23.5,stroke:ink,strokeWidth:1.5})); parts.push(E('rect',{key:'cb',x:-19,y:-8,width:8,height:11,fill:'#fff',stroke:ink,strokeWidth:1.4})); parts.push(E('line',{key:'cl',x1:-17,x2:-13,y1:-4,y2:-4,stroke:orange,strokeWidth:1.4})); }
-    parts.push(E('text',{key:'nm',x:0,y:31,textAnchor:'middle',fontSize:9,fontWeight:700,fill:'#9A9A96',fontFamily:'Archivo',letterSpacing:'.06em'},name.toUpperCase()));
-    return parts;
+  // ---------- Buero-Szene: Pixel-Art (Stardew-Stil) ----------
+  // Sprite-Engine: Zeichen-Raster -> zusammengefasste Pixel-Rects
+  _px(rows, pal, s, keyp){
+    const E=React.createElement, out=[];
+    rows.forEach((row,ry)=>{ let x=0;
+      while(x<row.length){ const ch=row[x];
+        if(ch==='.'){ x++; continue; }
+        let x2=x+1; while(x2<row.length && row[x2]===ch) x2++;
+        const col=pal[ch];
+        if(col) out.push(E('rect',{key:(keyp||'')+ry+'_'+x, x:x*s, y:ry*s, width:(x2-x)*s, height:s, fill:col}));
+        x=x2; } });
+    return out;
+  }
+  // Figur (12x15 Pixel, Skalierung 4 => 48x60px), zwei Bein-Frames, Varianten-Overlays
+  _bChar(cfg){
+    const E=React.createElement, S=4;
+    const pal={ k:cfg.hair||'#4A3220', f:'#F2D3A7', E:'#2B1B0E', T:'#16130F', O:'#FF5A00', P:'#3B3B36', S:'#16130F', W:'#FFFFFF', G:'#16130F', A:'#16130F', y:'#E9C46A', C:'#6E6C66', ...(cfg.pal||{}) };
+    const upper=[
+      "....kkkk....",
+      "...kkkkkk...",
+      "...ffffff...",
+      "...fEffEf...",
+      "...ffffff...",
+      "....ffff....",
+      "..TTTTTTTT..",
+      ".TTTTOOTTTT.",
+      ".TTTTOOTTTT.",
+      ".fTTTTTTTTf.",
+      "..TTTTTTTT.."];
+    const legsA=[
+      "..PPP..PPP..",
+      "..PPP..PPP..",
+      "..PPP..PPP..",
+      "..SSS..SSS.."];
+    const legsB=[
+      "..PPP..PPP..",
+      "..PPP..PPP..",
+      ".SSS...PPP..",
+      "........SSS."];
+    const ov = cfg.overlays||[];
+    const held = cfg.held||[];
+    const body = this._px(upper, pal, S, 'u');
+    const ovEls = ov.map((o,i)=> E('g',{key:'ov'+i, transform:'translate('+(o.x||0)*S+','+(o.y||0)*S+')'}, this._px(o.rows, pal, S, 'o'+i)));
+    const heldEls = held.map((h,i)=> E('g',{key:'hd'+i, transform:'translate('+(h.x||0)*S+','+(h.y||0)*S+')'}, this._px(h.rows, pal, S, 'h'+i)));
+    return E('g',{transform:'translate(-24,-60)'},
+      E('g',{className:'pp-f1'}, E('g',{transform:'translate(0,'+11*S+')'}, this._px(legsA,pal,S,'la'))),
+      E('g',{className:'pp-f2'}, E('g',{transform:'translate(0,'+11*S+')'}, this._px(legsB,pal,S,'lb'))),
+      body, ovEls, heldEls,
+      E('text',{x:24,y:60+13,textAnchor:'middle',fontSize:10,fontWeight:800,fill:'#8A8A86',fontFamily:'Archivo',letterSpacing:'.08em'},(cfg.name||'').toUpperCase()));
   }
   _bBubble(lines, color, cls){
     const E=React.createElement;
-    const w=Math.max(120, 8+Math.max(...lines.map(l=>l.length))*5.6), h=lines.length*13+14;
-    const x=-w/2, y=-46-h;
+    const w=Math.max(150, 20+Math.max(...lines.map(l=>l.length))*6.4), h=lines.length*15+16;
+    const x=-w/2, y=-72-h;
     return E('g',{className:cls, style:{opacity:0}},
-      E('rect',{x,y,width:w,height:h,fill:'#fff',stroke:color,strokeWidth:1.6}),
-      E('path',{d:'M -5 '+(y+h)+' L 5 '+(y+h)+' L 0 '+(y+h+7)+' Z',fill:'#fff',stroke:color,strokeWidth:1.6}),
-      E('rect',{x,y,width:4,height:h,fill:color}),
-      lines.map((l,i)=>E('text',{key:i,x:x+11,y:y+16+i*13,fontSize:10,fill:'#0A0A0A',fontFamily:'IBM Plex Sans',fontWeight:i===0?600:400},l))
+      E('rect',{x:x+3,y:y+3,width:w,height:h,fill:'#16130F',opacity:0.14}),
+      E('rect',{x,y,width:w,height:h,fill:'#fff',stroke:'#16130F',strokeWidth:2}),
+      E('path',{d:'M -6 '+(y+h)+' L 7 '+(y+h)+' L 0 '+(y+h+9)+' Z',fill:'#fff',stroke:'#16130F',strokeWidth:2}),
+      E('rect',{x:x-0,y:y,width:5,height:h,fill:color}),
+      lines.map((l,i)=>E('text',{key:i,x:x+13,y:y+18+i*15,fontSize:11.5,fill:'#16130F',fontFamily:'IBM Plex Sans',fontWeight:i===0?600:400},l))
     );
   }
-  _bSplit(txt, max){ max=max||34; if(txt.length<=max) return [txt];
-    let cut=txt.lastIndexOf(' ',max); if(cut<12) cut=max;
-    const rest=txt.slice(cut+ (txt[cut]===' '?1:0));
-    return [txt.slice(0,cut), rest.length>max? rest.slice(0,max-1)+'…' : rest]; }
+  _bSplit(txt, max){ max=max||38; const out=[]; let t=String(txt);
+    while(t.length>max && out.length<2){ let cut=t.lastIndexOf(' ',max); if(cut<12) cut=max; out.push(t.slice(0,cut)); t=t.slice(cut).replace(/^ /,''); }
+    out.push(t.length>max ? t.slice(0,max-1)+'…' : t);
+    return out; }
   _officeScene(b){
-    const E=React.createElement, ink='#0A0A0A', orange='#FF5A00', wall='#E4E4E0', floor='#FFFFFF';
-    const box=(x,y,s)=>E('g',{key:'bx'+x+'_'+y},E('rect',{x,y,width:s,height:s,fill:ink}),E('rect',{x:x+s*0.3,y:y+s*0.3,width:s*0.4,height:s*0.4,fill:orange}));
-    const desk=(x,y)=>E('g',{key:'dk'+x},E('rect',{x,y,width:64,height:34,fill:'#F1F1EE',stroke:wall}),E('rect',{x:x+20,y:y+7,width:24,height:15,fill:ink}),E('rect',{x:x+29,y:y+22,width:6,height:5,fill:'#C9C9C4'}));
-    const shelf=(x,y,w)=>{ const kids=[E('rect',{key:'s',x,y,width:w,height:44,fill:'#F1F1EE',stroke:'#D8D8D3'}),E('line',{key:'m',x1:x,x2:x+w,y1:y+22,y2:y+22,stroke:'#D8D8D3'})];
-      for(let i=0;i<Math.floor(w/34);i++){ kids.push(box(x+6+i*34,y+4,14)); if(i%2===0) kids.push(box(x+6+i*34+16,y+26,14)); }
-      return E('g',{key:'sh'+x+'_'+y},kids); };
-    // Statische Halle
+    const E=React.createElement, ink='#16130F', orange='#FF5A00';
+    const S=4;
+    // ---- Deko-Bausteine ----
+    const plant=(x,y)=>E('g',{key:'pl'+x+'_'+y,transform:'translate('+x+','+y+')'}, this._px([
+      "..gGg..","gGGGGg.",".gGGg..","..GG...",".bbbb..",".bbbb.."],{g:'#7BAF5A',G:'#4E8A3C',b:'#8A5B34'},S,'p'));
+    const crate=(x,y,dark)=>E('g',{key:'cr'+x+'_'+y,transform:'translate('+x+','+y+')'}, this._px([
+      "BBBBBB","BooooB","BooooB","BBBBBB"], dark?{B:ink,o:orange}:{B:'#B5793F',o:'#8A5B34'},S,'c'));
+    const pallet=(x,y)=>E('g',{key:'pa'+x+'_'+y,transform:'translate('+x+','+y+')'}, this._px([
+      "wwwwwwwww",".w..w..w."],{w:'#C08A4E'},S,'pl'));
+    const desk=(x,y)=>E('g',{key:'dk'+x+'_'+y,transform:'translate('+x+','+y+')'},
+      this._px(["ddddddddddddd","ddddddddddddd","l..........l","l..........l"],{d:'#B5793F',l:'#6B4A26'},S,'d'),
+      this._px(["..mmmm...","..mssm...","..mmmm...","....t....","..kkkkk.."],{m:ink,s:'#9FD3FF',t:'#6E6C66',k:'#3B3B36'},S,'mn'));
+    const shelfRow=(x,y,cols)=>{ const kids=[E('rect',{key:'fr',x:0,y:0,width:cols*46+10,height:60,fill:'#8F8D85'}),E('rect',{key:'in',x:4,y:4,width:cols*46+2,height:52,fill:'#DCD9D0'}),E('rect',{key:'mid',x:4,y:29,width:cols*46+2,height:4,fill:'#8F8D85'})];
+      for(let i=0;i<cols;i++){ kids.push(E('g',{key:'b'+i,transform:'translate('+(10+i*46)+',7)'},this._px(["BBBBBB","BooooB","BBBBBB"],{B:ink,o:orange},3.4,'x'))); if(i%2===0) kids.push(E('g',{key:'b2'+i,transform:'translate('+(10+i*46)+',36)'},this._px(["BBBBBB","BooooB","BBBBBB"],{B:'#B5793F',o:'#8A5B34'},3.4,'y'))); }
+      return E('g',{key:'sh'+x+'_'+y,transform:'translate('+x+','+y+')'},kids); };
+    // ---- Halle ----
     const scene=[
-      E('rect',{key:'bg',x:0,y:0,width:1200,height:640,fill:'#FAFAF8'}),
-      E('rect',{key:'hall',x:24,y:24,width:1152,height:592,fill:floor,stroke:ink,strokeWidth:2}),
-      // Bodenmarkierungen
-      E('g',{key:'grid'},[1,2,3,4,5].map(i=>E('line',{key:i,x1:24,x2:1176,y1:24+i*99,y2:24+i*99,stroke:'#F4F4F1'}))),
-      // Tor links (Rampe)
-      E('rect',{key:'gate',x:24,y:214,width:6,height:150,fill:orange}),
-      E('g',{key:'gatestripes'},[0,1,2,3].map(i=>E('rect',{key:i,x:32,y:222+i*36,width:16,height:6,fill:'#D8D8D3'}))),
-      E('text',{key:'gatetxt',x:44,y:206,fontSize:9,fontWeight:700,letterSpacing:'.1em',fill:'#B0B0AC',fontFamily:'Archivo'},'VERLADERAMPE'),
-      // Fahrbahn-Markierung
-      E('line',{key:'lane',x1:36,x2:250,y1:318,y2:318,stroke:'#E4E4E0',strokeWidth:2,strokeDasharray:'8,7'}),
-      // Packstation
-      E('rect',{key:'pack',x:262,y:284,width:74,height:36,fill:'#F1F1EE',stroke:'#D8D8D3'}),
-      box(276,262,18), box(300,262,18), box(288,244,18),
-      E('text',{key:'packtxt',x:299,y:338,fontSize:9,fontWeight:700,letterSpacing:'.1em',fill:'#B0B0AC',fontFamily:'Archivo',textAnchor:'middle'},'PACKSTATION'),
-      // Regale Mitte
-      shelf(420,96,300), shelf(420,404,300),
-      E('text',{key:'lagertxt',x:570,y:86,fontSize:9,fontWeight:700,letterSpacing:'.1em',fill:'#B0B0AC',fontFamily:'Archivo',textAnchor:'middle'},'LAGER'),
-      // Buero rechts: Trennlinie, Schreibtische, Whiteboard, Pinnwand
-      E('line',{key:'div',x1:868,x2:868,y1:24,y2:616,stroke:wall,strokeWidth:2,strokeDasharray:'4,6'}),
-      E('text',{key:'buerotxt',x:1020,y:66,fontSize:9,fontWeight:700,letterSpacing:'.1em',fill:'#B0B0AC',fontFamily:'Archivo',textAnchor:'middle'},'BÜRO'),
-      desk(900,300), desk(1080,300), desk(990,470),
-      // Whiteboard mit Chart-Kritzeln
-      E('rect',{key:'wb',x:990,y:96,width:120,height:64,fill:'#fff',stroke:ink,strokeWidth:1.8}),
-      E('path',{key:'wbl',d:'M 1002 146 L 1026 126 L 1046 136 L 1072 112 L 1096 120',fill:'none',stroke:orange,strokeWidth:2}),
-      E('line',{key:'wbx',x1:1002,x2:1098,y1:150,y2:150,stroke:'#C9C9C4'}),
-      // Pinnwand
-      E('rect',{key:'pin',x:890,y:96,width:70,height:52,fill:'#F1F1EE',stroke:'#D8D8D3'}),
-      E('rect',{key:'p1',x:898,y:104,width:12,height:12,fill:orange}),E('rect',{key:'p2',x:916,y:110,width:12,height:12,fill:'#0A0A0A'}),E('rect',{key:'p3',x:936,y:102,width:12,height:12,fill:orange}),
-      // Laster (animiert): Aufbau + Fahrerhaus + Raeder + Aufschrift
+      E('rect',{key:'bg',x:0,y:0,width:1400,height:900,fill:'#FAFAF8'}),
+      // Wand oben (mit Tiefe)
+      E('rect',{key:'wall',x:24,y:24,width:1352,height:70,fill:'#B7B5AD'}),
+      E('rect',{key:'wtop',x:24,y:24,width:1352,height:8,fill:ink}),
+      E('rect',{key:'wbase',x:24,y:86,width:1352,height:8,fill:'#8F8D85'}),
+      // Firmenschild
+      E('rect',{key:'sign',x:560,y:36,width:280,height:44,fill:ink}),
+      E('rect',{key:'signsq',x:574,y:48,width:20,height:20,fill:orange}),
+      E('text',{key:'signtx',x:606,y:64,fontSize:20,fontWeight:800,fill:'#fff',fontFamily:'Archivo',letterSpacing:'.05em'},'PARTY PEAK HQ'),
+      // Fenster im Buero-Teil
+      E('g',{key:'win'},[960,1080,1200].map(wx=>E('g',{key:wx},E('rect',{x:wx,y:40,width:64,height:38,fill:'#BBD7E8',stroke:ink,strokeWidth:3}),E('line',{x1:wx+32,x2:wx+32,y1:40,y2:78,stroke:ink,strokeWidth:3})))),
+      // Boden: Lager (Beton-Fliesen) + Buero (Holzdielen)
+      E('rect',{key:'wfloor',x:24,y:94,width:856,height:782,fill:'#DCD9D0'}),
+      E('g',{key:'wtiles'},(()=>{const l=[];for(let i=1;i<20;i++)l.push(E('line',{key:'v'+i,x1:24+i*44,x2:24+i*44,y1:94,y2:876,stroke:'#CFCCC2'}));for(let i=1;i<18;i++)l.push(E('line',{key:'h'+i,x1:24,x2:880,y1:94+i*44,y2:94+i*44,stroke:'#CFCCC2'}));return l;})()),
+      E('rect',{key:'ofloor',x:880,y:94,width:496,height:782,fill:'#D9A967'}),
+      E('g',{key:'planks'},(()=>{const l=[];for(let i=0;i<36;i++){const y=94+i*22;l.push(E('line',{key:'p'+i,x1:880,x2:1376,y1:y,y2:y,stroke:'#C08A4E'}));l.push(E('line',{key:'s'+i,x1:880+((i%3)*160)+80,x2:880+((i%3)*160)+80,y1:y,y2:y+22,stroke:'#C08A4E'}));}return l;})()),
+      E('line',{key:'div',x1:880,x2:880,y1:94,y2:876,stroke:ink,strokeWidth:3}),
+      // Aussenwaende links/rechts/unten
+      E('rect',{key:'wl',x:24,y:94,width:8,height:782,fill:'#8F8D85'}),
+      E('rect',{key:'wr',x:1368,y:94,width:8,height:782,fill:'#8F8D85'}),
+      E('rect',{key:'wb2',x:24,y:868,width:1352,height:8,fill:'#8F8D85'}),
+      // Verladerampe: Tor + Warnstreifen
+      E('rect',{key:'gate',x:24,y:330,width:10,height:180,fill:orange}),
+      E('g',{key:'haz'},(()=>{const l=[];for(let i=0;i<9;i++)l.push(E('rect',{key:i,x:38,y:334+i*20,width:14,height:10,fill:i%2?ink:orange}));return l;})()),
+      E('text',{key:'gtx',x:60,y:322,fontSize:11,fontWeight:800,letterSpacing:'.12em',fill:'#8F8D85',fontFamily:'Archivo'},'VERLADERAMPE'),
+      E('line',{key:'lane',x1:44,x2:300,y1:432,y2:432,stroke:'#B7B5AD',strokeWidth:3,strokeDasharray:'12,10'}),
+      // Packstation: Palette + Kistenstapel + Tisch
+      pallet(288,470), crate(292,438,true), crate(322,438,true), crate(307,414,true),
+      E('rect',{key:'ptab',x:280,y:492,width:110,height:14,fill:'#B5793F'}),
+      E('text',{key:'ptx',x:335,y:530,fontSize:11,fontWeight:800,letterSpacing:'.12em',fill:'#8F8D85',fontFamily:'Archivo',textAnchor:'middle'},'PACKSTATION'),
+      // Regale
+      shelfRow(452,150,8), shelfRow(452,560,8),
+      E('text',{key:'ltx',x:640,y:140,fontSize:11,fontWeight:800,letterSpacing:'.12em',fill:'#8F8D85',fontFamily:'Archivo',textAnchor:'middle'},'LAGER'),
+      // Kontrollpunkt (Nils)
+      E('rect',{key:'ktab',x:760,y:480,width:70,height:14,fill:'#B5793F'}),
+      E('g',{key:'kcl',transform:'translate(775,458)'},this._px(["wwww","woow","wwww","wwww"],{w:'#fff',o:orange},4,'kc')),
+      // Buero: Schreibtische, Whiteboard, Pinnwand, Flipchart, Archiv, Pflanzen, Teppich
+      E('text',{key:'btx',x:1128,y:140,fontSize:11,fontWeight:800,letterSpacing:'.12em',fill:'#B5793F',fontFamily:'Archivo',textAnchor:'middle'},'BÜRO'),
+      E('rect',{key:'rug',x:1090,y:560,width:230,height:150,fill:orange,opacity:0.16}),
+      E('rect',{key:'rugb',x:1090,y:560,width:230,height:150,fill:'none',stroke:orange,strokeWidth:3}),
+      desk(950,380), desk(1160,380), desk(1030,600),
+      // Whiteboard mit Chart
+      E('rect',{key:'wb',x:1080,y:150,width:150,height:84,fill:'#fff',stroke:ink,strokeWidth:3}),
+      E('path',{key:'wbl',d:'M 1094 218 L 1124 190 L 1148 202 L 1180 168 L 1212 178',fill:'none',stroke:orange,strokeWidth:3}),
+      E('line',{key:'wbx',x1:1094,x2:1216,y1:224,y2:224,stroke:'#B7B5AD',strokeWidth:2}),
+      // Pinnwand mit Notizen
+      E('rect',{key:'pin',x:912,y:150,width:110,height:74,fill:'#C08A4E',stroke:'#8A5B34',strokeWidth:3}),
+      E('rect',{key:'n1',x:924,y:162,width:18,height:18,fill:orange}),E('rect',{key:'n2',x:950,y:170,width:18,height:18,fill:'#fff'}),E('rect',{key:'n3',x:978,y:158,width:18,height:18,fill:'#E9C46A'}),E('rect',{key:'n4',x:938,y:194,width:18,height:18,fill:'#fff'}),E('rect',{key:'n5',x:970,y:196,width:18,height:18,fill:orange}),
+      // Flipchart (Max)
+      E('g',{key:'flip',transform:'translate(1250,530)'},E('rect',{x:0,y:0,width:64,height:78,fill:'#fff',stroke:ink,strokeWidth:3}),E('path',{d:'M 8 60 L 24 40 L 38 48 L 56 26',fill:'none',stroke:ink,strokeWidth:2.5}),E('line',{x1:6,x2:-6,y1:78,y2:104,stroke:ink,strokeWidth:3}),E('line',{x1:58,x2:70,y1:78,y2:104,stroke:ink,strokeWidth:3})),
+      // Archivschraenke (Ben)
+      E('g',{key:'arc',transform:'translate(1290,700)'},[0,1].map(i=>E('g',{key:i,transform:'translate('+i*44+',0)'},E('rect',{x:0,y:0,width:38,height:88,fill:'#8F8D85',stroke:ink,strokeWidth:2.5}),[0,1,2].map(j=>E('rect',{key:j,x:5,y:6+j*28,width:28,height:20,fill:'#B7B5AD',stroke:ink,strokeWidth:1.5}))))),
+      plant(60,120), plant(892,120), plant(1330,120), plant(60,790), plant(900,790),
+      // Laster (Pixel-Look, animiert)
       E('g',{key:'truck',className:'pp-truck'},
-        E('g',{transform:'translate(66,246)'},
-          E('rect',{x:0,y:0,width:138,height:64,fill:ink}),
-          E('text',{x:69,y:30,textAnchor:'middle',fontSize:12,fontWeight:800,fill:orange,fontFamily:'Archivo',letterSpacing:'.04em'},'PARTY PEAK'),
-          E('text',{x:69,y:46,textAnchor:'middle',fontSize:7,fontWeight:600,fill:'#fff',fontFamily:'IBM Plex Sans',letterSpacing:'.14em'},'LOGISTIK'),
-          E('rect',{x:-34,y:18,width:34,height:46,fill:ink}),
-          E('rect',{x:-28,y:24,width:16,height:14,fill:'#C9C9C4'}),
-          E('circle',{cx:-16,cy:66,r:9,fill:ink,stroke:'#fff',strokeWidth:2.4}),
-          E('circle',{cx:28,cy:66,r:9,fill:ink,stroke:'#fff',strokeWidth:2.4}),
-          E('circle',{cx:108,cy:66,r:9,fill:ink,stroke:'#fff',strokeWidth:2.4}))),
-      // Kevin (Lager): traegt Kiste, Sprechblase beim Verladen
+        E('g',{transform:'translate(70,350)'},
+          E('rect',{x:0,y:0,width:190,height:84,fill:ink}),
+          E('rect',{x:0,y:0,width:190,height:8,fill:'#3B3B36'}),
+          E('rect',{x:8,y:64,width:174,height:6,fill:orange}),
+          E('text',{x:95,y:38,textAnchor:'middle',fontSize:17,fontWeight:800,fill:orange,fontFamily:'Archivo',letterSpacing:'.04em'},'PARTY PEAK'),
+          E('text',{x:95,y:56,textAnchor:'middle',fontSize:9,fontWeight:600,fill:'#fff',fontFamily:'IBM Plex Sans',letterSpacing:'.2em'},'LOGISTIK'),
+          E('rect',{x:-46,y:24,width:46,height:60,fill:ink}),
+          E('rect',{x:-40,y:32,width:22,height:20,fill:'#BBD7E8',stroke:'#3B3B36',strokeWidth:2}),
+          E('rect',{x:-46,y:76,width:46,height:8,fill:orange}),
+          E('g',{transform:'translate(-24,84)'},E('circle',{cx:0,cy:8,r:13,fill:ink}),E('circle',{cx:0,cy:8,r:5,fill:'#8F8D85'})),
+          E('g',{transform:'translate(40,84)'},E('circle',{cx:0,cy:8,r:13,fill:ink}),E('circle',{cx:0,cy:8,r:5,fill:'#8F8D85'})),
+          E('g',{transform:'translate(150,84)'},E('circle',{cx:0,cy:8,r:13,fill:ink}),E('circle',{cx:0,cy:8,r:5,fill:'#8F8D85'})))),
+      // ---- Figuren ----
       E('g',{key:'kev',className:'pp-kev'},
-        E('g',{className:'pp-bob'},
-          this._bFigure({name:'Kevin',variant:'vest'}),
-          E('g',{className:'pp-kev-box',style:{opacity:0}},E('rect',{x:-9,y:-40,width:18,height:13,fill:ink}),E('rect',{x:-3.5,y:-36.5,width:7,height:6,fill:orange})),
-          this._bBubble(b.kevinLines,b.kevinColor,'pp-kev-bub'))),
-      // Herr Roth (Finanzen)
+        this._bChar({name:'Kevin',hair:'#6B4A26',overlays:[{y:6,rows:["..OOOOOOOO.."]},{y:10,rows:["..OOOOOOOO.."]}]}),
+        E('g',{className:'pp-kev-box',style:{opacity:0},transform:'translate(-14,-78)'},this._px(["BBBBBBB","BoooooB","BBBBBBB"],{B:'#16130F',o:'#FF5A00'},4,'kb')),
+        this._bBubble(b.kevinLines,b.kevinColor,'pp-kev-bub')),
       E('g',{key:'roth',className:'pp-roth'},
-        E('g',{className:'pp-bob'},
-          this._bFigure({name:'Hr. Roth',variant:'suit'}),
-          this._bBubble(b.rothLines,b.rothColor,'pp-roth-bub'))),
-      // Tom (Empfehlungen)
+        this._bChar({name:'Hr. Roth',hair:'#8F8D85',overlays:[{y:6,rows:["....WWWW....",".....OO.....",".....OO.....",".....OO....."]}],held:[{x:10,y:-6,rows:["BBBBB","B.B.B","BBBBB","BBBBB"]}]}),
+        this._bBubble(b.rothLines,b.rothColor,'pp-roth-bub')),
       E('g',{key:'tom',className:'pp-tom'},
-        E('g',{className:'pp-bob'},
-          this._bFigure({name:'Tom',variant:'glasses'}),
-          this._bBubble(b.tomLines,b.tomColor,'pp-tom-bub')))
+        this._bChar({name:'Tom',hair:'#2B1B0E',overlays:[{y:3,rows:[".GGGG..GGGG."]}],held:[{x:-6,y:-8,rows:["WWWW","WooW","WWWW","WWWW"],}]}),
+        this._bBubble(b.tomLines,b.tomColor,'pp-tom-bub')),
+      E('g',{key:'sarah',className:'pp-sarah'},
+        this._bChar({name:'Sarah',hair:'#E9C46A',overlays:[{y:0,rows:["...AAAA....."]},{y:2,rows:["..A......A.."]},{y:3,rows:["..A......A.."]}],held:[{x:9,y:-4,rows:["CCCCC","CCCCC","sssss"],}],pal:{s:'#9FD3FF'}}),
+        this._bBubble(b.sarahLines,b.sarahColor,'pp-sarah-bub')),
+      E('g',{key:'max',className:'pp-max'},
+        this._bChar({name:'Max',hair:'#16130F',held:[{x:10,y:-7,rows:["O","O","O","O"]}]}),
+        this._bBubble(b.maxLines,b.maxColor,'pp-max-bub')),
+      E('g',{key:'lina',className:'pp-lina'},
+        this._bChar({name:'Lina',hair:'#C4552D',overlays:[{y:2,rows:["..k......k..","..k......k..","..k......k.."]}],held:[{x:-6,y:-5,rows:["Oy","yO"]}]}),
+        this._bBubble(b.linaLines,b.linaColor,'pp-lina-bub')),
+      E('g',{key:'ben',className:'pp-ben'},
+        this._bChar({name:'Ben',hair:'#B7B5AD',held:[{x:10,y:-5,rows:["CC","CC",".C","CC"]}]}),
+        this._bBubble(b.benLines,b.benColor,'pp-ben-bub')),
+      E('g',{key:'nils',className:'pp-nils'},
+        this._bChar({name:'Nils',hair:'#3B3B36',overlays:[{y:3,rows:[".GGGG..GGGG."]}],held:[{x:-7,y:-9,rows:[".CC.","C..C",".CC.","..C.","..C."]}]}),
+        this._bBubble(b.nilsLines,b.nilsColor,'pp-nils-bub'))
     ];
-    return E('svg',{viewBox:'0 0 1200 640',style:{width:'100%',height:'auto',display:'block'}},scene);
+    return E('svg',{viewBox:'0 0 1400 900',style:{width:'100%',height:'auto',display:'block',shapeRendering:'crispEdges'}},scene);
   }
 
   renderVals(){
@@ -2163,17 +2259,56 @@ class Component extends DCLogic {
       let tomTxt, tomColor;
       if(recs.length){ const r=recs[tick%recs.length];
         tomTxt=r.productName+': '+r.action; tomColor = r.priority==='kritisch'?red : r.priority==='wichtig'?yellow : green;
-        if(tomTxt.length>70) tomTxt=tomTxt.slice(0,69)+'…'; }
+        if(tomTxt.length>95) tomTxt=tomTxt.slice(0,94)+'…'; }
       else { tomTxt='Alles im grünen Bereich — keine akuten To-dos.'; tomColor=green; }
+      // Sarah: Werbung (global + je Produkt)
+      const sarahMsgs=[{t:'Werbung diesen Monat: '+this._eur(bAgg.ad)+' — TACOS '+(bAgg.revenue>0&&bAgg.ad>0?this._pct(bAgg.tacos*100,1):'—')+'.', c:ink}];
+      st.products.forEach(p=>{ const d=this.derive(p,bcy,bcy); if(d.adSpend>0){ const over=d.actualAcos>d.breakEvenAcos;
+        sarahMsgs.push({t:p.name+': ACOS '+this._pct(d.actualAcos)+' (Break-even '+this._pct(d.breakEvenAcos)+').', c:over?red:green}); } });
+      if(sarahMsgs.length===1) sarahMsgs.push({t:'Aktuell keine aktiven Kampagnen mit Ausgaben.', c:'#8A8A86'});
+      const sm=sarahMsgs[tick%sarahMsgs.length];
+      // Max: Szenarien
+      let maxTxt, maxColor;
+      const scn=st.scenario; const scnP=scn && st.products.find(x=>x.id===scn.productId);
+      if(scnP){ maxTxt='Simulation '+scnP.name+': Preis '+this._eur(scn.price,2)+' · '+this._num(scn.units)+' Stk/Monat · Werbung '+this._eur(scn.adSpend)+'.'; maxColor=ink; }
+      else { maxTxt='Noch keine Simulation eingestellt — Regler im Szenarien-Tab warten.'; maxColor='#8A8A86'; }
+      // Lina: Ideen-Board
+      const openIdeas=(st.ideas||[]).filter(i=> !(i.statuses||[]).includes('Verworfen'));
+      let linaTxt, linaColor;
+      if(openIdeas.length){ const idea=openIdeas[tick%openIdeas.length];
+        linaTxt='Idee: „'+idea.title+'" — Potenzial '+(+idea.potential||0)+' %, Priorität '+(idea.priority||'Mittel')+'.'; linaColor=orange; }
+      else { linaTxt='Das Ideen-Board ist leer — Zeit für ein Brainstorming!'; linaColor='#8A8A86'; }
+      // Ben: Berichte/Archiv
+      const benMsgs=[
+        {t:'Berichtsmonat '+this._mlabel(st.reportMonth||bcy)+': '+st.products.length+' Produkte dokumentiert.', c:ink},
+        {t:'Alle Monatswerte sind gesichert — PDF-Export im Berichte-Tab bereit.', c:green}
+      ];
+      const bm=benMsgs[tick%benMsgs.length];
+      // Nils: Qualitaet je Produkt
+      const rLabel=(r)=> r==='green'?'stark' : r==='yellow'?'okay' : r==='red'?'schwach' : 'offen';
+      const nilsMsgs=st.products.map(p=>({ t:p.name+': '+((+p.stars||0)>0?(+p.stars).toLocaleString('de-DE',{maximumFractionDigits:1})+'★':'noch keine Sterne')+' · Listing '+rLabel(p.listingRating)+' · A+ '+rLabel(p.aplusRating)+'.',
+        c: (p.listingRating==='red'||p.aplusRating==='red')?red : (p.listingRating==='yellow'||p.aplusRating==='yellow')?yellow : green }));
+      if(!nilsMsgs.length) nilsMsgs.push({t:'Keine Produkte zum Prüfen angelegt.', c:'#8A8A86'});
+      const nm2=nilsMsgs[tick%nilsMsgs.length];
       const buero={ kevinLines:this._bSplit(kevinTxt), kevinColor,
         rothLines:this._bSplit(rm.t), rothColor:rm.c,
-        tomLines:this._bSplit(tomTxt), tomColor };
+        tomLines:this._bSplit(tomTxt), tomColor,
+        sarahLines:this._bSplit(sm.t), sarahColor:sm.c,
+        maxLines:this._bSplit(maxTxt), maxColor,
+        linaLines:this._bSplit(linaTxt), linaColor,
+        benLines:this._bSplit(bm.t), benColor:bm.c,
+        nilsLines:this._bSplit(nm2.t), nilsColor:nm2.c };
       V.bueroSceneEl=this._officeScene(buero);
       V.bueroMonthLabel=this._mlabel(bcy);
       V.bueroTeam=[
-        {name:'Kevin', role:'Lager & Versand', desc:'Verlädt die Bestellungen und meldet die Verkaufszahlen des Monats.', accent:orange},
-        {name:'Herr Roth', role:'Finanzen', desc:'Gibt am Whiteboard den Überblick über Umsatz, Gewinn, Marge und Werbekosten.', accent:ink},
-        {name:'Tom', role:'Empfehlungen', desc:'Läuft durch die Halle und weist auf offene Handlungsempfehlungen hin.', accent:'#9A9A96'}
+        {name:'Kevin', role:'Lager & Versand', desc:'Verlädt die Bestellungen in den Laster und meldet die Verkaufszahlen des Monats.', accent:orange},
+        {name:'Herr Roth', role:'Finanzen', desc:'Präsentiert am Whiteboard Umsatz, Gewinn, Marge, Werbekosten und Organik-Quote.', accent:ink},
+        {name:'Tom', role:'Empfehlungen', desc:'Läuft durch die ganze Halle und weist auf offene Handlungsempfehlungen hin.', accent:'#9A9A96'},
+        {name:'Sarah', role:'Werbung', desc:'Behält ACOS, TACOS und das Werbebudget im Blick — je Kampagne und gesamt.', accent:orange},
+        {name:'Max', role:'Szenarien', desc:'Steht am Flipchart und fasst die zuletzt eingestellte Simulation zusammen.', accent:ink},
+        {name:'Lina', role:'Ideen-Board', desc:'Pinnt an der Ideenwand — stellt offene Ideen samt Potenzial vor.', accent:orange},
+        {name:'Ben', role:'Berichte & Archiv', desc:'Hält die Dokumentation aktuell und erinnert an den PDF-Export.', accent:'#9A9A96'},
+        {name:'Nils', role:'Qualität', desc:'Prüft Sterne, Listing- und A+-Qualität aller Produkte am Kontrollpunkt.', accent:ink}
       ];
     } else { V.bueroSceneEl=null; V.bueroMonthLabel=''; V.bueroTeam=[]; }
 
