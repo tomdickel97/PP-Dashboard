@@ -49,6 +49,30 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
 .pp-scroll::-webkit-scrollbar{height:8px;width:8px}
 .pp-scroll::-webkit-scrollbar-thumb{background:#D2D2CE}
 @keyframes ppfade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+/* --- Buero-Szene: 3 Laeufer + feste Arbeitsplaetze · EIN gemeinsamer 96s-Sprechtakt (4 Slots x 2 Personen) --- */
+@keyframes ppTruck{0%,58%{transform:translateX(0)}70%,84%{transform:translateX(-760px)}96%,100%{transform:translateX(0)}}
+@keyframes ppKev{0%,6%{transform:translate(520px,470px)}18%{transform:translate(330px,450px)}26%{transform:translate(228px,430px)}44%{transform:translate(228px,430px)}56%{transform:translate(330px,450px)}66%,100%{transform:translate(520px,470px)}}
+@keyframes ppKevBox{0%,7%{opacity:0}10%,42%{opacity:1}46%,100%{opacity:0}}
+@keyframes ppTom{0%,4%{transform:translate(750px,700px)}14%{transform:translate(440px,650px)}26%{transform:translate(440px,650px)}38%{transform:translate(340px,310px)}52%{transform:translate(340px,310px)}64%{transform:translate(660px,250px)}76%{transform:translate(660px,250px)}90%{transform:translate(910px,650px)}96%,100%{transform:translate(750px,700px)}}
+@keyframes ppSarah{0%,10%{transform:translate(1205px,430px)}24%{transform:translate(878px,330px)}72%{transform:translate(878px,330px)}88%,100%{transform:translate(1205px,430px)}}
+/* Sprech-Slots: 96s Gesamttakt, je Slot ~20s sichtbar, nie mehr als 2 Personen gleichzeitig */
+@keyframes ppSlot1{0%{opacity:0}2%,22%{opacity:1}24.5%,100%{opacity:0}}
+@keyframes ppSlot2{0%,25%{opacity:0}27%,47%{opacity:1}49.5%,100%{opacity:0}}
+@keyframes ppSlot3{0%,50%{opacity:0}52%,72%{opacity:1}74.5%,100%{opacity:0}}
+@keyframes ppSlot4{0%,75%{opacity:0}77%,97%{opacity:1}99.5%,100%{opacity:0}}
+@keyframes ppF1{0%,49.9%{opacity:1}50%,100%{opacity:0}}
+@keyframes ppF2{0%,49.9%{opacity:0}50%,100%{opacity:1}}
+.pp-truck{animation:ppTruck 28s linear infinite}
+.pp-kev{animation:ppKev 28s linear infinite}
+.pp-kev-box{animation:ppKevBox 28s linear infinite}
+.pp-tom{animation:ppTom 36s linear infinite}
+.pp-sarah{animation:ppSarah 26s linear infinite}
+.pp-bub-s1{animation:ppSlot1 96s linear infinite}
+.pp-bub-s2{animation:ppSlot2 96s linear infinite}
+.pp-bub-s3{animation:ppSlot3 96s linear infinite}
+.pp-bub-s4{animation:ppSlot4 96s linear infinite}
+.pp-f1{animation:ppF1 .55s steps(1) infinite}
+.pp-f2{animation:ppF2 .55s steps(1) infinite}
 /* Kalkulations-Felder: jedes Label reserviert 2 Zeilen -> Eingabefelder bleiben in einer Reihe buendig */
 .pp-calcgrid > label > span{display:block;min-height:2.4em;line-height:1.25}
 /* ===== Mobile-Anpassungen ===== */
@@ -85,6 +109,8 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
         <button onClick="{{ goSzenarien }}" style="{{ tabStyle4 }}">Szenarien</button>
         <button onClick="{{ goIdeen }}" style="{{ tabStyle5 }}">Ideen</button>
         <button onClick="{{ goEmpfehlungen }}" style="{{ tabStyle6 }}">Empfehlungen</button>
+        <button onClick="{{ goBerichte }}" style="{{ tabStyle7 }}">Berichte</button>
+        <button onClick="{{ goBuero }}" style="{{ tabStyle8 }}">Büro</button>
       </div>
     </div>
   </sc-if>
@@ -129,6 +155,14 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 4h6M8 4h1a1 1 0 011 1v0a1 1 0 001 1h2a1 1 0 001-1v0a1 1 0 011-1h1a1 1 0 011 1v14a1 1 0 01-1 1H7a1 1 0 01-1-1V5a1 1 0 011-1z"/><path d="M9 13l2 2 4-4"/></svg>
             <span>Empfehlungen</span>
           </button>
+          <button onClick="{{ goBerichte }}" style="{{ nav7 }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 3h7l5 5v13a0 0 0 01 0 0H7a1 1 0 01-1-1V4a1 1 0 011-1z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6M9 9h2"/></svg>
+            <span>Berichte</span>
+          </button>
+          <button onClick="{{ goBuero }}" style="{{ nav8 }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21V8l7-5 7 5v13"/><path d="M17 21V11l4 2v8"/><path d="M8 21v-5h4v5"/><path d="M8 11h4"/></svg>
+            <span>Büro</span>
+          </button>
         </nav>
         <div style="padding:16px 20px;border-top:1px solid #EEEEEB">
           <div style="font-size:11px;color:#9A9A96;letter-spacing:.05em">Stand {{ dataStamp }}</div>
@@ -154,10 +188,11 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
 
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:16px 0 4px">
             <span style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96;margin-right:2px">Zeitraum</span>
-            <button onClick="{{ presetLast30 }}" style="{{ presetStyle0 }}">Letzte 30 Tage</button>
-            <button onClick="{{ presetThisYear }}" style="{{ presetStyle1 }}">Dieses Jahr</button>
-            <button onClick="{{ presetLastYear }}" style="{{ presetStyle2 }}">Letztes Jahr</button>
-            <button onClick="{{ presetGesamt }}" style="{{ presetStyle3 }}">Gesamt</button>
+            <button onClick="{{ presetThisMonth }}" style="{{ presetStyle0 }}">Dieser Monat</button>
+            <button onClick="{{ presetLastMonth }}" style="{{ presetStyle1 }}">Letzter Monat</button>
+            <button onClick="{{ presetThisYear }}" style="{{ presetStyle2 }}">Dieses Jahr</button>
+            <button onClick="{{ presetLastYear }}" style="{{ presetStyle3 }}">Letztes Jahr</button>
+            <button onClick="{{ presetGesamt }}" style="{{ presetStyle4 }}">Gesamt</button>
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap" class="pp-daterange">
               <div class="pp-datedivider" style="width:1px;height:22px;background:#E4E4E0;margin:0 4px"></div>
               <label style="display:inline-flex;align-items:center;gap:6px"><span style="font-size:12px;color:#8A8A86">Von</span>
@@ -210,8 +245,9 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
               <div style="font-family:'Archivo';font-weight:800;font-size:28px;letter-spacing:-.02em;font-feature-settings:'tnum' 1;margin-top:10px">{{ kpiConversion }}</div>
             </div>
             <div style="padding:20px 22px">
-              <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A96">Deckungsbeitrag</div>
-              <div style="font-family:'Archivo';font-weight:800;font-size:28px;letter-spacing:-.02em;font-feature-settings:'tnum' 1;margin-top:10px">{{ kpiContribution }}</div>
+              <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A96">Organik-Quote</div>
+              <div style="font-family:'Archivo';font-weight:800;font-size:28px;letter-spacing:-.02em;font-feature-settings:'tnum' 1;margin-top:10px">{{ kpiOrganic }}</div>
+              <div style="font-size:12px;margin-top:6px;color:#8A8A86">Anteil Verkäufe ohne Werbung</div>
             </div>
           </div>
 
@@ -256,7 +292,14 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                 <div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:3px">Monatlicher Umsatz · {{ chartYear }}</div>
               </div>
               <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+                <sc-if value="{{ chartYoyOn }}" hint-placeholder-val="{{ false }}">
+                  <div style="text-align:right"><div style="font-size:11px;color:#9A9A96">Vorjahresvergleich</div><div style="font-family:'Archivo';font-weight:700;font-size:14px;color:{{ yoyDeltaColor }}">{{ yoyDeltaText }}</div></div>
+                </sc-if>
                 <div style="text-align:right"><div style="font-size:11px;color:#9A9A96">Spitzenmonat</div><div style="font-family:'Archivo';font-weight:700;font-size:14px">{{ peakMonth }}</div></div>
+                <button onClick="{{ toggleChartYoy }}" style="{{ yoyToggleStyle }}">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>
+                  Vorjahresvergleich
+                </button>
                 <div style="display:flex;align-items:center;gap:4px" class="pp-yearchips"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em;margin-right:2px">Jahr</span><sc-for list="{{ chartYears }}" as="y" hint-placeholder-count="6"><button onClick="{{ y.select }}" style="{{ y.style }}">{{ y.label }}</button></sc-for></div>
               </div>
             </div>
@@ -365,7 +408,13 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
             </div>
           </div>
 
-          <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A96;margin:20px 0 8px">Produkt-Cockpit · Gesamtzeitraum</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin:20px 0 8px">
+            <div style="font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9A9A96">Produkt-Cockpit · {{ sel.scopeLabel }}</div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <button onClick="{{ sel.setScopeGesamt }}" style="{{ sel.scopeGesamtStyle }}">Gesamt</button>
+              <button onClick="{{ sel.setScopeYear }}" style="{{ sel.scopeYearStyle }}">Jährlich · {{ sel.activeYear }}</button>
+            </div>
+          </div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:#EEEEEB;border:1px solid #E4E4E0">
             <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Umsatz</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px">{{ sel.revenueStr }}</div></div>
             <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Einheiten</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px">{{ sel.unitsStr }}</div></div>
@@ -397,8 +446,26 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
             </div>
             <div style="padding:13px 22px;border-top:1px solid #EEEEEB;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
               <span style="font-size:12px;color:#7A7A76">Ziel {{ goal.monthLabel }}</span>
-              <input type="number" value="{{ goal.targetInput }}" onChange="{{ goal.setTarget }}" style="width:92px;border:1px solid #E2E2E2;padding:7px 9px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1">
+              <input type="number" value="{{ goal.targetInput }}" onChange="{{ goal.setTarget }}" onFocus="{{ editFocus }}" onBlur="{{ editBlur }}" style="width:92px;border:1px solid #E2E2E2;padding:7px 9px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1">
               <span style="font-size:12px;color:#9A9A96">Stk · Ziele je Monat editierbar in der Tabelle unten</span>
+            </div>
+            <div style="padding:14px 22px;border-top:1px solid #EEEEEB;background:#FAFAF8;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
+              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                <div style="width:26px;height:26px;background:#FFF3EC;border:1px solid #FFD9C2;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FF5A00" stroke-width="2.2"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96">Smarter Vorschlag · {{ goalNext.nextLabel }}</div>
+                  <div style="font-size:12.5px;color:#5A5A56;margin-top:2px">{{ goalNext.reasonText }}</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+                <div style="text-align:right">
+                  <div style="font-family:'Archivo';font-weight:800;font-size:20px;font-feature-settings:'tnum' 1">{{ goalNext.valueStr }}</div>
+                  <div style="font-size:10.5px;color:#9A9A96">aktuell: {{ goalNext.currentStr }}</div>
+                </div>
+                <button onClick="{{ goalNext.apply }}" style="padding:9px 15px;border:none;background:#0A0A0A;color:#fff;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:#FF5A00">Übernehmen</button>
+              </div>
             </div>
           </div>
 
@@ -421,9 +488,9 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
           </div>
 
           <div style="background:#fff;border:1px solid #E4E4E0;margin-top:26px">
-            <div style="padding:18px 22px;border-bottom:1px solid #EEEEEB"><div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#9A9A96">Content-Qualität</div><div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:3px">Listing &amp; A+ Content bewerten</div></div>
+            <div style="padding:18px 22px;border-bottom:1px solid #EEEEEB"><div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#9A9A96">Content-Qualität</div><div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:3px">Listing, A+ &amp; Keywords bewerten</div></div>
             <div style="padding:8px 22px 20px">
-              <sc-for list="{{ sel.qualityRows }}" as="q" hint-placeholder-count="2">
+              <sc-for list="{{ sel.qualityRows }}" as="q" hint-placeholder-count="3">
                 <div style="display:flex;align-items:center;gap:20px;padding:14px 0;border-bottom:1px solid #F1F1EE;flex-wrap:wrap">
                   <div style="min-width:150px;flex:0 0 auto">
                     <div style="font-weight:600;font-size:14px">{{ q.label }}</div>
@@ -436,17 +503,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                   </div>
                 </div>
               </sc-for>
-              <div style="display:flex;align-items:center;gap:20px;padding:14px 0;border-bottom:1px solid #F1F1EE;flex-wrap:wrap">
-                <div style="min-width:150px;flex:0 0 auto">
-                  <div style="font-weight:600;font-size:14px">Keywords aktuell?</div>
-                  <div style="display:flex;align-items:center;gap:7px;margin-top:4px"><div style="width:8px;height:8px;background:{{ sel.keyword.tone }}"></div><span style="font-size:12px;color:#7A7A76">{{ sel.keyword.label }}</span></div>
-                </div>
-                <div style="display:flex;align-items:center;gap:14px;flex:1;min-width:240px;flex-wrap:wrap">
-                  <span style="font-size:12px;color:#9A9A96">{{ sel.keyword.sub }}</span>
-                  <button onClick="{{ sel.keyword.markCurrent }}" style="margin-left:auto;padding:9px 14px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap">Als aktuell markieren</button>
-                </div>
-              </div>
-              <div style="font-size:12px;color:#9A9A96;margin-top:12px;line-height:1.5"><span style="color:#1B7F4B;font-weight:600">Grün</span> kein Handlungsbedarf · <span style="color:#D8930A;font-weight:600">Gelb</span> ausbaufähig · <span style="color:#D42E12;font-weight:600">Rot</span> kritisch · <span style="color:#6A6A66">Keywords: grün &lt; 90 Tg, gelb &lt; 180 Tg, danach rot</span></div>
+              <div style="font-size:12px;color:#9A9A96;margin-top:12px;line-height:1.5"><span style="color:#1B7F4B;font-weight:600">Grün</span> kein Handlungsbedarf · <span style="color:#D8930A;font-weight:600">Gelb</span> ausbaufähig · <span style="color:#D42E12;font-weight:600">Rot</span> kritisch</div>
             </div>
           </div>
 
@@ -460,7 +517,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                   <label style="background:#fff;padding:12px 2px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">FBA-Gebühr €</span><input type="number" step="0.01" value="{{ sel.fbaFee }}" onChange="{{ editFba }}" style="width:100%;border:1px solid #E2E2E2;padding:8px 10px;font-size:14px;margin-top:6px;font-feature-settings:'tnum' 1"></label>
                   <label style="background:#fff;padding:12px 2px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Versand / Stk €</span><input type="number" step="0.01" value="{{ sel.shipping }}" onChange="{{ editShip }}" style="width:100%;border:1px solid #E2E2E2;padding:8px 10px;font-size:14px;margin-top:6px;font-feature-settings:'tnum' 1"></label>
                 </div>
-                <div style="display:flex;justify-content:space-between;padding-top:14px;font-size:13px;color:#7A7A76"><span>MwSt. 19 % · (VK − FBA)</span><span style="font-feature-settings:'tnum' 1">{{ sel.vatStr }}</span></div>
+                <div style="display:flex;justify-content:space-between;padding-top:14px;font-size:13px;color:#7A7A76"><span>MwSt. 19 % · aus Brutto herausgerechnet</span><span style="font-feature-settings:'tnum' 1">{{ sel.vatStr }}</span></div>
                 <label style="display:block;margin-top:14px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Amazon-Listing-Link</span><input value="{{ sel.amazonUrl }}" onChange="{{ editUrl }}" placeholder="https://www.amazon.de/dp/B0..." style="width:100%;border:1px solid #E2E2E2;padding:8px 10px;font-size:13px;margin-top:6px"></label>
               </div>
             </div>
@@ -485,36 +542,36 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
               </div>
             </div>
             <div style="overflow-x:auto" class="pp-scroll">
-              <table style="width:100%;border-collapse:collapse;min-width:1200px">
+              <table style="width:100%;border-collapse:collapse;min-width:1040px">
                 <thead><tr style="text-align:left">
-                  <th style="padding:10px 22px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB">Monat</th>
-                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Verkäufe</th>
-                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Preis €</th>
-                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Umsatz</th>
-                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Gewinn</th>
-                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">davon PPC</th>
-                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Org.-Rate</th>
-                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Werbek. €</th>
-                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Ziel</th>
-                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Erreichung</th>
-                  <th style="padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Aufrufe</th>
-                  <th style="padding:10px 22px 10px 14px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Conversion</th>
+                  <th style="padding:9px 16px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB">Monat</th>
+                  <th style="padding:9px 8px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Verkäufe</th>
+                  <th style="padding:9px 8px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Preis €</th>
+                  <th style="padding:9px 8px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Umsatz</th>
+                  <th style="padding:9px 8px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Gewinn</th>
+                  <th style="padding:9px 8px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">davon PPC</th>
+                  <th style="padding:9px 8px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Org.-Rate</th>
+                  <th style="padding:9px 8px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Werbek. €</th>
+                  <th style="padding:9px 8px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Ziel</th>
+                  <th style="padding:9px 8px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Erreichung</th>
+                  <th style="padding:9px 8px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Aufrufe</th>
+                  <th style="padding:9px 16px 9px 8px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #EEEEEB;text-align:right">Conversion</th>
                 </tr></thead>
                 <tbody>
                   <sc-for list="{{ sel.monthRows }}" as="m" hint-placeholder-count="6">
                     <tr style="border-bottom:1px solid #F1F1EE">
-                      <td style="padding:8px 22px;font-weight:600;font-size:13.5px">{{ m.label }}</td>
-                      <td style="padding:8px 14px;text-align:right"><input type="number" value="{{ m.units }}" onChange="{{ m.setUnits }}" style="width:70px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
-                      <td style="padding:8px 14px;text-align:right"><input type="number" step="0.01" value="{{ m.price }}" onChange="{{ m.setPrice }}" style="width:78px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
-                      <td style="padding:8px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:13.5px;font-weight:600">{{ m.revStr }}</td>
-                      <td style="padding:8px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:13.5px;font-weight:600;color:{{ m.profitColor }}">{{ m.profitStr }}</td>
-                      <td style="padding:8px 14px;text-align:right"><input type="number" value="{{ m.ppc }}" onChange="{{ m.setPpc }}" style="width:70px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
-                      <td style="padding:8px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:13px;color:#7A7A76">{{ m.orgRateStr }}</td>
-                      <td style="padding:8px 14px;text-align:right"><input type="number" step="0.01" value="{{ m.adCost }}" onChange="{{ m.setAdCost }}" style="width:80px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
-                      <td style="padding:8px 14px;text-align:right"><input type="number" value="{{ m.target }}" onChange="{{ m.setTarget }}" style="width:70px;border:1px solid #E8E8E4;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1;color:#6A6A66"></td>
-                      <td style="padding:8px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:13.5px;font-weight:600;color:{{ m.achColor }}">{{ m.achStr }}</td>
-                      <td style="padding:8px 14px;text-align:right"><input type="number" value="{{ m.views }}" onChange="{{ m.setViews }}" style="width:70px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
-                      <td style="padding:8px 22px 8px 14px;text-align:right;font-feature-settings:'tnum' 1;font-size:13.5px;font-weight:600;color:{{ m.convColor }}">{{ m.convStr }}</td>
+                      <td style="padding:8px 16px;font-weight:600;font-size:13.5px">{{ m.label }}</td>
+                      <td style="padding:8px 8px;text-align:right"><input type="number" value="{{ m.units }}" onChange="{{ m.setUnits }}" onFocus="{{ editFocus }}" onBlur="{{ editBlur }}" style="width:54px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
+                      <td style="padding:8px 8px;text-align:right"><input type="number" step="0.01" value="{{ m.price }}" onChange="{{ m.setPrice }}" onFocus="{{ editFocus }}" onBlur="{{ editBlur }}" style="width:62px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
+                      <td style="padding:8px 8px;text-align:right;font-feature-settings:'tnum' 1;font-size:13.5px;font-weight:600">{{ m.revStr }}</td>
+                      <td style="padding:8px 8px;text-align:right;font-feature-settings:'tnum' 1;font-size:13.5px;font-weight:600;color:{{ m.profitColor }}">{{ m.profitStr }}</td>
+                      <td style="padding:8px 8px;text-align:right"><input type="number" value="{{ m.ppc }}" onChange="{{ m.setPpc }}" onFocus="{{ editFocus }}" onBlur="{{ editBlur }}" style="width:54px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
+                      <td style="padding:8px 8px;text-align:right;font-feature-settings:'tnum' 1;font-size:13px;color:#7A7A76">{{ m.orgRateStr }}</td>
+                      <td style="padding:8px 8px;text-align:right"><input type="number" step="0.01" value="{{ m.adCost }}" onChange="{{ m.setAdCost }}" onFocus="{{ editFocus }}" onBlur="{{ editBlur }}" style="width:64px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
+                      <td style="padding:8px 8px;text-align:right"><input type="number" value="{{ m.target }}" onChange="{{ m.setTarget }}" onFocus="{{ editFocus }}" onBlur="{{ editBlur }}" style="width:54px;border:1px solid #E8E8E4;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1;color:#6A6A66"></td>
+                      <td style="padding:8px 8px;text-align:right;font-feature-settings:'tnum' 1;font-size:13.5px;font-weight:600;color:{{ m.achColor }}">{{ m.achStr }}</td>
+                      <td style="padding:8px 8px;text-align:right"><input type="number" value="{{ m.views }}" onChange="{{ m.setViews }}" onFocus="{{ editFocus }}" onBlur="{{ editBlur }}" style="width:54px;border:1px solid #E2E2E2;padding:6px 8px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1"></td>
+                      <td style="padding:8px 16px 8px 8px;text-align:right;font-feature-settings:'tnum' 1;font-size:13.5px;font-weight:600;color:{{ m.convColor }}">{{ m.convStr }}</td>
                     </tr>
                   </sc-for>
                 </tbody>
@@ -896,6 +953,105 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
         </div>
       </sc-if>
 
+      <sc-if value="{{ isBerichte }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Berichte" style="max-width:1240px;margin:0 auto;padding:30px 40px 72px;animation:ppfade .25s ease">
+          <div style="padding-bottom:20px;border-bottom:2px solid #0A0A0A">
+            <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9A96;margin-bottom:8px">Berichte</div>
+            <h1 style="font-family:'Archivo';font-weight:800;font-size:30px;letter-spacing:-.02em;margin:0;line-height:1">PDF-Export &amp; Geschäftsbericht</h1>
+            <div style="font-size:13.5px;color:#8A8A86;margin-top:10px;max-width:640px;line-height:1.55">Erstelle druckfertige PDFs aus den erfassten Dashboard-Daten. Der Bericht öffnet sich in einem neuen Fenster – dort über <b style="color:#0A0A0A">Drucken → „Als PDF speichern"</b> sichern.</div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;margin-top:26px;align-items:start">
+
+            <div style="background:#fff;border:1px solid #E4E4E0;display:flex;flex-direction:column">
+              <div style="padding:20px 22px;border-bottom:1px solid #EEEEEB">
+                <div style="display:flex;align-items:center;gap:11px">
+                  <div style="width:38px;height:38px;background:#FFF3EC;border:1px solid #FFD9C2;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#FF5A00" stroke-width="1.8"><path d="M7 3h7l5 5v13H7a1 1 0 01-1-1V4a1 1 0 011-1z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
+                  </div>
+                  <div>
+                    <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9A9A96">Sicherungskopie</div>
+                    <div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:2px">Produktdaten-Export</div>
+                  </div>
+                </div>
+              </div>
+              <div style="padding:20px 22px;flex:1">
+                <div style="font-size:13.5px;color:#4A4A46;line-height:1.6">Alle eingetragenen Monatswerte je Produkt – Verkäufe, Preis, Umsatz, PPC-Einheiten, Werbekosten, Aufrufe und Ziele – als vollständige PDF-Übersicht. Ideal als Backup oder Nachweis der erfassten Daten.</div>
+                <div style="font-size:12px;color:#9A9A96;margin-top:14px">Enthält <b style="color:#0A0A0A">{{ repProductCount }}</b> Produkte · alle erfassten Monate</div>
+              </div>
+              <div style="padding:16px 22px;border-top:1px solid #EEEEEB">
+                <button onClick="{{ genProductReport }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:9px;padding:12px 16px;border:none;background:#0A0A0A;color:#fff;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="background:#FF5A00">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6M6 18H4v-6a2 2 0 012-2h12a2 2 0 012 2v6h-2M8 14h8v7H8z"/></svg>
+                  PDF erstellen
+                </button>
+              </div>
+            </div>
+
+            <div style="background:#fff;border:1px solid #E4E4E0;display:flex;flex-direction:column">
+              <div style="padding:20px 22px;border-bottom:1px solid #EEEEEB">
+                <div style="display:flex;align-items:center;gap:11px">
+                  <div style="width:38px;height:38px;background:#F1F1EE;border:1px solid #E0E0DB;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="1.8"><path d="M4 19V5M4 19h16"/><rect x="7" y="10" width="3" height="6"/><rect x="12" y="7" width="3" height="9"/><rect x="17" y="12" width="3" height="4"/></svg>
+                  </div>
+                  <div>
+                    <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9A9A96">Monatlich</div>
+                    <div style="font-family:'Archivo';font-weight:700;font-size:17px;margin-top:2px">Geschäftsbericht</div>
+                  </div>
+                </div>
+              </div>
+              <div style="padding:20px 22px;flex:1">
+                <div style="font-size:13.5px;color:#4A4A46;line-height:1.6">Zusammenfassung der wichtigsten Kennzahlen für einen Monat – Umsatz, Einheiten, Gewinn, Marge, ACOS, Conversion und Organik-Quote inkl. Vormonatsvergleich – plus konkrete Handlungsempfehlungen.</div>
+                <div style="display:flex;align-items:center;gap:10px;margin-top:16px;flex-wrap:wrap">
+                  <span style="font-size:12px;font-weight:600;color:#7A7A76;text-transform:uppercase;letter-spacing:.05em">Berichtsmonat</span>
+                  <select value="{{ repMonth }}" onChange="{{ setRepMonth }}" style="border:1px solid #E2E2E2;padding:8px 11px;font-size:13px;background:#fff;cursor:pointer;font-feature-settings:'tnum' 1">
+                    <sc-for list="{{ repMonthOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.ym }}">{{ o.label }}</option></sc-for>
+                  </select>
+                </div>
+              </div>
+              <div style="padding:16px 22px;border-top:1px solid #EEEEEB">
+                <button onClick="{{ genBusinessReport }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:9px;padding:12px 16px;border:none;background:#0A0A0A;color:#fff;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="background:#FF5A00">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6M6 18H4v-6a2 2 0 012-2h12a2 2 0 012 2v6h-2M8 14h8v7H8z"/></svg>
+                  Bericht für {{ repMonthLabel }} erstellen
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="margin-top:24px;background:#FAFAF8;border:1px solid #EEEEEB;padding:16px 20px;display:flex;gap:12px;align-items:flex-start">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9A9A96" stroke-width="1.8" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+            <div style="font-size:12.5px;color:#7A7A76;line-height:1.55">Der Bericht öffnet in einem neuen Browser-Tab. Falls nichts passiert, bitte <b style="color:#0A0A0A">Pop-ups erlauben</b>. Im Druckdialog als Ziel „Als PDF speichern" wählen – Ränder und Umbrüche sind bereits für A4 optimiert.</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isBuero }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Buero" style="max-width:1560px;margin:0 auto;padding:30px 28px 72px;animation:ppfade .25s ease">
+          <div style="padding-bottom:20px;border-bottom:2px solid #0A0A0A;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px">
+            <div>
+              <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9A96;margin-bottom:8px">Büro</div>
+              <h1 style="font-family:'Archivo';font-weight:800;font-size:30px;letter-spacing:-.02em;margin:0;line-height:1">Das Party-Peak-Team bei der Arbeit</h1>
+              <div style="font-size:13.5px;color:#8A8A86;margin-top:10px;max-width:640px;line-height:1.55">Live-Blick in Lager &amp; Büro — das Team kommentiert die echten Zahlen aus dem Dashboard. Berichtsmonat: <b style="color:#0A0A0A">{{ bueroMonthLabel }}</b></div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #E4E4E0;margin-top:26px;overflow:hidden">
+            {{ bueroSceneEl }}
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:#E4E4E0;border:1px solid #E4E4E0;margin-top:26px">
+            <sc-for list="{{ bueroTeam }}" as="tm" hint-placeholder-count="3">
+              <div style="background:#fff;padding:18px 20px">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:10px;height:10px;background:{{ tm.accent }}"></div>
+                  <div style="font-family:'Archivo';font-weight:800;font-size:15px">{{ tm.name }}</div>
+                  <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96">{{ tm.role }}</div>
+                </div>
+                <div style="font-size:12.5px;color:#6A6A66;margin-top:8px;line-height:1.55">{{ tm.desc }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
     </main>
   </div>
 
@@ -1088,13 +1244,17 @@ class Component extends DCLogic {
       ideaUploading:false,
       recDismissed:(saved && saved.recDismissed) || {},
       detailYear:null,
-      period:{preset:'gesamt', from:dmin||'2025-07', to:dmax||'2026-07'},
-      chartYear:String(new Date().getFullYear())
+      detailScope:'gesamt',
+      reportMonth:this._curYm(),
+      period:{preset:'thisYear', from:(String(new Date().getFullYear())+'-01'), to:this._curYm()},
+      chartYear:String(new Date().getFullYear()),
+      chartYoy:false,
+      bueroTick:0
     };
   }
   componentDidMount(){ this._onResize = ()=> this.setState({narrow: window.innerWidth < 900}); window.addEventListener('resize', this._onResize); this._sbInit(); }
   componentWillUnmount(){ window.removeEventListener('resize', this._onResize); try{ if(this._sb && this._sbChannel) this._sb.removeChannel(this._sbChannel); }catch(e){} }
-  _persist(){ try { localStorage.setItem('partypeak_v4', JSON.stringify(this._snapshot())); } catch(e){} this._sbPush(); }
+  _persist(){ clearTimeout(this._persistT); this._persistT=setTimeout(()=>{ try { localStorage.setItem('partypeak_v4', JSON.stringify(this._snapshot())); } catch(e){} }, 250); this._sbPush(); }
 
   /* ============================================================
      PARTY PEAK · SUPABASE-SYNC  — START
@@ -1143,6 +1303,13 @@ class Component extends DCLogic {
   }
   _sbApplyRemote(remote){
     try{
+      // Während aktiv getippt wird NICHT übernehmen (sonst springt das Eingabefeld) –
+      // stattdessen nach kurzer Tipp-Pause frisch nachladen.
+      if(this._editingActive || (Date.now()-(this._lastEditTs||0) < 2500)){
+        clearTimeout(this._pullRetryT);
+        this._pullRetryT=setTimeout(()=>this._sbPull(), 2800);
+        return;
+      }
       const sig = this._stableStringify(remote);
       if(sig === this._lastSyncedSig) return; // eigenes Echo oder identisch -> ignorieren
       this._lastSyncedSig = sig;
@@ -1155,17 +1322,19 @@ class Component extends DCLogic {
   }
   _sbPush(){
     if(!this._sbReady) return;
-    const snap = this._snapshot();
-    const sig = this._stableStringify(snap);
-    if(sig === this._lastSyncedSig) return; // nichts wirklich geaendert
-    this._lastSyncedSig = sig;
+    // Nur einen Timer neu setzen (billig); die teure Signatur-Berechnung + Upload
+    // passiert gebündelt erst nach kurzer Pause -> kein Ruckeln pro Tastendruck.
     clearTimeout(this._sbPushT);
     this._sbPushT = setTimeout(async ()=>{
+      const snap = this._snapshot();
+      const sig = this._stableStringify(snap);
+      if(sig === this._lastSyncedSig) return; // nichts wirklich geaendert
+      this._lastSyncedSig = sig;
       try{
         const { error } = await this._sb.from(this._sbTable).upsert({ id:this._sbRow, data:snap, updated_at:new Date().toISOString() });
         if(error) console.warn('[Party Peak] Speichern fehlgeschlagen:', error.message);
       }catch(e){ console.warn('[Party Peak] Speichern-Ausnahme:', e); }
-    }, 500); // kurzes Debounce, damit Slider/Tippen nicht bei jedem Zeichen sendet
+    }, 600); // Debounce, damit Slider/Tippen nicht bei jedem Zeichen sendet
   }
   /* PARTY PEAK · SUPABASE-SYNC — ENDE */
 
@@ -1176,7 +1345,7 @@ class Component extends DCLogic {
   _genMonthly(base, conv, price, acosPct, ppcShare){ const s=this._season(); const o={}; this.months.forEach(ym=>{ if(ym<'2025-07'||ym>'2026-07') return; const mi=+ym.slice(5)-1; let u=Math.round(base*s[mi]); if(ym==='2026-07') u=Math.round(u*0.55); const ppc=Math.round(u*(ppcShare||0.4)); const adCost=Math.round(ppc*(price||0)*((acosPct||18)/100)); o[ym]={units:u, views:Math.round(u/conv), unitsPpc:ppc, adCost:adCost}; }); return o; }
   _blankDraft(){ return {name:'',asin:'',amazonUrl:'',price:'',productionCost:'',fbaFee:'',shipping:'',stock:'',dims:'',leadTime:'45',safetyDays:'14',targetAcos:'',stars:''}; }
   _seed(){
-    const P = (o)=>({ id:'p'+Math.random().toString(36).slice(2,8), listingRating:'green', aplusRating:'green', amazonUrl: o.asin ? ('https://www.amazon.de/dp/'+o.asin) : '', ...o });
+    const P = (o)=>({ id:'p'+Math.random().toString(36).slice(2,8), listingRating:'green', aplusRating:'green', keywordRating:'green', amazonUrl: o.asin ? ('https://www.amazon.de/dp/'+o.asin) : '', ...o });
     const products = [
       P({name:'Wackelturm Party XXL', asin:'B0C1PARTY1', price:24.99, productionCost:6.20, fbaFee:4.35, shipping:1.10, dims:'30×9×9 cm · 1,2 kg', stock:210, leadTime:45, safetyDays:14, dailyBudget:8, targetAcos:18, monthly:this._genMonthly(40,0.12,24.99,18,0.45)}),
       P({name:'Trinkspiel Roulette Deluxe', asin:'B0C2PARTY2', price:19.99, productionCost:4.10, fbaFee:3.85, shipping:0.95, dims:'22×22×6 cm · 0,6 kg', stock:90, leadTime:40, safetyDays:14, dailyBudget:6.5, targetAcos:16, monthly:this._genMonthly(62,0.14,19.99,16,0.4)}),
@@ -1185,12 +1354,10 @@ class Component extends DCLogic {
       P({name:'Pärchen-Fragen Kartenspiel', asin:'B0C5PARTY5', price:12.99, productionCost:2.40, fbaFee:3.10, shipping:0.70, dims:'10×7×3 cm · 0,2 kg', stock:620, leadTime:42, safetyDays:14, dailyBudget:4.5, targetAcos:14, monthly:this._genMonthly(78,0.16,12.99,14,0.45)})
     ];
     const ratingSeed=[['yellow','red'],['green','yellow'],['green','green'],['red','yellow'],['green','red']];
-    const kwAgeSeed=[35,120,15,240,80]; // Tage seit letzter Keyword-Pflege (grün/gelb/rot gemischt)
     const bases=[40,62,30,26,78]; const tmult=[1.1,0.95,1.0,1.25,0.9]; const s=this._season();
     const starSeed=[4.6,4.2,4.8,3.9,4.4];
     products.forEach((p,i)=>{
       if(ratingSeed[i]){ p.listingRating=ratingSeed[i][0]; p.aplusRating=ratingSeed[i][1]; }
-      if(kwAgeSeed[i]!=null){ const dd=new Date(Date.now()-kwAgeSeed[i]*86400000); p.keywordUpdated=dd.getFullYear()+'-'+String(dd.getMonth()+1).padStart(2,'0')+'-'+String(dd.getDate()).padStart(2,'0'); }
       p.stars = starSeed[i]!=null?starSeed[i]:4.3;
       // monthly targets 2025-07 .. 2026-12
       const t={}; this.months.forEach(ym=>{ if(ym<'2025-07'||ym>'2026-12') return; const mi=+ym.slice(5)-1; t[ym]=Math.round(bases[i]*s[mi]*tmult[i]); }); p.targets=t;
@@ -1230,8 +1397,10 @@ class Component extends DCLogic {
     from = from || dr.min; to = to || dr.max;
     if(from>to){ const t=from; from=to; to=t; }
     // Aktuelle Stück-Oekonomie (fuer Anzeige von Marge/Break-Even/Wasserfall – basiert auf JETZIGEM Preis)
-    const vat = (p.price - p.fbaFee)*0.19;
-    const net = p.price - vat;
+    // USt korrekt: Verkaufspreis ist BRUTTO -> Netto = Brutto/1,19; USt = Brutto - Netto.
+    // Amazon-Gebühren sind separate Betriebsausgaben und mindern die USt NICHT.
+    const net = p.price/1.19;
+    const vat = p.price - net;
     const unitProfit = net - p.fbaFee - p.shipping - p.productionCost;
     const marginPct = p.price>0 ? unitProfit/p.price : 0;
     // Aggregation PRO MONAT mit dem jeweils gueltigen Monatspreis
@@ -1239,7 +1408,7 @@ class Component extends DCLogic {
     this.months.forEach(ym=>{ if(ym<from||ym>to) return; const m=p.monthly[ym]; if(!m) return;
       const mUnits=+m.units||0, mViews=+m.views||0, mPpc=Math.min(mUnits,+m.unitsPpc||0), mAd=+m.adCost||0;
       const mPrice=this._monthPrice(p,m);
-      const mUnitProfit=(mPrice-(mPrice-p.fbaFee)*0.19)-p.fbaFee-p.shipping-p.productionCost;
+      const mUnitProfit=(mPrice/1.19)-p.fbaFee-p.shipping-p.productionCost;
       units+=mUnits; views+=mViews; unitsPpc+=mPpc; adSpend+=mAd;
       revenue+=mUnits*mPrice; grossProfit+=mUnits*mUnitProfit; ppcRevenue+=mPpc*mPrice;
     });
@@ -1253,9 +1422,28 @@ class Component extends DCLogic {
     const tacos = revenue>0 ? adSpend/revenue*100 : 0;
     const maxCpc = unitProfit*conversion;
     const stock = this._stockOf(p);
-    const dataMonths = this.months.filter(ym=>p.monthly[ym]);
-    const last3 = dataMonths.slice(-3).reduce((s,ym)=> s + (+p.monthly[ym].units||0), 0);
-    const velocity = last3/90;
+    // Velocity = Verkaufsrate/Tag im LAUFENDEN Jahr, ab Produktstart (erster Datenmonat des Jahres)
+    // bis heute – geteilt durch die tatsächlich verstrichenen Tage (nicht fix 90, nicht ab Jahresanfang).
+    const _curY = this._curYm().slice(0,4);
+    const _cym = this._curYm();
+    const yMonths = this.months.filter(ym=> ym.slice(0,4)===_curY && ym<=_cym && p.monthly[ym]);
+    let velocity = 0;
+    if(yMonths.length){
+      const vUnits = yMonths.reduce((s,ym)=> s + (+p.monthly[ym].units||0), 0);
+      const [fy,fm] = yMonths[0].split('-').map(Number);   // erster Datenmonat im Jahr = Produktstart
+      const startD = new Date(fy, fm-1, 1);
+      const days = Math.max(1, Math.round((new Date() - startD)/86400000)+1);
+      velocity = vUnits/days;
+    } else {
+      // Fallback (z.B. Jahresanfang noch ohne Daten): letzte bis zu 3 Datenmonate / deren tatsächliche Tage
+      const dm = this.months.filter(ym=>p.monthly[ym]).slice(-3);
+      if(dm.length){
+        const u = dm.reduce((s,ym)=> s + (+p.monthly[ym].units||0), 0);
+        const [ay,am]=dm[0].split('-').map(Number); const [by,bm]=dm[dm.length-1].split('-').map(Number);
+        const d0=new Date(ay,am-1,1), d1=new Date(by,bm,0);
+        velocity = u/Math.max(1, Math.round((d1-d0)/86400000)+1);
+      }
+    }
     const cover = velocity>0 ? stock/velocity : Infinity;
     const threshold = (+p.leadTime||0) + (+p.safetyDays||0);
     let status = 'green';
@@ -1266,13 +1454,14 @@ class Component extends DCLogic {
     return {units,views,revenue,vat,net,unitProfit,marginPct,grossProfit,estProfit,conversion,breakEvenAcos,actualAcos,velocity,cover,threshold,status,reorderQty,adSpend,days,stock,unitsPpc,organicUnits,organicRate,ppcRevenue,tacos,maxCpc};
   }
   aggregate(from,to){
-    let revenue=0,units=0,ad=0,grossProfit=0,estProfit=0,views=0,contribution=0,ppcRev=0;
-    this.state.products.forEach(p=>{ const d=this.derive(p,from,to); revenue+=d.revenue; units+=d.units; ad+=d.adSpend; grossProfit+=d.grossProfit; estProfit+=d.estProfit; views+=d.views; contribution+=d.grossProfit; ppcRev+=d.ppcRevenue; });
+    let revenue=0,units=0,ad=0,grossProfit=0,estProfit=0,views=0,contribution=0,ppcRev=0,ppcUnits=0;
+    this.state.products.forEach(p=>{ const d=this.derive(p,from,to); revenue+=d.revenue; units+=d.units; ad+=d.adSpend; grossProfit+=d.grossProfit; estProfit+=d.estProfit; views+=d.views; contribution+=d.grossProfit; ppcRev+=d.ppcRevenue; ppcUnits+=d.unitsPpc; });
     const avgMargin = revenue>0 ? grossProfit/revenue : 0;
     const acos = ppcRev>0 ? ad/ppcRev : 0;
     const tacos = revenue>0 ? ad/revenue : 0;
     const conversion = views>0 ? units/views : 0;
-    return {revenue,units,ad,grossProfit,estProfit,views,avgMargin,acos,tacos,conversion,contribution};
+    const organicRate = units>0 ? (units-ppcUnits)/units : 0;
+    return {revenue,units,ad,grossProfit,estProfit,views,avgMargin,acos,tacos,conversion,contribution,organicRate};
   }
   yearRevenueSeries(year){
     const arr=[];
@@ -1289,6 +1478,37 @@ class Component extends DCLogic {
       React.createElement('text',{x:70,y:67,textAnchor:'middle',fontSize:27,fontWeight:800,fill:'#0A0A0A',fontFamily:'Archivo'}, Math.round(pct*100)+'%'),
       React.createElement('text',{x:70,y:88,textAnchor:'middle',fontSize:11,fill:'#9A9A96',fontFamily:'IBM Plex Sans'},'vom Ziel')
     );
+  }
+  // Mehrfach-Linienchart (z.B. laufendes Jahr vs. Vorjahr) — gleiche Skala, eine X-Achse, Legende oben rechts
+  _lineChartMulti(seriesList, {h=230, unit='€'}={}){
+    const W=760, H=h, padL=54, padR=18, padT=26, padB=34;
+    const n = Math.max(1, ...seriesList.map(s=>s.data.length));
+    const max = Math.max(1, ...seriesList.flatMap(s=>s.data.map(d=>d.value)));
+    const niceMax = Math.ceil(max/(max>2000?500:100)) * (max>2000?500:100) || max;
+    const iw=W-padL-padR, ih=H-padT-padB;
+    const x=i=> padL + (n<=1?0:(i/(n-1))*iw);
+    const y=v=> padT + ih - (v/niceMax)*ih;
+    const grid=[0,0.5,1].map(t=>{ const gy=padT+ih-t*ih; const val=niceMax*t; return React.createElement('g',{key:'g'+t},
+      React.createElement('line',{x1:padL,x2:W-padR,y1:gy,y2:gy,stroke:'#EEEEEB',strokeWidth:1}),
+      React.createElement('text',{x:padL-8,y:gy+4,textAnchor:'end',fontSize:11,fill:'#B0B0AC',fontFamily:'IBM Plex Sans'}, unit==='€'? (val>=1000?(val/1000).toLocaleString('de-DE',{maximumFractionDigits:1})+'k':Math.round(val)) : Math.round(val)) ); });
+    const labelSrc = seriesList.find(s=>s.data.length===n) || seriesList[0];
+    const labels = labelSrc.data.map((s,i)=> (i%2===0||i===n-1) ? React.createElement('text',{key:'l'+i,x:x(i),y:H-12,textAnchor:'middle',fontSize:10.5,fill:'#B0B0AC',fontFamily:'IBM Plex Sans'}, s.label) : null);
+    const els=[];
+    seriesList.forEach((s,si)=>{
+      const d=s.data; if(!d.length) return;
+      const line=d.map((pt,i)=> (i?'L':'M')+x(i).toFixed(1)+' '+y(pt.value).toFixed(1)).join(' ');
+      if(s.fill){ const area='M'+x(0).toFixed(1)+' '+(padT+ih)+' '+d.map((pt,i)=>'L'+x(i).toFixed(1)+' '+y(pt.value).toFixed(1)).join(' ')+' L'+x(d.length-1).toFixed(1)+' '+(padT+ih)+' Z';
+        els.push(React.createElement('path',{key:'a'+si,d:area,fill:s.color,opacity:0.08})); }
+      els.push(React.createElement('path',{key:'p'+si,d:line,fill:'none',stroke:s.color,strokeWidth:2.2,strokeLinejoin:'round',strokeLinecap:'round',strokeDasharray:s.dashed?'5,4':undefined}));
+      els.push(React.createElement('g',{key:'d'+si}, d.map((pt,i)=>React.createElement('circle',{key:i,cx:x(i),cy:y(pt.value),r:2.5,fill:'#fff',stroke:s.color,strokeWidth:1.6}))));
+    });
+    const legend = React.createElement('g',{key:'legend'}, seriesList.map((s,si)=>{
+      const lx=W-padR-seriesList.length*72+si*72, ly=8;
+      return React.createElement('g',{key:'lg'+si},
+        React.createElement('line',{x1:lx,x2:lx+16,y1:ly,y2:ly,stroke:s.color,strokeWidth:2.4,strokeDasharray:s.dashed?'5,4':undefined}),
+        React.createElement('text',{x:lx+21,y:ly+3.5,fontSize:10.5,fill:'#6A6A66',fontFamily:'IBM Plex Sans',fontWeight:600}, s.label));
+    }));
+    return React.createElement('svg',{viewBox:'0 0 '+W+' '+H,style:{width:'100%',height:'auto',display:'block'}}, grid, els, labels, legend);
   }
   _lineChart(series, {color='#FF5A00', h=230, unit='€'}={}){
     const W=760, H=h, padL=54, padR=18, padT=18, padB=34;
@@ -1311,14 +1531,25 @@ class Component extends DCLogic {
       dots, labels);
   }
   _barChart(series,{color='#0A0A0A', h=210}={}){
-    const W=520,H=h,padL=34,padR=10,padT=14,padB=30; const max=Math.max(1,...series.map(s=>s.value));
+    const W=520,H=h,padL=40,padR=12,padT=14,padB=30;
+    const rawMax=Math.max(1,...series.map(s=>s.value));
+    // "Schoene" Skala, die sich automatisch an das Verkaufsniveau des Produktes anpasst
+    // (kleine Mengen -> 0/2/4/…, groessere -> 0/50/100/… bzw. 0/500/1000/…)
+    let step; { const rs=rawMax/5; const mag=Math.pow(10,Math.floor(Math.log10(rs))); const n=rs/mag;
+      step=(n<=1?1:n<=2?2:n<=5?5:10)*mag; if(step<1) step=1; }
+    const niceMax=Math.ceil(rawMax/step)*step;
     const iw=W-padL-padR, ih=H-padT-padB; const bw=iw/series.length*0.6; const gap=iw/series.length;
-    const bars=series.map((s,i)=>{ const bh=(s.value/max)*ih; const bx=padL+i*gap+(gap-bw)/2; const by=padT+ih-bh; const last=i>=series.length-3;
+    const yOf=v=> padT+ih-(v/niceMax)*ih;
+    // Y-Achse: horizontale Hilfslinien + Beschriftung links
+    const axis=[];
+    for(let v=0; v<=niceMax+1e-9; v+=step){ const gy=yOf(v);
+      axis.push(React.createElement('line',{key:'g'+v,x1:padL,x2:W-padR,y1:gy,y2:gy,stroke:v===0?'#E4E4E0':'#F3F3F0'}));
+      axis.push(React.createElement('text',{key:'t'+v,x:padL-7,y:gy+3.2,textAnchor:'end',fontSize:9.5,fill:'#B0B0AC',fontFamily:'IBM Plex Sans',style:{fontFeatureSettings:"'tnum' 1"}}, Math.round(v).toLocaleString('de-DE'))); }
+    const bars=series.map((s,i)=>{ const bh=(s.value/niceMax)*ih; const bx=padL+i*gap+(gap-bw)/2; const by=padT+ih-bh; const last=i>=series.length-3;
       return React.createElement('g',{key:i},
-        React.createElement('rect',{x:bx,y:by,width:bw,height:Math.max(1,bh),fill:last?'#FF5A00':'#0A0A0A'}),
+        React.createElement('rect',{x:bx,y:by,width:bw,height:Math.max(s.value>0?1:0,bh),fill:last?'#FF5A00':'#0A0A0A'}),
         (i%2===0||i===series.length-1)?React.createElement('text',{x:bx+bw/2,y:H-10,textAnchor:'middle',fontSize:10,fill:'#B0B0AC',fontFamily:'IBM Plex Sans'},s.label):null); });
-    return React.createElement('svg',{viewBox:'0 0 '+W+' '+H,style:{width:'100%',height:'auto',display:'block'}},
-      React.createElement('line',{x1:padL,x2:W-padR,y1:padT+ih,y2:padT+ih,stroke:'#EEEEEB'}), bars);
+    return React.createElement('svg',{viewBox:'0 0 '+W+' '+H,style:{width:'100%',height:'auto',display:'block'}}, axis, bars);
   }
   _waterfall(p){
     const d=this.derive(p);
@@ -1353,18 +1584,21 @@ class Component extends DCLogic {
   _starsEl(val, size){ val=Math.max(0,Math.min(5,+val||0)); size=size||16; const path='M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17.8 5.7 21l1.3-6.7-5-4.6 6.8-.8z'; const stars=[]; for(let i=0;i<5;i++){ const fill=Math.max(0,Math.min(1,val-i)); const gid='ppstar'+i+'_'+Math.round(val*10); stars.push(React.createElement('svg',{key:i,width:size,height:size,viewBox:'0 0 24 24',style:{display:'block'}}, React.createElement('defs',null, React.createElement('linearGradient',{id:gid,x1:'0',y1:'0',x2:'1',y2:'0'}, React.createElement('stop',{offset:(fill*100)+'%',stopColor:'#FF5A00'}), React.createElement('stop',{offset:(fill*100)+'%',stopColor:'#E4E4E0'}))), React.createElement('path',{d:path,fill:'url(#'+gid+')'}))); } return React.createElement('div',{style:{display:'flex',gap:'3px',alignItems:'center'}}, stars); }
 
   // ---------- navigation ----------
-  _go(m){ this.setState({module:m, productId:null}); window.scrollTo(0,0); }
+  _go(m){ this.setState({module:m, productId:null}); window.scrollTo(0,0);
+    // Buero-Sprechblasen: Texte rotieren alle 8s, aber nur solange der Reiter offen ist
+    clearInterval(this._bueroT);
+    if(m==='buero'){ this._bueroT=setInterval(()=>this.setState(s=>({bueroTick:(s.bueroTick||0)+1})), 24000); } }
   _open(id){ this.setState({module:'produkte', productId:id}); window.scrollTo(0,0); }
 
   // ---------- mutations ----------
-  _update(id, patch){ this.setState(s=>({products:s.products.map(p=> p.id===id?{...p,...patch}:p)}), ()=>this._persist()); }
-  _setMonth(id, ym, field, val){ this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const mo={...p.monthly}; mo[ym]={...(mo[ym]||{units:0,views:0}), [field]: Math.max(0,+val||0)}; return {...p,monthly:mo}; })}), ()=>this._persist()); }
+  _update(id, patch){ this._lastEditTs=Date.now(); this.setState(s=>({products:s.products.map(p=> p.id===id?{...p,...patch}:p)}), ()=>this._persist()); }
+  _setMonth(id, ym, field, val){ this._lastEditTs=Date.now(); this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const mo={...p.monthly}; mo[ym]={...(mo[ym]||{units:0,views:0}), [field]: Math.max(0,+val||0)}; return {...p,monthly:mo}; })}), ()=>this._persist()); }
   // Gueltiger Preis eines Monats: eigener Monatspreis, sonst Fallback auf aktuellen Produktpreis
   _monthPrice(p, m){ return (m && m.price!=null && m.price!=='') ? (+m.price||0) : (+p.price||0); }
   // Produktpreis aendern: vorhandene Monate ohne eigenen Preis mit dem ALTEN Preis einfrieren,
   // damit sich vergangene Umsaetze/Gewinne nicht rueckwirkend veraendern.
-  _setProductPrice(id, val){ const np=Math.max(0,+val||0); this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const oldP=+p.price||0; const mo={...p.monthly}; Object.keys(mo).forEach(ym=>{ const mm=mo[ym]; if(mm && (mm.price==null||mm.price==='')){ mo[ym]={...mm, price:oldP}; } }); return {...p, price:np, monthly:mo}; })}), ()=>this._persist()); }
-  _setTarget(id, ym, val){ this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const t={...(p.targets||{})}; t[ym]=Math.max(0,Math.round(+val||0)); return {...p,targets:t}; })}), ()=>this._persist()); }
+  _setProductPrice(id, val){ this._lastEditTs=Date.now(); const np=Math.max(0,+val||0); this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const oldP=+p.price||0; const mo={...p.monthly}; Object.keys(mo).forEach(ym=>{ const mm=mo[ym]; if(mm && (mm.price==null||mm.price==='')){ mo[ym]={...mm, price:oldP}; } }); return {...p, price:np, monthly:mo}; })}), ()=>this._persist()); }
+  _setTarget(id, ym, val){ this._lastEditTs=Date.now(); this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const t={...(p.targets||{})}; t[ym]=Math.max(0,Math.round(+val||0)); return {...p,targets:t}; })}), ()=>this._persist()); }
   _addMonth(id){ this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; const keys=Object.keys(p.monthly).sort(); let last=keys[keys.length-1]||'2026-06'; let [y,m]=last.split('-').map(Number); m++; if(m>12){m=1;y++;} const nk=y+'-'+String(m).padStart(2,'0'); if(p.monthly[nk]) return p; const mo={...p.monthly, [nk]:{units:0,views:0,unitsPpc:0,adCost:0,price:+p.price||0}}; if(!this.months.includes(nk)) this.months=[...this.months,nk]; return {...p,monthly:mo}; })}), ()=>this._persist()); }
   _deleteProduct(id){ this.setState(s=>({products:s.products.filter(p=>p.id!==id), productId:null, module:'produkte', deleteModal:null}), ()=>this._persist()); if(typeof window!=='undefined') window.scrollTo(0,0); }
   _addMonthYm(id, ym){ if(!ym) return; this.setState(s=>({products:s.products.map(p=>{ if(p.id!==id) return p; if(p.monthly[ym]) return p; const mo={...p.monthly,[ym]:{units:0,views:0,unitsPpc:0,adCost:0,price:+p.price||0}}; if(!this.months.includes(ym)){ this.months=[...this.months,ym].sort(); } return {...p,monthly:mo}; }), detailAddYm:''}), ()=>this._persist()); }
@@ -1390,7 +1624,14 @@ class Component extends DCLogic {
   _removeIdea(id){ this.setState(s=>({ideas:s.ideas.filter(i=>i.id!==id)}), ()=>this._persist()); }
   _openAbgleich(p){ this.setState({stockModal:{productId:p.id, value:String(Math.max(0,Math.round(this._stockOf(p))))}}); }
   _saveAbgleich(){ const sm=this.state.stockModal; if(!sm) return; const v=Math.max(0,Math.round(+sm.value||0)); const iso=this._todayISO(); this.setState(s=>({products:s.products.map(p=> p.id===sm.productId?{...p,stockRef:{value:v,date:iso}}:p), stockModal:null}), ()=>this._persist()); }
-  _setPreset(preset){ const dr=this._dataRange(); const y=this._curYm().slice(0,4); let from,to; if(preset==='last30'){ from=this._curYm(); to=this._curYm(); } else if(preset==='thisYear'){ from=y+'-01'; to=y+'-12'; } else if(preset==='lastYear'){ const py=(+y-1); from=py+'-01'; to=py+'-12'; } else { preset='gesamt'; from=dr.min; to=dr.max; } this.setState({period:{preset,from,to}}); }
+  _shiftYm(ym,delta){ let [y,m]=ym.split('-').map(Number); const d=new Date(y,(m-1)+delta,1); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
+  _setPreset(preset){ const dr=this._dataRange(); const cur=this._curYm(); const y=cur.slice(0,4); let from,to;
+    if(preset==='thisMonth'){ from=cur; to=cur; }
+    else if(preset==='lastMonth'){ const lm=this._shiftYm(cur,-1); from=lm; to=lm; }
+    else if(preset==='thisYear'){ from=y+'-01'; to=cur; }
+    else if(preset==='lastYear'){ const py=(+y-1); from=py+'-01'; to=py+'-12'; }
+    else { preset='gesamt'; from=dr.min; to=dr.max; }
+    this.setState({period:{preset,from,to}}); }
   _scenDefaults(p){ const d=this.derive(p); const dm=this.months.filter(ym=>p.monthly[ym]).length||1; const avg=Math.max(0,Math.round(d.units/12)); return {productId:p.id, price:+(+p.price).toFixed(2), adSpend:Math.round(d.adSpend/dm), units:avg, prodCost:+(+p.productionCost).toFixed(2)}; }
 
   _recommendations(){
@@ -1444,6 +1685,16 @@ class Component extends DCLogic {
           reason:`Conversion ${P(d.conversion*100)} % im roten Bereich bei ${this._num(d.views)} Klicks.`,
           action:'Listing prüfen — Hauptbild, Titel, Preis und A+ Content testen.'});
       }
+      // Keyword-Aktualität (aus Ampel)
+      if(p.keywordRating==='red'){
+        recs.push({key:p.id+':kw', productId:p.id, productName:nm, area:'Keywords', priority:'wichtig', sev:0.5,
+          reason:'Keyword-Ampel steht auf Rot — die hinterlegten Keywords sind veraltet.',
+          action:'Keyword-Recherche auffrischen (Suchbegriffe, Backend-Keywords, Titel) und Listing aktualisieren.'});
+      } else if(p.keywordRating==='yellow'){
+        recs.push({key:p.id+':kw', productId:p.id, productName:nm, area:'Keywords', priority:'hinweis', sev:0.2,
+          reason:'Keyword-Ampel steht auf Gelb — Keywords teilweise veraltet.',
+          action:'Bei Gelegenheit Keyword-Recherche prüfen und Backend-Keywords ergänzen.'});
+      }
       // Marge
       if(d.marginPct>0 && d.marginPct<0.20){
         recs.push({key:p.id+':margin', productId:p.id, productName:nm, area:'Marge', priority:'wichtig', sev:0.20-d.marginPct,
@@ -1468,8 +1719,389 @@ class Component extends DCLogic {
     recs.sort((a,b)=> (order[a.priority]-order[b.priority]) || (b.sev-a.sev) || a.productName.localeCompare(b.productName));
     return recs;
   }
+  // Smarter Zielvorschlag: kombiniert jüngsten Trend (Ø letzte bis zu 3 abgeschlossene Monate)
+  // mit dem Vorjahresmonat (Saisonalität), falls vorhanden. Wachstum wird auf ein plausibles
+  // Band begrenzt (-15% .. +30%), damit einzelne Ausreißer keine absurden Vorschläge erzeugen.
+  _suggestTarget(p, targetYm){
+    const priorYm = this._shiftYm(targetYm,-1);
+    const dataMonths = this.months.filter(ym=> ym<targetYm && p.monthly[ym]).sort();
+    if(!dataMonths.length) return null;
+    const last = dataMonths.slice(-3);
+    const lastUnits = last.map(ym=>+p.monthly[ym].units||0);
+    const avg3 = lastUnits.reduce((a,b)=>a+b,0)/lastUnits.length;
+    const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
+
+    // Trend: Ø der Monat-zu-Monat-Wachstumsraten der letzten Datenpunkte
+    let trendGrowth=null;
+    if(last.length>=2){
+      const steps=[];
+      for(let i=1;i<last.length;i++){ const prev=lastUnits[i-1], cur=lastUnits[i]; if(prev>0) steps.push(clamp((cur-prev)/prev,-0.5,0.5)); }
+      if(steps.length) trendGrowth = steps.reduce((a,b)=>a+b,0)/steps.length;
+    }
+    // Saisonalität: Wachstum des letzten abgeschlossenen Monats ggü. demselben Monat im Vorjahr
+    let yoyGrowth=null;
+    const priorLY=this._shiftYm(priorYm,-12);
+    if(p.monthly[priorLY] && p.monthly[priorYm]){
+      const a=+p.monthly[priorLY].units||0, b=+p.monthly[priorYm].units||0;
+      if(a>0) yoyGrowth=clamp((b-a)/a,-0.5,0.5);
+    }
+    let growth, basisLabel;
+    if(trendGrowth!=null && yoyGrowth!=null){ growth=(trendGrowth+yoyGrowth)/2; basisLabel='Trend &amp; Vorjahresmonat'; }
+    else if(trendGrowth!=null){ growth=trendGrowth; basisLabel='Trend letzte '+last.length+' Monate'; }
+    else if(yoyGrowth!=null){ growth=yoyGrowth; basisLabel='Vorjahresmonat'; }
+    else { growth=0.05; basisLabel='Basiswachstum (wenig Daten)'; }
+    growth=clamp(growth,-0.15,0.30);
+    const base = avg3>0?avg3:lastUnits[lastUnits.length-1];
+    const value = Math.max(0, Math.round(base*(1+growth)));
+    return { value, growthPct:growth*100, basisLabel, baseUnits:Math.round(base), monthsUsed:last.length };
+  }
   _dismissRec(key,mode){ this.setState(s=>({recDismissed:{...s.recDismissed,[key]:mode}}), ()=>this._persist()); }
   _restoreRecs(){ this.setState({recDismissed:{}}, ()=>this._persist()); }
+
+  // ---------- Berichte / PDF ----------
+  _esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  _openPrintWindow(title, inner){
+    const w = window.open('', '_blank');
+    if(!w){ alert('Bitte Pop-ups für diese Seite erlauben – der Bericht öffnet sich in einem neuen Fenster und kann dort über „Drucken → Als PDF speichern" gesichert werden.'); return; }
+    const css = `
+      *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      @page{size:A4;margin:16mm 14mm}
+      html,body{margin:0;padding:0}
+      body{font-family:'IBM Plex Sans',-apple-system,Segoe UI,Roboto,sans-serif;color:#0A0A0A;font-size:11.5px;line-height:1.5}
+      h1,h2,h3,.arch{font-family:'Archivo','IBM Plex Sans',sans-serif}
+      .head{display:flex;align-items:flex-end;justify-content:space-between;border-bottom:3px solid #0A0A0A;padding-bottom:12px;margin-bottom:22px}
+      .brand{display:flex;align-items:center;gap:9px}
+      .brand .sq{width:14px;height:14px;background:#FF5A00}
+      .brand .nm{font-family:'Archivo';font-weight:800;font-size:15px;letter-spacing:.02em}
+      .brand .sub{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#9A9A96;margin-top:1px}
+      .rtitle{font-family:'Archivo';font-weight:800;font-size:22px;letter-spacing:-.01em;margin:2px 0 0}
+      .rmeta{text-align:right;font-size:10px;color:#8A8A86}
+      h2.sec{font-family:'Archivo';font-weight:800;font-size:14px;margin:26px 0 9px;padding-bottom:5px;border-bottom:1px solid #E4E4E0}
+      table{width:100%;border-collapse:collapse;margin-top:6px}
+      th{font-size:8.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#8A8A86;text-align:right;padding:6px 7px;border-bottom:1.5px solid #0A0A0A}
+      th:first-child{text-align:left}
+      td{font-size:10.5px;padding:5px 7px;text-align:right;border-bottom:1px solid #EFEFEC;font-variant-numeric:tabular-nums}
+      td:first-child{text-align:left;font-weight:600}
+      tfoot td{border-top:1.5px solid #0A0A0A;border-bottom:none;font-weight:700;font-size:10.5px}
+      .kpigrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#E4E4E0;border:1px solid #E4E4E0;margin-top:6px}
+      .kpi{background:#fff;padding:11px 12px}
+      .kpi .l{font-size:8.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96}
+      .kpi .v{font-family:'Archivo';font-weight:800;font-size:19px;margin-top:5px;font-variant-numeric:tabular-nums}
+      .kpi .d{font-size:9px;margin-top:3px}
+      .up{color:#1B7F4B}.down{color:#D42E12}.mut{color:#8A8A86}
+      .prodblock{margin-bottom:16px;break-inside:avoid}
+      .prodhd{display:flex;justify-content:space-between;align-items:baseline;border-left:3px solid #FF5A00;padding-left:9px;margin-bottom:2px}
+      .prodhd .pn{font-family:'Archivo';font-weight:700;font-size:13px}
+      .prodhd .pa{font-size:9.5px;color:#9A9A96}
+      .rec{break-inside:avoid;border:1px solid #E4E4E0;border-left:4px solid #9A9A96;padding:9px 12px;margin-top:8px}
+      .rec.kritisch{border-left-color:#D42E12}.rec.wichtig{border-left-color:#D8930A}.rec.hinweis{border-left-color:#1B7F4B}
+      .rec .rh{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+      .rec .rt{font-weight:700;font-size:11.5px}
+      .rec .bad{font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;color:#fff;white-space:nowrap}
+      .bad.kritisch{background:#D42E12}.bad.wichtig{background:#D8930A}.bad.hinweis{background:#1B7F4B}
+      .rec .rr{color:#3A3A36;margin-top:3px}
+      .rec .ra{margin-top:4px;font-size:10.5px}.rec .ra b{color:#0A0A0A}
+      .note{font-size:10px;color:#8A8A86;margin-top:6px;line-height:1.5}
+      .foot{margin-top:26px;padding-top:8px;border-top:1px solid #E4E4E0;font-size:8.5px;color:#B0B0AC;display:flex;justify-content:space-between}
+      @media print{.noprint{display:none}}
+      .printbar{position:fixed;top:0;left:0;right:0;background:#0A0A0A;color:#fff;padding:9px 16px;display:flex;justify-content:space-between;align-items:center;font-family:'IBM Plex Sans',sans-serif;font-size:12px;z-index:99}
+      .printbar button{font:inherit;font-weight:600;background:#FF5A00;color:#fff;border:none;padding:7px 15px;cursor:pointer}
+      .wrap{max-width:190mm;margin:0 auto}
+      body{padding-top:0}
+    `;
+    const bar = '<div class="printbar noprint"><span>Bericht bereit · über „Als PDF speichern" im Druckdialog sichern</span><button onclick="window.print()">Als PDF speichern / Drucken</button></div>';
+    const doc = '<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><title>'+this._esc(title)+'</title>'+
+      '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'+
+      '<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">'+
+      '<style>'+css+'</style></head><body>'+bar+'<div class="wrap" style="padding-top:52px">'+inner+'</div></body></html>';
+    w.document.open(); w.document.write(doc); w.document.close(); w.focus();
+    setTimeout(()=>{ try{ w.print(); }catch(e){} }, 650);
+  }
+  _reportHead(title, sub){
+    return '<div class="head"><div class="brand"><div class="sq"></div><div><div class="nm">PARTY PEAK</div><div class="sub">Amazon FBA Control</div></div></div>'+
+      '<div style="flex:1;text-align:center;padding:0 16px"><div class="rtitle">'+this._esc(title)+'</div></div>'+
+      '<div class="rmeta">'+this._esc(sub||'')+'<br>Erstellt '+this._esc(this._fmtDate(this._todayISO()))+'</div></div>';
+  }
+  _reportFoot(){
+    return '<div class="foot"><span>Party Peak · Roth &amp; Dickel GbR · vertraulich</span><span>Alle Werte aus dem Party-Peak-Dashboard · '+this._esc(this._fmtDate(this._todayISO()))+'</span></div>';
+  }
+  _reportProductData(){
+    const prods=this.state.products;
+    let body=this._reportHead('Produktdaten-Export', prods.length+' Produkte');
+    body+='<div class="note">Übersicht aller im Dashboard erfassten Monatswerte je Produkt – als Sicherungskopie und Nachweis der eingetragenen Daten.</div>';
+    if(!prods.length){ body+='<h2 class="sec">Keine Produkte erfasst</h2>'; }
+    prods.forEach(p=>{
+      const months=this.months.filter(ym=>p.monthly[ym]).sort();
+      const d=this.derive(p);
+      body+='<div class="prodblock"><div class="prodhd"><span class="pn">'+this._esc(p.name)+'</span><span class="pa">'+this._esc(p.asin||'—')+' · '+this._esc(p.dims||'')+'</span></div>';
+      body+='<div class="note" style="margin:2px 0 0">Aktueller Preis '+this._eur(p.price,2)+' · Produktion '+this._eur(p.productionCost,2)+' · FBA '+this._eur(p.fbaFee,2)+' · Versand '+this._eur(p.shipping,2)+' · Bestand '+this._num(this._stockOf(p))+' Stk</div>';
+      if(!months.length){ body+='<div class="note">Noch keine Monatswerte erfasst.</div></div>'; return; }
+      let tU=0,tR=0,tPpc=0,tAd=0,tV=0;
+      let rows='';
+      months.forEach(ym=>{ const m=p.monthly[ym]; const un=+m.units||0; const pr=this._monthPrice(p,m); const ppc=+m.unitsPpc||0; const ad=+m.adCost||0; const vw=+m.views||0; const tgt=+((p.targets||{})[ym]||0); const rev=un*pr;
+        tU+=un; tR+=rev; tPpc+=ppc; tAd+=ad; tV+=vw;
+        rows+='<tr><td>'+this._esc(this._mlabel(ym))+'</td><td>'+this._num(un)+'</td><td>'+this._eur(pr,2)+'</td><td>'+this._eur(rev)+'</td><td>'+this._num(ppc)+'</td><td>'+this._eur(ad,2)+'</td><td>'+this._num(vw)+'</td><td>'+(tgt>0?this._num(tgt):'—')+'</td></tr>';
+      });
+      body+='<table><thead><tr><th>Monat</th><th>Verkäufe</th><th>Preis</th><th>Umsatz</th><th>PPC-Stk</th><th>Werbek.</th><th>Aufrufe</th><th>Ziel</th></tr></thead>'+
+        '<tbody>'+rows+'</tbody>'+
+        '<tfoot><tr><td>Summe</td><td>'+this._num(tU)+'</td><td>—</td><td>'+this._eur(tR)+'</td><td>'+this._num(tPpc)+'</td><td>'+this._eur(tAd,2)+'</td><td>'+this._num(tV)+'</td><td>—</td></tr></tfoot></table></div>';
+    });
+    body+=this._reportFoot();
+    this._openPrintWindow('Party Peak · Produktdaten-Export', body);
+  }
+  _reportBusiness(ym){
+    ym = ym || this._curYm();
+    const prev=this._shiftYm(ym,-1);
+    const a=this.aggregate(ym,ym), b=this.aggregate(prev,prev);
+    const delta=(cur,prv)=>{ if(!(prv>0)) return {txt:'kein Vergleichswert', cls:'mut'}; const dp=(cur-prv)/prv*100; return {txt:(dp>=0?'▲ +':'▼ ')+this._pct(Math.abs(dp),1)+' ggü. Vormonat', cls:dp>=0?'up':'down'}; };
+    const dRev=delta(a.revenue,b.revenue), dUn=delta(a.units,b.units), dPr=delta(a.estProfit,b.estProfit);
+    let body=this._reportHead('Monatlicher Geschäftsbericht', this._mlabel(ym));
+    body+='<div class="note">Zusammenfassung der wichtigsten Kennzahlen für <b>'+this._esc(this._mlabel(ym))+'</b> im Vergleich zum Vormonat ('+this._esc(this._mlabel(prev))+'), mit abgeleiteten Handlungsempfehlungen.</div>';
+    // KPI-Block 1
+    body+='<h2 class="sec">Kennzahlen im Überblick</h2>';
+    body+='<div class="kpigrid">'+
+      '<div class="kpi"><div class="l">Umsatz</div><div class="v">'+this._eur(a.revenue)+'</div><div class="d '+dRev.cls+'">'+dRev.txt+'</div></div>'+
+      '<div class="kpi"><div class="l">Verkaufte Einheiten</div><div class="v">'+this._num(a.units)+'</div><div class="d '+dUn.cls+'">'+dUn.txt+'</div></div>'+
+      '<div class="kpi"><div class="l">Geschätzter Gewinn</div><div class="v">'+this._eur(a.estProfit)+'</div><div class="d '+dPr.cls+'">'+dPr.txt+'</div></div>'+
+      '<div class="kpi"><div class="l">Ø Marge</div><div class="v">'+this._pct(a.avgMargin*100)+'</div><div class="d mut">gewichtet</div></div>'+
+      '</div>';
+    body+='<div class="kpigrid" style="margin-top:1px">'+
+      '<div class="kpi"><div class="l">Werbeausgaben</div><div class="v">'+this._eur(a.ad)+'</div><div class="d mut">im Monat</div></div>'+
+      '<div class="kpi"><div class="l">Gesamt-ACOS</div><div class="v">'+(a.ad>0?this._pct(a.acos*100):'—')+'</div><div class="d mut">Werbek. ÷ PPC-Umsatz</div></div>'+
+      '<div class="kpi"><div class="l">Ø Conversion</div><div class="v">'+(a.views>0?this._pct(a.conversion*100):'—')+'</div><div class="d mut">Käufe ÷ Aufrufe</div></div>'+
+      '<div class="kpi"><div class="l">Organik-Quote</div><div class="v">'+(a.units>0?this._pct(a.organicRate*100,0):'—')+'</div><div class="d mut">Anteil ohne Werbung</div></div>'+
+      '</div>';
+    // Produkt-Tabelle für den Monat
+    body+='<h2 class="sec">Produkt-Performance · '+this._esc(this._mlabel(ym))+'</h2>';
+    const prows=this.state.products.map(p=>({p, d:this.derive(p,ym,ym)})).filter(x=>x.d.units>0 || x.d.revenue>0).sort((x,y)=>y.d.revenue-x.d.revenue);
+    if(prows.length){
+      let rows='';
+      prows.forEach(({p,d})=>{ rows+='<tr><td>'+this._esc(p.name)+'</td><td>'+this._num(d.units)+'</td><td>'+this._eur(d.revenue)+'</td><td>'+this._pct(d.marginPct*100,0)+'</td><td>'+(d.views>0?this._pct(d.conversion*100):'—')+'</td><td>'+(d.ppcRevenue>0?this._pct(d.actualAcos):'—')+'</td></tr>'; });
+      body+='<table><thead><tr><th>Produkt</th><th>Einheiten</th><th>Umsatz</th><th>Marge</th><th>Conv.</th><th>ACOS</th></tr></thead><tbody>'+rows+'</tbody>'+
+        '<tfoot><tr><td>Gesamt</td><td>'+this._num(a.units)+'</td><td>'+this._eur(a.revenue)+'</td><td>'+this._pct(a.avgMargin*100,0)+'</td><td>'+(a.views>0?this._pct(a.conversion*100):'—')+'</td><td>'+(a.ad>0?this._pct(a.acos*100):'—')+'</td></tr></tfoot></table>';
+    } else {
+      body+='<div class="note">Für '+this._esc(this._mlabel(ym))+' sind keine Verkäufe erfasst.</div>';
+    }
+    // Handlungsempfehlungen
+    body+='<h2 class="sec">Handlungsempfehlungen</h2>';
+    const recs=this._recommendations();
+    if(recs.length){
+      const top=recs.slice(0,10);
+      top.forEach(r=>{ body+='<div class="rec '+r.priority+'"><div class="rh"><span class="rt">'+this._esc(r.productName)+' · '+this._esc(r.area)+'</span><span class="bad '+r.priority+'">'+this._esc(r.priority)+'</span></div>'+
+        '<div class="rr">'+this._esc(r.reason)+'</div><div class="ra"><b>Empfehlung:</b> '+this._esc(r.action)+'</div></div>'; });
+      const nk=recs.filter(r=>r.priority==='kritisch').length, nw=recs.filter(r=>r.priority==='wichtig').length;
+      body+='<div class="note" style="margin-top:10px"><b>Fazit:</b> '+ (nk>0?(nk+' kritische'):'Keine kritischen') +' und '+nw+' wichtige Punkte offen'+(recs.length>10?(' (Top 10 von '+recs.length+' angezeigt)'):'')+'. Kritische Punkte zuerst abarbeiten.</div>';
+    } else {
+      body+='<div class="rec hinweis"><div class="rt">Keine akuten Handlungsempfehlungen</div><div class="rr">Alle überwachten Kennzahlen liegen im grünen Bereich. Sortiment stabil weiterführen.</div></div>';
+    }
+    body+=this._reportFoot();
+    this._openPrintWindow('Party Peak · Geschäftsbericht '+this._mlabel(ym), body);
+  }
+
+  // ---------- Buero-Szene: Pixel-Art mit Tiefe (Stardew-Stil) ----------
+  _px(rows, pal, s, keyp){
+    const E=React.createElement, out=[];
+    rows.forEach((row,ry)=>{ let x=0;
+      while(x<row.length){ const ch=row[x];
+        if(ch==='.'){ x++; continue; }
+        let x2=x+1; while(x2<row.length && row[x2]===ch) x2++;
+        const col=pal[ch];
+        if(col) out.push(E('rect',{key:(keyp||'')+ry+'_'+x, x:x*s, y:ry*s, width:(x2-x)*s, height:s, fill:col}));
+        x=x2; } });
+    return out;
+  }
+  // Figur (12x15 Pixel, x4 => 48x60px). walk=false: fester Arbeitsplatz (keine Lauf-Frames).
+  _bChar(cfg){
+    const E=React.createElement, S=4;
+    const pal={ k:cfg.hair||'#4A3220', f:'#F2D3A7', E:'#2B1B0E', T:'#16130F', O:'#FF5A00', P:'#3B3B36', S:'#16130F', W:'#FFFFFF', A:'#16130F', y:'#E9C46A', C:'#6E6C66', ...(cfg.pal||{}) };
+    const upper=[
+      "....kkkk....",
+      "...kkkkkk...",
+      "...ffffff...",
+      "...fEffEf...",
+      "...ffffff...",
+      "....ffff....",
+      "..TTTTTTTT..",
+      ".TTTTOOTTTT.",
+      ".TTTTOOTTTT.",
+      ".fTTTTTTTTf.",
+      "..TTTTTTTT.."];
+    const legsA=[
+      "..PPP..PPP..",
+      "..PPP..PPP..",
+      "..PPP..PPP..",
+      "..SSS..SSS.."];
+    const legsB=[
+      "..PPP..PPP..",
+      "..PPP..PPP..",
+      ".SSS...PPP..",
+      "........SSS."];
+    const ov=(cfg.overlays||[]).map((o,i)=> E('g',{key:'ov'+i, transform:'translate('+(o.x||0)*S+','+(o.y||0)*S+')'}, this._px(o.rows, pal, S, 'o'+i)));
+    const held=(cfg.held||[]).map((h,i)=> E('g',{key:'hd'+i, transform:'translate('+(h.x||0)*S+','+(h.y||0)*S+')'}, this._px(h.rows, pal, S, 'h'+i)));
+    const legs = cfg.walk===false
+      ? E('g',{key:'lst',transform:'translate(0,'+11*S+')'}, this._px(legsA,pal,S,'ls'))
+      : [ E('g',{key:'lf1',className:'pp-f1'}, E('g',{transform:'translate(0,'+11*S+')'}, this._px(legsA,pal,S,'la'))),
+          E('g',{key:'lf2',className:'pp-f2'}, E('g',{transform:'translate(0,'+11*S+')'}, this._px(legsB,pal,S,'lb'))) ];
+    return E('g',{transform:'translate(-24,-60)'},
+      E('rect',{key:'shdw',x:5,y:57,width:38,height:6,fill:'#16130F',opacity:0.16}),
+      legs, this._px(upper,pal,S,'u'), ov, held,
+      E('text',{x:24,y:60+13,textAnchor:'middle',fontSize:10,fontWeight:800,fill:'#8A8A86',fontFamily:'Archivo',letterSpacing:'.08em'},(cfg.name||'').toUpperCase()));
+  }
+  _bBubble(lines, color, cls){
+    const E=React.createElement;
+    const w=Math.max(150, 20+Math.max(...lines.map(l=>l.length))*6.4), h=lines.length*15+16;
+    const x=-w/2, y=-72-h;
+    return E('g',{className:cls, style:{opacity:0}},
+      E('rect',{x:x+3,y:y+3,width:w,height:h,fill:'#16130F',opacity:0.14}),
+      E('rect',{x,y,width:w,height:h,fill:'#fff',stroke:'#16130F',strokeWidth:2}),
+      E('path',{d:'M -6 '+(y+h)+' L 7 '+(y+h)+' L 0 '+(y+h+9)+' Z',fill:'#fff',stroke:'#16130F',strokeWidth:2}),
+      E('rect',{x:x-0,y:y,width:5,height:h,fill:color}),
+      lines.map((l,i)=>E('text',{key:i,x:x+13,y:y+18+i*15,fontSize:11.5,fill:'#16130F',fontFamily:'IBM Plex Sans',fontWeight:i===0?600:400},l))
+    );
+  }
+  _bSplit(txt, max){ max=max||38; const out=[]; let t=String(txt);
+    while(t.length>max && out.length<2){ let cut=t.lastIndexOf(' ',max); if(cut<12) cut=max; out.push(t.slice(0,cut)); t=t.slice(cut).replace(/^ /,''); }
+    out.push(t.length>max ? t.slice(0,max-1)+'…' : t);
+    return out; }
+  _officeScene(b){
+    const E=React.createElement, ink='#16130F', orange='#FF5A00';
+    const S=4;
+    const shadow=(x,y,w,op)=>E('rect',{key:'sd'+x+'_'+y,x,y,width:w,height:8,fill:ink,opacity:op||0.13});
+    const plant=(x,y)=>E('g',{key:'pl'+x+'_'+y,transform:'translate('+x+','+y+')'}, shadow(-2,24,34,0.12), this._px([
+      "..gGg..","gGGGGg.",".gGGg..","..GG...",".bbbb..",".bBBb.."],{g:'#7BAF5A',G:'#4E8A3C',b:'#8A5B34',B:'#6B4426'},S,'p'));
+    // Kiste mit Top-Highlight + Seiten-Schatten (Tiefe)
+    const crate=(x,y,dark)=>E('g',{key:'cr'+x+'_'+y,transform:'translate('+x+','+y+')'},
+      this._px(["HHHHHH","BooooB","BooooB","BBBBBB"], dark?{H:'#3B3B36',B:ink,o:orange}:{H:'#C89A5F',B:'#B5793F',o:'#8A5B34'},S,'c'),
+      E('rect',{x:5*S,y:S,width:S,height:3*S,fill:ink,opacity:0.28}),
+      shadow(0,16,26,0.15));
+    const pallet=(x,y)=>E('g',{key:'pa'+x+'_'+y,transform:'translate('+x+','+y+')'}, this._px([
+      "wwwwwwwww",".d..d..d."],{w:'#C08A4E',d:'#8A5B34'},S,'pl'), shadow(0,9,38,0.12));
+    // Schreibtisch: Platte hell, Frontpaneel dunkler, Schatten
+    const desk=(x,y)=>E('g',{key:'dk'+x+'_'+y,transform:'translate('+x+','+y+')'},
+      this._px(["hhhhhhhhhhhhh","ddddddddddddd","FFFFFFFFFFFFF","l..........l"],{h:'#C89A5F',d:'#B5793F',F:'#8A5B34',l:'#5A3D20'},S,'d'),
+      shadow(0,17,54,0.14),
+      this._px(["..mmmm...","..mssm...","..mmmm...","....t....","..kkkkk.."],{m:ink,s:'#9FD3FF',t:'#6E6C66',k:'#3B3B36'},S,'mn'));
+    // Regal: Top-Fläche hell, Rahmen, Frontkante dunkel, Bodenschatten
+    const shelfRow=(x,y,cols)=>{ const w=cols*46+10;
+      const kids=[
+        E('rect',{key:'top',x:0,y:-8,width:w,height:8,fill:'#A7A59D'}),
+        E('rect',{key:'fr',x:0,y:0,width:w,height:60,fill:'#8F8D85'}),
+        E('rect',{key:'in',x:4,y:4,width:w-8,height:52,fill:'#DCD9D0'}),
+        E('rect',{key:'mid',x:4,y:29,width:w-8,height:4,fill:'#8F8D85'}),
+        E('rect',{key:'edge',x:0,y:60,width:w,height:6,fill:'#6E6C66'}),
+        shadow(0,66,w,0.16)];
+      for(let i=0;i<cols;i++){ kids.push(E('g',{key:'b'+i,transform:'translate('+(10+i*46)+',7)'},this._px(["HHHHHH","BooooB","BBBBBB"],{H:'#3B3B36',B:ink,o:orange},3.4,'x'))); if(i%2===0) kids.push(E('g',{key:'b2'+i,transform:'translate('+(10+i*46)+',36)'},this._px(["HHHHHH","BooooB","BBBBBB"],{H:'#C89A5F',B:'#B5793F',o:'#8A5B34'},3.4,'y'))); }
+      return E('g',{key:'sh'+x+'_'+y,transform:'translate('+x+','+y+')'},kids); };
+    // Schachbrett-Fliesen im Lager (dezente Tiefe)
+    const checker=(()=>{ const l=[]; for(let r=0;r<17;r++) for(let c=0;c<19;c++) if((r+c)%2===0) l.push(E('rect',{key:'ck'+r+'_'+c,x:24+c*44,y:94+r*44,width:44,height:44,fill:'#D5D2C8',opacity:0.55})); return E('g',{key:'checker'},l); })();
+    const scene=[
+      E('rect',{key:'bg',x:0,y:0,width:1400,height:900,fill:'#FAFAF8'}),
+      E('rect',{key:'wall',x:24,y:24,width:1352,height:70,fill:'#B7B5AD'}),
+      E('rect',{key:'wtop',x:24,y:24,width:1352,height:8,fill:ink}),
+      E('rect',{key:'wbase',x:24,y:86,width:1352,height:8,fill:'#8F8D85'}),
+      E('rect',{key:'sign',x:560,y:36,width:280,height:44,fill:ink}),
+      E('rect',{key:'signsq',x:574,y:48,width:20,height:20,fill:orange}),
+      E('text',{key:'signtx',x:606,y:64,fontSize:20,fontWeight:800,fill:'#fff',fontFamily:'Archivo',letterSpacing:'.05em'},'PARTY PEAK HQ'),
+      E('g',{key:'win'},[960,1080,1200].map(wx=>E('g',{key:wx},E('rect',{x:wx,y:40,width:64,height:38,fill:'#BBD7E8',stroke:ink,strokeWidth:3}),E('rect',{x:wx,y:40,width:64,height:12,fill:'#DCEBF4'}),E('line',{x1:wx+32,x2:wx+32,y1:40,y2:78,stroke:ink,strokeWidth:3})))),
+      // Boeden
+      E('rect',{key:'wfloor',x:24,y:94,width:856,height:782,fill:'#DCD9D0'}),
+      checker,
+      E('g',{key:'wtiles'},(()=>{const l=[];for(let i=1;i<20;i++)l.push(E('line',{key:'v'+i,x1:24+i*44,x2:24+i*44,y1:94,y2:876,stroke:'#CFCCC2'}));for(let i=1;i<18;i++)l.push(E('line',{key:'h'+i,x1:24,x2:880,y1:94+i*44,y2:94+i*44,stroke:'#CFCCC2'}));return l;})()),
+      E('rect',{key:'ofloor',x:880,y:94,width:496,height:782,fill:'#D9A967'}),
+      E('g',{key:'planks'},(()=>{const l=[];for(let i=0;i<36;i++){const y=94+i*22;l.push(E('line',{key:'p'+i,x1:880,x2:1376,y1:y,y2:y,stroke:'#C08A4E'}));l.push(E('line',{key:'s'+i,x1:880+((i%3)*160)+80,x2:880+((i%3)*160)+80,y1:y,y2:y+22,stroke:'#C08A4E'}));}return l;})()),
+      // Ambient Occlusion: Raumtiefe an Waenden
+      E('rect',{key:'aoT',x:24,y:94,width:1352,height:16,fill:ink,opacity:0.09}),
+      E('rect',{key:'aoT2',x:24,y:110,width:1352,height:8,fill:ink,opacity:0.045}),
+      E('rect',{key:'aoL',x:32,y:94,width:12,height:782,fill:ink,opacity:0.05}),
+      E('rect',{key:'aoR',x:1356,y:94,width:12,height:782,fill:ink,opacity:0.05}),
+      E('rect',{key:'aoB',x:24,y:856,width:1352,height:12,fill:ink,opacity:0.05}),
+      E('line',{key:'div',x1:880,x2:880,y1:94,y2:876,stroke:ink,strokeWidth:3}),
+      E('rect',{key:'divsh',x:883,y:94,width:8,height:782,fill:ink,opacity:0.06}),
+      E('rect',{key:'wl',x:24,y:94,width:8,height:782,fill:'#8F8D85'}),
+      E('rect',{key:'wr',x:1368,y:94,width:8,height:782,fill:'#8F8D85'}),
+      E('rect',{key:'wb2',x:24,y:868,width:1352,height:8,fill:'#8F8D85'}),
+      // Rampe
+      E('rect',{key:'gate',x:24,y:330,width:10,height:180,fill:orange}),
+      E('g',{key:'haz'},(()=>{const l=[];for(let i=0;i<9;i++)l.push(E('rect',{key:i,x:38,y:334+i*20,width:14,height:10,fill:i%2?ink:orange}));return l;})()),
+      E('text',{key:'gtx',x:60,y:322,fontSize:11,fontWeight:800,letterSpacing:'.12em',fill:'#8F8D85',fontFamily:'Archivo'},'VERLADERAMPE'),
+      E('line',{key:'lane',x1:44,x2:300,y1:432,y2:432,stroke:'#B7B5AD',strokeWidth:3,strokeDasharray:'12,10'}),
+      // Packstation
+      pallet(288,470), crate(292,438,true), crate(322,438,true), crate(307,414,true),
+      E('rect',{key:'ptabh',x:280,y:488,width:110,height:6,fill:'#C89A5F'}),
+      E('rect',{key:'ptab',x:280,y:494,width:110,height:12,fill:'#B5793F'}),
+      shadow(280,506,110,0.14),
+      E('text',{key:'ptx',x:335,y:534,fontSize:11,fontWeight:800,letterSpacing:'.12em',fill:'#8F8D85',fontFamily:'Archivo',textAnchor:'middle'},'PACKSTATION'),
+      shelfRow(452,150,8), shelfRow(452,560,8),
+      E('text',{key:'ltx',x:640,y:132,fontSize:11,fontWeight:800,letterSpacing:'.12em',fill:'#8F8D85',fontFamily:'Archivo',textAnchor:'middle'},'LAGER'),
+      // Kontrollpunkt (Nils' fester Platz)
+      E('rect',{key:'ktabh',x:760,y:476,width:70,height:6,fill:'#C89A5F'}),
+      E('rect',{key:'ktab',x:760,y:482,width:70,height:12,fill:'#B5793F'}),
+      shadow(760,494,70,0.14),
+      E('g',{key:'kcl',transform:'translate(775,456)'},this._px(["wwww","woow","wwww","wwww"],{w:'#fff',o:orange},4,'kc')),
+      // Buero
+      E('text',{key:'btx',x:1128,y:132,fontSize:11,fontWeight:800,letterSpacing:'.12em',fill:'#B5793F',fontFamily:'Archivo',textAnchor:'middle'},'BÜRO'),
+      E('rect',{key:'rug',x:1090,y:560,width:230,height:150,fill:orange,opacity:0.16}),
+      E('rect',{key:'rugb',x:1090,y:560,width:230,height:150,fill:'none',stroke:orange,strokeWidth:3}),
+      desk(950,380), desk(1160,380), desk(1030,600),
+      E('rect',{key:'wb',x:1080,y:150,width:150,height:84,fill:'#fff',stroke:ink,strokeWidth:3}),
+      E('rect',{key:'wbsh',x:1083,y:234,width:150,height:6,fill:ink,opacity:0.10}),
+      E('path',{key:'wbl',d:'M 1094 218 L 1124 190 L 1148 202 L 1180 168 L 1212 178',fill:'none',stroke:orange,strokeWidth:3}),
+      E('line',{key:'wbx',x1:1094,x2:1216,y1:224,y2:224,stroke:'#B7B5AD',strokeWidth:2}),
+      E('rect',{key:'pin',x:912,y:150,width:110,height:74,fill:'#C08A4E',stroke:'#8A5B34',strokeWidth:3}),
+      E('rect',{key:'pinsh',x:915,y:224,width:110,height:6,fill:ink,opacity:0.10}),
+      E('rect',{key:'n1',x:924,y:162,width:18,height:18,fill:orange}),E('rect',{key:'n2',x:950,y:170,width:18,height:18,fill:'#fff'}),E('rect',{key:'n3',x:978,y:158,width:18,height:18,fill:'#E9C46A'}),E('rect',{key:'n4',x:938,y:194,width:18,height:18,fill:'#fff'}),E('rect',{key:'n5',x:970,y:196,width:18,height:18,fill:orange}),
+      E('g',{key:'flip',transform:'translate(1250,530)'},E('rect',{x:0,y:0,width:64,height:78,fill:'#fff',stroke:ink,strokeWidth:3}),E('path',{d:'M 8 60 L 24 40 L 38 48 L 56 26',fill:'none',stroke:ink,strokeWidth:2.5}),E('line',{x1:6,x2:-6,y1:78,y2:104,stroke:ink,strokeWidth:3}),E('line',{x1:58,x2:70,y1:78,y2:104,stroke:ink,strokeWidth:3}),shadow(-8,104,80,0.12)),
+      E('g',{key:'arc',transform:'translate(1290,700)'},[0,1].map(i=>E('g',{key:i,transform:'translate('+i*44+',0)'},E('rect',{x:0,y:-6,width:38,height:6,fill:'#A7A59D'}),E('rect',{x:0,y:0,width:38,height:88,fill:'#8F8D85',stroke:ink,strokeWidth:2.5}),[0,1,2].map(j=>E('rect',{key:j,x:5,y:6+j*28,width:28,height:20,fill:'#B7B5AD',stroke:ink,strokeWidth:1.5})),shadow(0,88,38,0.15)))),
+      plant(60,120), plant(892,120), plant(1330,120), plant(60,790), plant(900,790),
+      // Laster mit Dach-Highlight + mitfahrendem Schatten
+      E('g',{key:'truck',className:'pp-truck'},
+        E('g',{transform:'translate(70,350)'},
+          E('rect',{x:-50,y:96,width:250,height:10,fill:ink,opacity:0.14}),
+          E('rect',{x:0,y:-6,width:190,height:6,fill:'#3B3B36'}),
+          E('rect',{x:0,y:0,width:190,height:84,fill:ink}),
+          E('rect',{x:0,y:0,width:190,height:8,fill:'#3B3B36'}),
+          E('rect',{x:182,y:0,width:8,height:84,fill:'#000',opacity:0.35}),
+          E('rect',{x:8,y:64,width:174,height:6,fill:orange}),
+          E('text',{x:95,y:38,textAnchor:'middle',fontSize:17,fontWeight:800,fill:orange,fontFamily:'Archivo',letterSpacing:'.04em'},'PARTY PEAK'),
+          E('text',{x:95,y:56,textAnchor:'middle',fontSize:9,fontWeight:600,fill:'#fff',fontFamily:'IBM Plex Sans',letterSpacing:'.2em'},'LOGISTIK'),
+          E('rect',{x:-46,y:18,width:46,height:6,fill:'#3B3B36'}),
+          E('rect',{x:-46,y:24,width:46,height:60,fill:ink}),
+          E('rect',{x:-40,y:32,width:22,height:20,fill:'#BBD7E8',stroke:'#3B3B36',strokeWidth:2}),
+          E('rect',{x:-40,y:32,width:22,height:7,fill:'#DCEBF4'}),
+          E('rect',{x:-46,y:76,width:46,height:8,fill:orange}),
+          E('g',{transform:'translate(-24,84)'},E('circle',{cx:0,cy:8,r:13,fill:ink}),E('circle',{cx:0,cy:8,r:5,fill:'#8F8D85'})),
+          E('g',{transform:'translate(40,84)'},E('circle',{cx:0,cy:8,r:13,fill:ink}),E('circle',{cx:0,cy:8,r:5,fill:'#8F8D85'})),
+          E('g',{transform:'translate(150,84)'},E('circle',{cx:0,cy:8,r:13,fill:ink}),E('circle',{cx:0,cy:8,r:5,fill:'#8F8D85'})))),
+      // ---- Figuren: 3 Laeufer (Kevin, Tom, Sarah) + 5 feste Arbeitsplaetze ----
+      // Sprech-Slots: S1 Kevin+Roth · S2 Tom+Sarah · S3 Max+Lina · S4 Ben+Nils
+      E('g',{key:'kev',className:'pp-kev'},
+        this._bChar({name:'Kevin',hair:'#6B4A26',overlays:[{y:6,rows:["..OOOOOOOO.."]},{y:10,rows:["..OOOOOOOO.."]}]}),
+        E('g',{className:'pp-kev-box',style:{opacity:0},transform:'translate(-14,-78)'},this._px(["HHHHHHH","BoooooB","BBBBBBB"],{H:'#3B3B36',B:'#16130F',o:'#FF5A00'},4,'kb')),
+        this._bBubble(b.kevinLines,b.kevinColor,'pp-bub-s1')),
+      E('g',{key:'roth',transform:'translate(1128,255)'},
+        this._bChar({name:'Hr. Roth',hair:'#8F8D85',walk:false,overlays:[{y:6,rows:["....WWWW....",".....OO.....",".....OO.....",".....OO....."]}],held:[{x:10,y:-6,rows:["BBBBB","B.B.B","BBBBB","BBBBB"]}]}),
+        this._bBubble(b.rothLines,b.rothColor,'pp-bub-s1')),
+      E('g',{key:'tom',className:'pp-tom'},
+        this._bChar({name:'Tom',hair:'#2B1B0E',held:[{x:-6,y:-8,rows:["WWWW","WooW","WWWW","WWWW"]}]}),
+        this._bBubble(b.tomLines,b.tomColor,'pp-bub-s2')),
+      E('g',{key:'sarah',className:'pp-sarah'},
+        this._bChar({name:'Sarah',hair:'#E9C46A',overlays:[{y:0,rows:["...AAAA....."]},{y:2,rows:["..A......A.."]},{y:3,rows:["..A......A.."]}],held:[{x:9,y:-4,rows:["CCCCC","CCCCC","sssss"]}],pal:{s:'#9FD3FF'}}),
+        this._bBubble(b.sarahLines,b.sarahColor,'pp-bub-s2')),
+      E('g',{key:'max',transform:'translate(1226,632)'},
+        this._bChar({name:'Max',hair:'#16130F',walk:false,held:[{x:10,y:-7,rows:["O","O","O","O"]}]}),
+        this._bBubble(b.maxLines,b.maxColor,'pp-bub-s3')),
+      E('g',{key:'lina',transform:'translate(968,262)'},
+        this._bChar({name:'Lina',hair:'#C4552D',walk:false,overlays:[{y:2,rows:["..k......k..","..k......k..","..k......k.."]}],held:[{x:-6,y:-5,rows:["Oy","yO"]}]}),
+        this._bBubble(b.linaLines,b.linaColor,'pp-bub-s3')),
+      E('g',{key:'ben',transform:'translate(1252,795)'},
+        this._bChar({name:'Ben',hair:'#B7B5AD',walk:false,held:[{x:10,y:-5,rows:["CC","CC",".C","CC"]}]}),
+        this._bBubble(b.benLines,b.benColor,'pp-bub-s4')),
+      E('g',{key:'nils',transform:'translate(795,462)'},
+        this._bChar({name:'Nils',hair:'#3B3B36',walk:false,held:[{x:-7,y:-9,rows:[".CC.","C..C",".CC.","..C.","..C."]}]}),
+        this._bBubble(b.nilsLines,b.nilsColor,'pp-bub-s4'))
+    ];
+    return E('svg',{viewBox:'0 0 1400 900',style:{width:'100%',height:'auto',display:'block',shapeRendering:'crispEdges'}},scene);
+  }
 
   renderVals(){
     const st=this.state, mod=st.module, pid=st.productId;
@@ -1493,11 +2125,11 @@ class Component extends DCLogic {
     const V = {
       narrow:st.narrow, wide:!st.narrow,
       isCockpit: mod==='cockpit', isProdukteList: mod==='produkte' && !pid, isProdukteDetail: isDetail,
-      isLager: mod==='lager', isWerbung: mod==='werbung', isSzenarien: mod==='szenarien', isIdeen: mod==='ideen', isEmpfehlungen: mod==='empfehlungen',
+      isLager: mod==='lager', isWerbung: mod==='werbung', isSzenarien: mod==='szenarien', isIdeen: mod==='ideen', isEmpfehlungen: mod==='empfehlungen', isBerichte: mod==='berichte', isBuero: mod==='buero',
       goCockpit:()=>this._go('cockpit'), goProdukte:()=>this._go('produkte'), goLager:()=>this._go('lager'),
-      goWerbung:()=>this._go('werbung'), goSzenarien:()=>this._go('szenarien'), goIdeen:()=>this._go('ideen'), goEmpfehlungen:()=>this._go('empfehlungen'),
-      nav0:nv('cockpit'), nav1:nv('produkte'), nav2:nv('lager'), nav3:nv('werbung'), nav4:nv('szenarien'), nav5:nv('ideen'), nav6:nv('empfehlungen'),
-      tabStyle0:tb('cockpit'), tabStyle1:tb('produkte'), tabStyle2:tb('lager'), tabStyle3:tb('werbung'), tabStyle4:tb('szenarien'), tabStyle5:tb('ideen'), tabStyle6:tb('empfehlungen'),
+      goWerbung:()=>this._go('werbung'), goSzenarien:()=>this._go('szenarien'), goIdeen:()=>this._go('ideen'), goEmpfehlungen:()=>this._go('empfehlungen'), goBerichte:()=>this._go('berichte'), goBuero:()=>this._go('buero'),
+      nav0:nv('cockpit'), nav1:nv('produkte'), nav2:nv('lager'), nav3:nv('werbung'), nav4:nv('szenarien'), nav5:nv('ideen'), nav6:nv('empfehlungen'), nav7:nv('berichte'), nav8:nv('buero'),
+      tabStyle0:tb('cockpit'), tabStyle1:tb('produkte'), tabStyle2:tb('lager'), tabStyle3:tb('werbung'), tabStyle4:tb('szenarien'), tabStyle5:tb('ideen'), tabStyle6:tb('empfehlungen'), tabStyle7:tb('berichte'), tabStyle8:tb('buero'),
       productCount: st.products.length, dataStamp:'Juli 2026',
       periodLabel: this._mlabel(from)+' – '+this._mlabel(to), periodDays: this._num(this._rangeDays(from,to)),
       periodFrom: per.from, periodTo: per.to,
@@ -1507,35 +2139,63 @@ class Component extends DCLogic {
 
     // period presets + selects
     const presetStyle=(k)=> per.preset===k?'padding:7px 12px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12px;font-weight:600;cursor:pointer':'padding:7px 12px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12px;font-weight:500;cursor:pointer';
-    V.presetStyle0=presetStyle('last30'); V.presetStyle1=presetStyle('thisYear'); V.presetStyle2=presetStyle('lastYear'); V.presetStyle3=presetStyle('gesamt');
-    V.presetLast30=()=>this._setPreset('last30'); V.presetThisYear=()=>this._setPreset('thisYear'); V.presetLastYear=()=>this._setPreset('lastYear'); V.presetGesamt=()=>this._setPreset('gesamt');
+    V.presetStyle0=presetStyle('thisMonth'); V.presetStyle1=presetStyle('lastMonth'); V.presetStyle2=presetStyle('thisYear'); V.presetStyle3=presetStyle('lastYear'); V.presetStyle4=presetStyle('gesamt');
+    V.presetThisMonth=()=>this._setPreset('thisMonth'); V.presetLastMonth=()=>this._setPreset('lastMonth'); V.presetThisYear=()=>this._setPreset('thisYear'); V.presetLastYear=()=>this._setPreset('lastYear'); V.presetGesamt=()=>this._setPreset('gesamt');
     V.monthOptions=this.months.map(ym=>({ym, label:this._mlabel(ym)}));
     V.setPeriodFrom=(e)=>{ const v=e.target.value; this.setState(s=>({period:{...s.period, from:v, preset:'custom'}})); };
     V.setPeriodTo=(e)=>{ const v=e.target.value; this.setState(s=>({period:{...s.period, to:v, preset:'custom'}})); };
+    // Eingabe-Fokus: markiert aktives Tippen (blockt Realtime-Übernahme) + markiert 0 zum Überschreiben
+    V.editFocus=(e)=>{ this._editingActive=true; this._lastEditTs=Date.now(); try{ e.target.select(); }catch(_){} };
+    V.editBlur=(e)=>{ this._editingActive=false; this._lastEditTs=Date.now(); };
 
     // ---- Cockpit KPIs (period) ----
     const agg=this.aggregate(from,to);
     V.kpiRevenue=this._eur(agg.revenue); V.kpiUnits=this._num(agg.units); V.kpiMargin=this._pct(agg.avgMargin*100);
     V.kpiProfit=this._eur(agg.estProfit); V.kpiAdSpend=this._eur(agg.ad); V.kpiAcos=this._pct(agg.acos*100);
     V.kpiConversion=this._pct(agg.conversion*100); V.kpiContribution=this._eur(agg.contribution);
+    V.kpiOrganic = agg.units>0 ? this._pct(agg.organicRate*100,0) : '—';
     V.profitColor = agg.estProfit>=0?ink:red;
     V.acosColor = agg.acos*100 > agg.avgMargin*100 ? red : ink;
 
-    // period revenue delta (last two months in period)
-    const pmonths=this.months.filter(ym=>ym>=from&&ym<=to);
-    const revP=pmonths.map(ym=>{ let v=0; st.products.forEach(p=>{ const m=p.monthly[ym]; if(m) v+=(+m.units||0)*this._monthPrice(p,m); }); return v; });
-    const unitsP=pmonths.map(ym=>{ let v=0; st.products.forEach(p=>{ const m=p.monthly[ym]; if(m) v+=(+m.units||0); }); return v; });
-    const lr=revP[revP.length-1]||0, pr=revP[revP.length-2]||0; const rdp=pr>0?((lr-pr)/pr*100):0;
-    const lu=unitsP[unitsP.length-1]||0, pu=unitsP[unitsP.length-2]||0; const udp=pu>0?((lu-pu)/pu*100):0;
-    V.revDelta=(rdp>=0?'▲ +':'▼ ')+this._pct(Math.abs(rdp),1)+' ggü. Vormonat'; V.revDeltaColor=rdp>=0?green:red;
-    V.unitsDelta=(udp>=0?'▲ +':'▼ ')+this._pct(Math.abs(udp),1)+' ggü. Vormonat'; V.unitsDeltaColor=udp>=0?green:red;
+    // Vergleich: Monat -> Vormonat, Jahr (auch YTD) -> gleiche Spanne im Vorjahr, sonst -> Vorperiode
+    const monthSpan=(aY,bY)=>{ const [ay,am]=aY.split('-').map(Number); const [by,bm]=bY.split('-').map(Number); return (by-ay)*12+(bm-am)+1; };
+    const nMonths=Math.max(1, monthSpan(from,to));
+    const isYearPreset = (per.preset==='thisYear' || per.preset==='lastYear');
+    const sumWin=(mFrom,mTo)=>{ let r=0,u=0; let ym=mFrom; let guard=0; while(ym<=mTo && guard<600){ st.products.forEach(p=>{ const m=p.monthly[ym]; if(m){ r+=(+m.units||0)*this._monthPrice(p,m); u+=(+m.units||0); } }); ym=this._shiftYm(ym,1); guard++; } return {r,u}; };
+    const curWin=sumWin(from,to);
+    const prevFrom = isYearPreset ? this._shiftYm(from,-12) : this._shiftYm(from,-nMonths);
+    const prevTo   = isYearPreset ? this._shiftYm(to,-12)   : this._shiftYm(from,-1);
+    const prevWin=sumWin(prevFrom,prevTo);
+    const cmpLabel = isYearPreset ? 'ggü. Vorjahr' : (nMonths===1 ? 'ggü. Vormonat' : 'ggü. Vorperiode');
+    const rdp = prevWin.r>0 ? ((curWin.r-prevWin.r)/prevWin.r*100) : 0;
+    const udp = prevWin.u>0 ? ((curWin.u-prevWin.u)/prevWin.u*100) : 0;
+    V.revDelta   = prevWin.r>0 ? ((rdp>=0?'▲ +':'▼ ')+this._pct(Math.abs(rdp),1)+' '+cmpLabel) : '— kein Vergleichswert';
+    V.revDeltaColor   = prevWin.r>0 ? (rdp>=0?green:red) : '#8A8A86';
+    V.unitsDelta = prevWin.u>0 ? ((udp>=0?'▲ +':'▼ ')+this._pct(Math.abs(udp),1)+' '+cmpLabel) : '— kein Vergleichswert';
+    V.unitsDeltaColor = prevWin.u>0 ? (udp>=0?green:red) : '#8A8A86';
 
-    // revenue chart (own year)
+    // revenue chart (own year, optional Vorjahresvergleich)
     const chartSeries=this.yearRevenueSeries(st.chartYear);
     const peak=chartSeries.reduce((a,b)=>b.value>a.value?b:a,chartSeries[0]);
     V.chartYear=st.chartYear;
     V.peakMonth = peak && peak.value>0 ? (peak.label+' '+st.chartYear.slice(2)+' · '+this._eur(peak.value)) : '—';
-    V.revenueChartEl = this._lineChart(chartSeries,{unit:'€'});
+    V.chartYoyOn = !!st.chartYoy;
+    V.toggleChartYoy = ()=> this.setState({chartYoy: !st.chartYoy});
+    V.yoyToggleStyle = st.chartYoy ? 'padding:5px 12px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px' : 'padding:5px 12px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px';
+    if(st.chartYoy){
+      const prevYear=String(+st.chartYear-1);
+      const prevSeries=this.yearRevenueSeries(prevYear);
+      const curSum=chartSeries.reduce((s,m)=>s+m.value,0), prevSum=prevSeries.reduce((s,m)=>s+m.value,0);
+      V.yoyDeltaText = prevSum>0 ? ((curSum>=prevSum?'▲ +':'▼ ')+this._pct(Math.abs((curSum-prevSum)/prevSum*100),1)+' ggü. '+prevYear) : (curSum>0?'kein Vorjahreswert':'—');
+      V.yoyDeltaColor = prevSum>0 ? (curSum>=prevSum?green:red) : '#8A8A86';
+      V.revenueChartEl = this._lineChartMulti([
+        {label:st.chartYear, color:orange, fill:true, data:chartSeries},
+        {label:prevYear, color:'#B0B0AC', dashed:true, data:prevSeries}
+      ], {unit:'€'});
+    } else {
+      V.yoyDeltaText=''; V.yoyDeltaColor='#8A8A86';
+      V.revenueChartEl = this._lineChart(chartSeries,{unit:'€'});
+    }
     V.chartYears=['2025','2026','2027','2028','2029','2030'].map(y=>({ label:y, select:()=>this.setState({chartYear:y}), style:(y===st.chartYear?'padding:5px 10px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-feature-settings:\'tnum\' 1':'padding:5px 10px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12px;font-weight:500;cursor:pointer;font-feature-settings:\'tnum\' 1') }));
 
     // cockpit table (period)
@@ -1584,6 +2244,96 @@ class Component extends DCLogic {
     }; });
     V.openNewProduct=()=> this.setState({modalOpen:true, draft:this._blankDraft()});
 
+    // ---- Berichte ----
+    const repMonth = st.reportMonth || this._curYm();
+    V.repMonth = repMonth;
+    V.repMonthLabel = this._mlabel(repMonth);
+    V.repMonthOptions = (this.months.filter(ym=>ym<=this._curYm()).sort().reverse()).map(ym=>({ ym, label:this._mlabel(ym) }));
+    V.setRepMonth = (e)=>{ this.setState({reportMonth:e.target.value}); };
+    V.repProductCount = st.products.length;
+    V.genProductReport = ()=> this._reportProductData();
+    V.genBusinessReport = ()=> this._reportBusiness(this.state.reportMonth || this._curYm());
+
+    // ---- Buero (animierte Szene) ----
+    if(mod==='buero'){
+      const tick=st.bueroTick||0;
+      const bcy=this._curYm(), bprev=this._shiftYm(bcy,-1);
+      const bAgg=this.aggregate(bcy,bcy), bPrev=this.aggregate(bprev,bprev);
+      // Kevin: Verkaufszahlen beim Verladen
+      const tgtSum=st.products.reduce((s,p)=>s+(+((p.targets||{})[bcy]||0)),0);
+      const boxNo=(tick%9)+1;
+      let kevinTxt, kevinColor;
+      if(tgtSum>0 && bAgg.units>=tgtSum){ kevinTxt='Läuft richtig gut — '+this._num(bAgg.units)+' Verkäufe diesen Monat! Kiste Nr. '+boxNo+' geht raus.'; kevinColor=green; }
+      else if(tgtSum>0 && bAgg.units<tgtSum*0.5){ kevinTxt='Erst '+this._num(bAgg.units)+' diesen Monat — ruhiger als sonst. Kiste Nr. '+boxNo+' ist verladen.'; kevinColor=yellow; }
+      else { kevinTxt=this._num(bAgg.units)+' Stück diesen Monat verkauft — Kiste Nr. '+boxNo+' geht raus!'; kevinColor=ink; }
+      // Herr Roth: Finanz-Rotation
+      const rd = bPrev.revenue>0 ? (bAgg.revenue-bPrev.revenue)/bPrev.revenue*100 : null;
+      const rdTxt = rd===null ? 'kein Vormonatswert' : ((rd>=0?'+':'')+this._pct(rd,1)+' ggü. Vormonat');
+      const rothMsgs=[
+        {t:'Umsatz diesen Monat: '+this._eur(bAgg.revenue)+' — '+rdTxt+'.', c: rd===null?ink:(rd>=0?green:red)},
+        {t:'Geschätzter Gewinn: '+this._eur(bAgg.estProfit)+', Marge '+this._pct(bAgg.avgMargin*100)+'.', c: bAgg.estProfit>=0?ink:red},
+        {t:'Werbung: '+this._eur(bAgg.ad)+' eingesetzt — ACOS '+(bAgg.ad>0?this._pct(bAgg.acos*100):'—')+', TACOS '+(bAgg.revenue>0?this._pct(bAgg.tacos*100,1):'—')+'.', c:ink},
+        {t:'Organik-Quote: '+(bAgg.units>0?this._pct(bAgg.organicRate*100,0):'—')+' der Verkäufe ohne Werbung.', c:green}
+      ];
+      const rm=rothMsgs[tick%rothMsgs.length];
+      // Tom: Empfehlungs-Rotation
+      const recs=this._recommendations();
+      let tomTxt, tomColor;
+      if(recs.length){ const r=recs[tick%recs.length];
+        tomTxt=r.productName+': '+r.action; tomColor = r.priority==='kritisch'?red : r.priority==='wichtig'?yellow : green;
+        if(tomTxt.length>95) tomTxt=tomTxt.slice(0,94)+'…'; }
+      else { tomTxt='Alles im grünen Bereich — keine akuten To-dos.'; tomColor=green; }
+      // Sarah: Werbung (global + je Produkt)
+      const sarahMsgs=[{t:'Werbung diesen Monat: '+this._eur(bAgg.ad)+' — TACOS '+(bAgg.revenue>0&&bAgg.ad>0?this._pct(bAgg.tacos*100,1):'—')+'.', c:ink}];
+      st.products.forEach(p=>{ const d=this.derive(p,bcy,bcy); if(d.adSpend>0){ const over=d.actualAcos>d.breakEvenAcos;
+        sarahMsgs.push({t:p.name+': ACOS '+this._pct(d.actualAcos)+' (Break-even '+this._pct(d.breakEvenAcos)+').', c:over?red:green}); } });
+      if(sarahMsgs.length===1) sarahMsgs.push({t:'Aktuell keine aktiven Kampagnen mit Ausgaben.', c:'#8A8A86'});
+      const sm=sarahMsgs[tick%sarahMsgs.length];
+      // Max: Szenarien
+      let maxTxt, maxColor;
+      const scn=st.scenario; const scnP=scn && st.products.find(x=>x.id===scn.productId);
+      if(scnP){ maxTxt='Simulation '+scnP.name+': Preis '+this._eur(scn.price,2)+' · '+this._num(scn.units)+' Stk/Monat · Werbung '+this._eur(scn.adSpend)+'.'; maxColor=ink; }
+      else { maxTxt='Noch keine Simulation eingestellt — Regler im Szenarien-Tab warten.'; maxColor='#8A8A86'; }
+      // Lina: Ideen-Board
+      const openIdeas=(st.ideas||[]).filter(i=> !(i.statuses||[]).includes('Verworfen'));
+      let linaTxt, linaColor;
+      if(openIdeas.length){ const idea=openIdeas[tick%openIdeas.length];
+        linaTxt='Idee: „'+idea.title+'" — Potenzial '+(+idea.potential||0)+' %, Priorität '+(idea.priority||'Mittel')+'.'; linaColor=orange; }
+      else { linaTxt='Das Ideen-Board ist leer — Zeit für ein Brainstorming!'; linaColor='#8A8A86'; }
+      // Ben: Berichte/Archiv
+      const benMsgs=[
+        {t:'Berichtsmonat '+this._mlabel(st.reportMonth||bcy)+': '+st.products.length+' Produkte dokumentiert.', c:ink},
+        {t:'Alle Monatswerte sind gesichert — PDF-Export im Berichte-Tab bereit.', c:green}
+      ];
+      const bm=benMsgs[tick%benMsgs.length];
+      // Nils: Qualitaet je Produkt
+      const rLabel=(r)=> r==='green'?'stark' : r==='yellow'?'okay' : r==='red'?'schwach' : 'offen';
+      const nilsMsgs=st.products.map(p=>({ t:p.name+': '+((+p.stars||0)>0?(+p.stars).toLocaleString('de-DE',{maximumFractionDigits:1})+'★':'noch keine Sterne')+' · Listing '+rLabel(p.listingRating)+' · Keywords '+rLabel(p.keywordRating)+'.',
+        c: (p.listingRating==='red'||p.aplusRating==='red'||p.keywordRating==='red')?red : (p.listingRating==='yellow'||p.aplusRating==='yellow'||p.keywordRating==='yellow')?yellow : green }));
+      if(!nilsMsgs.length) nilsMsgs.push({t:'Keine Produkte zum Prüfen angelegt.', c:'#8A8A86'});
+      const nm2=nilsMsgs[tick%nilsMsgs.length];
+      const buero={ kevinLines:this._bSplit(kevinTxt), kevinColor,
+        rothLines:this._bSplit(rm.t), rothColor:rm.c,
+        tomLines:this._bSplit(tomTxt), tomColor,
+        sarahLines:this._bSplit(sm.t), sarahColor:sm.c,
+        maxLines:this._bSplit(maxTxt), maxColor,
+        linaLines:this._bSplit(linaTxt), linaColor,
+        benLines:this._bSplit(bm.t), benColor:bm.c,
+        nilsLines:this._bSplit(nm2.t), nilsColor:nm2.c };
+      V.bueroSceneEl=this._officeScene(buero);
+      V.bueroMonthLabel=this._mlabel(bcy);
+      V.bueroTeam=[
+        {name:'Kevin', role:'Lager & Versand', desc:'Verlädt die Bestellungen in den Laster und meldet die Verkaufszahlen des Monats.', accent:orange},
+        {name:'Herr Roth', role:'Finanzen', desc:'Präsentiert am Whiteboard Umsatz, Gewinn, Marge, Werbekosten und Organik-Quote.', accent:ink},
+        {name:'Tom', role:'Empfehlungen', desc:'Läuft durch die ganze Halle und weist auf offene Handlungsempfehlungen hin.', accent:'#9A9A96'},
+        {name:'Sarah', role:'Werbung', desc:'Behält ACOS, TACOS und das Werbebudget im Blick — je Kampagne und gesamt.', accent:orange},
+        {name:'Max', role:'Szenarien', desc:'Steht am Flipchart und fasst die zuletzt eingestellte Simulation zusammen.', accent:ink},
+        {name:'Lina', role:'Ideen-Board', desc:'Pinnt an der Ideenwand — stellt offene Ideen samt Potenzial vor.', accent:orange},
+        {name:'Ben', role:'Berichte & Archiv', desc:'Hält die Dokumentation aktuell und erinnert an den PDF-Export.', accent:'#9A9A96'},
+        {name:'Nils', role:'Qualität', desc:'Prüft Sterne, Listing- und A+-Qualität aller Produkte am Kontrollpunkt.', accent:ink}
+      ];
+    } else { V.bueroSceneEl=null; V.bueroMonthLabel=''; V.bueroTeam=[]; }
+
     // ---- Produkte detail ----
     if(isDetail){
       const p=st.products.find(x=>x.id===pid);
@@ -1603,8 +2353,12 @@ class Component extends DCLogic {
         if(!activeYear || !yearsPresent.includes(activeYear)) activeYear = yearsPresent.includes(curYear)?curYear:(yearsPresent[yearsPresent.length-1]||curYear);
         const yearMonths = this.months.filter(ym=>p.monthly[ym] && ym.slice(0,4)===activeYear);
         const detailYears = yearsPresent.map(y=>({ label:y, style:(y===activeYear?'padding:6px 13px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-feature-settings:\'tnum\' 1':'padding:6px 13px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12px;font-weight:500;cursor:pointer;font-feature-settings:\'tnum\' 1'), select:()=>this.setState({detailYear:y}) }));
+        // Kachel-Ansicht: Gesamt (alle Daten) oder Jährlich (aktives Jahr)
+        const detailScope = st.detailScope==='year' ? 'year' : 'gesamt';
+        const dTiles = detailScope==='year' ? this.derive(p, activeYear+'-01', activeYear+'-12') : d;
+        const scopeBtn=(active)=> active?'padding:5px 12px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:11.5px;font-weight:600;cursor:pointer;font-feature-settings:\'tnum\' 1':'padding:5px 12px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:11.5px;font-weight:500;cursor:pointer;font-feature-settings:\'tnum\' 1';
         const monthRows = yearMonths.map(ym=>{ const m=p.monthly[ym]; const conv=(+m.views>0)?(+m.units/+m.views):0; const tv=+((p.targets||{})[ym]||0); const un=+m.units||0; const ppcu=Math.min(un,+m.unitsPpc||0); const orgu=Math.max(0,un-ppcu); const ach=tv>0?un/tv:0;
-          const mPrice=this._monthPrice(p,m); const mUnitProfit=(mPrice-(mPrice-p.fbaFee)*0.19)-p.fbaFee-p.shipping-p.productionCost; const mRev=un*mPrice; const mProfit=un*mUnitProfit-(+m.adCost||0); return {
+          const mPrice=this._monthPrice(p,m); const mUnitProfit=(mPrice/1.19)-p.fbaFee-p.shipping-p.productionCost; const mRev=un*mPrice; const mProfit=un*mUnitProfit-(+m.adCost||0); return {
           label:this._mlabel(ym), units:un, ppc:+m.unitsPpc||0, adCost:+m.adCost||0, views:+m.views||0, target:tv||'',
           price:+(+mPrice).toFixed(2), revStr:this._eur(mRev), profitStr:this._eur(mProfit), profitColor: mProfit<0?red:ink,
           orgRateStr: un>0?this._pct(orgu/un*100,0):'—',
@@ -1615,28 +2369,24 @@ class Component extends DCLogic {
           setPpc:(e)=>this._setMonth(p.id,ym,'unitsPpc',e.target.value), setAdCost:(e)=>this._setMonth(p.id,ym,'adCost',e.target.value)
         }; });
         const ratingMeta={green:{tone:green,label:'Grün',desc:'Kein Handlungsbedarf'},yellow:{tone:yellow,label:'Gelb',desc:'Ausbaufähig'},red:{tone:red,label:'Rot',desc:'Kritisch'}};
-        const mkRating=(key,fieldLabel)=>{ const cur=p[key]||'green'; const m=ratingMeta[cur]; return {
-          label:fieldLabel, tone:m.tone, statusText:m.desc,
+        const mkRating=(key,fieldLabel,descs)=>{ const cur=p[key]||'green'; const m=ratingMeta[cur]; return {
+          label:fieldLabel, tone:m.tone, statusText:((descs&&descs[cur])||m.desc),
           buttons:['green','yellow','red'].map(v=>{ const active=v===cur; const mm=ratingMeta[v]; return {
             label:mm.label, select:()=>this._update(p.id,{[key]:v}), dotColor:(active?'#fff':mm.tone),
             style:(active?('flex:1;padding:9px 6px;border:1px solid '+mm.tone+';background:'+mm.tone+';color:#fff;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px'):'flex:1;padding:9px 6px;border:1px solid #E4E4E0;background:#fff;color:#9A9A96;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px') }; }) }; };
-        const qualityRows=[ mkRating('listingRating','Listing'), mkRating('aplusRating','A+ Content') ];
-        // Keyword-Ampel: datumsbasiert (grün <=90 Tg, gelb <=180 Tg, rot älter/nie)
-        const kwIso=p.keywordUpdated||null; let kwTone,kwLabel,kwSub;
-        if(!kwIso){ kwTone=red; kwLabel='Nie gepflegt'; kwSub='Noch nicht als aktuell markiert'; }
-        else { const kwDays=Math.max(0,Math.floor((Date.now()-new Date(kwIso+'T00:00:00').getTime())/86400000));
-          if(kwDays<=90){ kwTone=green; kwLabel='Aktuell'; } else if(kwDays<=180){ kwTone=yellow; kwLabel='Bald prüfen'; } else { kwTone=red; kwLabel='Veraltet'; }
-          kwSub='Zuletzt: '+this._fmtDate(kwIso)+' · vor '+kwDays+' Tg.'; }
-        const keyword={ tone:kwTone, label:kwLabel, sub:kwSub, markCurrent:()=>this._update(p.id,{keywordUpdated:this._todayISO()}) };
+        const qualityRows=[ mkRating('listingRating','Listing'), mkRating('aplusRating','A+ Content'), mkRating('keywordRating','Keywords aktuell',{green:'Keywords aktuell',yellow:'Teils veraltet — Auffrischung sinnvoll',red:'Veraltet — überarbeiten'}) ];
         const addMonthOptions=this.months.filter(ym=>!p.monthly[ym]).map(ym=>({ym, label:this._mlabel(ym)}));
         V.sel={ name:p.name, asin:p.asin, dims:p.dims, amazonUrl:p.amazonUrl||'', hasUrl:!!p.amazonUrl, price:p.price, productionCost:p.productionCost, fbaFee:p.fbaFee, shipping:p.shipping,
-          qualityRows, keyword, activeYear,
-          unitProfitStr:this._eur(d.unitProfit,2), unitProfitColor:d.unitProfit<0?red:ink, marginStr:this._pct(d.marginPct*100),
-          conversionStr:this._pct(d.conversion*100), conversionColor:convColor(d.conversion), revenueStr:this._eur(d.revenue), vatStr:this._eur(d.vat,2),
-          unitsStr:this._num(d.units), acosStr:d.ppcRevenue>0?this._pct(d.actualAcos):'—', acosColor:d.actualAcos>d.breakEvenAcos?red:ink,
-          tacosStr:this._pct(d.tacos), stockStr:this._num(d.stock), stockColor:d.stock<0?red:ink,
+          qualityRows, activeYear,
+          scopeLabel: detailScope==='year'?('Jahr '+activeYear):'Gesamtzeitraum',
+          scopeGesamtStyle: scopeBtn(detailScope==='gesamt'), scopeYearStyle: scopeBtn(detailScope==='year'),
+          setScopeGesamt:()=>this.setState({detailScope:'gesamt'}), setScopeYear:()=>this.setState({detailScope:'year'}),
+          unitProfitStr:this._eur(d.unitProfit,2), unitProfitColor:d.unitProfit<0?red:ink, marginStr:this._pct(dTiles.marginPct*100),
+          conversionStr:this._pct(dTiles.conversion*100), conversionColor:convColor(dTiles.conversion), revenueStr:this._eur(dTiles.revenue), vatStr:this._eur(d.vat,2),
+          unitsStr:this._num(dTiles.units), acosStr:dTiles.ppcRevenue>0?this._pct(dTiles.actualAcos):'—', acosColor:dTiles.actualAcos>dTiles.breakEvenAcos?red:ink,
+          tacosStr:dTiles.revenue>0?this._pct(dTiles.tacos):'—', stockStr:this._num(d.stock), stockColor:d.stock<0?red:ink,
           coverStr:isFinite(d.cover)?Math.round(d.cover)+' Tage':'∞', coverColor:statusColor(d.status),
-          maxCpcStr:this._eur(d.maxCpc,2), organicRateStr:this._pct(d.organicRate*100,0),
+          maxCpcStr:this._eur(dTiles.maxCpc,2), organicRateStr:dTiles.units>0?this._pct(dTiles.organicRate*100,0):'—',
           starsVal:p.stars!=null?p.stars:'', starsStr:(+(p.stars!=null?p.stars:0)).toLocaleString('de-DE',{minimumFractionDigits:1,maximumFractionDigits:1}),
           addMonthOptions,
           statusColor:statusColor(d.status), statusLabel:statusLabel(d.status), recs, monthRows, detailYears };
@@ -1669,12 +2419,27 @@ class Component extends DCLogic {
           curVelStr:curVel.toLocaleString('de-DE',{maximumFractionDigits:1}), reqVelStr:gTarget>0?reqVel.toLocaleString('de-DE',{maximumFractionDigits:1}):'—',
           reqColor:(gTarget>0&&reqVel>curVel*1.15)?red:ink, dayStr:dayEl+'/'+dim,
           targetInput:gTarget||'', setTarget:(e)=>this._setTarget(p.id,cy,e.target.value) };
+        // ---- Smarter Zielvorschlag (nächster Monat) ----
+        const nextYm=this._shiftYm(cy,1);
+        const sug=this._suggestTarget(p,nextYm);
+        const nextCur=+((p.targets||{})[nextYm]||0);
+        if(sug){
+          const gSign = sug.growthPct>=0?'+':'';
+          V.goalNext={ has:true, nextLabel:this._mlabel(nextYm),
+            valueStr:this._num(sug.value), reasonText:gSign+sug.growthPct.toLocaleString('de-DE',{maximumFractionDigits:0})+' % ggü. '+sug.basisLabel+' (Ø '+this._num(sug.baseUnits)+' Stk)',
+            currentStr: nextCur>0?this._num(nextCur)+' Stk':'noch kein Ziel gesetzt',
+            isSame: nextCur===sug.value,
+            apply:()=>this._setTarget(p.id,nextYm,sug.value) };
+        } else {
+          V.goalNext={ has:false, nextLabel:this._mlabel(nextYm), valueStr:'—', reasonText:'Noch keine Verkaufsdaten erfasst — Vorschlag erst ab dem ersten Monat mit Werten möglich.', currentStr:'—', isSame:false, apply:()=>{} };
+        }
       }
     }
-    if(!V.sel) V.sel={name:'',asin:'',dims:'',amazonUrl:'',hasUrl:false,price:0,productionCost:0,fbaFee:0,shipping:0,activeYear:'',unitProfitStr:'',unitProfitColor:ink,marginStr:'',conversionStr:'',conversionColor:ink,revenueStr:'',vatStr:'',unitsStr:'',acosStr:'',acosColor:ink,tacosStr:'',stockStr:'',stockColor:ink,coverStr:'',coverColor:'#9A9A96',maxCpcStr:'',organicRateStr:'',starsVal:'',starsStr:'',addMonthOptions:[],statusColor:'#9A9A96',statusLabel:'',recs:[],monthRows:[],detailYears:[],qualityRows:[],keyword:{tone:'#9A9A96',label:'—',sub:'',markCurrent:()=>{}}};
+    if(!V.sel) V.sel={name:'',asin:'',dims:'',amazonUrl:'',hasUrl:false,price:0,productionCost:0,fbaFee:0,shipping:0,activeYear:'',unitProfitStr:'',unitProfitColor:ink,marginStr:'',conversionStr:'',conversionColor:ink,revenueStr:'',vatStr:'',unitsStr:'',acosStr:'',acosColor:ink,tacosStr:'',stockStr:'',stockColor:ink,coverStr:'',coverColor:'#9A9A96',maxCpcStr:'',organicRateStr:'',starsVal:'',starsStr:'',addMonthOptions:[],statusColor:'#9A9A96',statusLabel:'',recs:[],monthRows:[],detailYears:[],qualityRows:[]};
     if(!V.starEl) V.starEl=null; if(!V.editStars) V.editStars=()=>{}; if(!V.editUrl) V.editUrl=()=>{}; if(!V.askDelete) V.askDelete=()=>{};
     if(V.detailAddYm===undefined) V.detailAddYm=''; if(!V.setDetailAddYm) V.setDetailAddYm=()=>{}; if(!V.addSelectedMonth) V.addSelectedMonth=()=>{};
     if(!V.goal) V.goal={monthLabel:'',tone:'#9A9A96',statusLabel:'',ringEl:null,actualStr:'',targetStr:'',remainingStr:'',curVelStr:'',reqVelStr:'',reqColor:ink,dayStr:'',targetInput:'',setTarget:()=>{}};
+    if(!V.goalNext) V.goalNext={has:false,nextLabel:'',valueStr:'—',reasonText:'',currentStr:'—',isSame:false,apply:()=>{}};
 
     // ---- modal (new product) ----
     V.modalOpen=st.modalOpen; V.draft=st.draft; V.closeModal=()=>this.setState({modalOpen:false});
@@ -1682,7 +2447,7 @@ class Component extends DCLogic {
     V.setDraftName=sd('name'); V.setDraftAsin=sd('asin'); V.setDraftUrl=sd('amazonUrl'); V.setDraftPrice=sd('price'); V.setDraftProd=sd('productionCost');
     V.setDraftFba=sd('fbaFee'); V.setDraftShip=sd('shipping'); V.setDraftStock=sd('stock'); V.setDraftDims=sd('dims');
     V.setDraftLead=sd('leadTime'); V.setDraftSafety=sd('safetyDays'); V.setDraftStars=sd('stars'); V.setDraftTarget=sd('targetAcos');
-    V.saveProduct=()=>{ const dft=st.draft; if(!dft.name) return; const iso=this._todayISO(); const stock=+dft.stock||0; let url=(dft.amazonUrl||'').trim(); if(url && !/^https?:\/\//i.test(url)) url='https://'+url; const np={ id:'p'+Math.random().toString(36).slice(2,8), name:dft.name, asin:dft.asin||'—', amazonUrl:url, price:+dft.price||0, productionCost:+dft.productionCost||0, fbaFee:+dft.fbaFee||0, shipping:+dft.shipping||0, stock:stock, dims:dft.dims||'—', leadTime:+dft.leadTime||45, safetyDays:+dft.safetyDays||14, targetAcos:+dft.targetAcos||15, stars:(parseFloat(String(dft.stars).replace(',','.'))||0), listingRating:'green', aplusRating:'green', keywordUpdated:iso, monthly:{}, targets:{}, stockRef:{value:stock,date:iso} }; this.setState(s=>({products:[...s.products,np], modalOpen:false}), ()=>this._persist()); };
+    V.saveProduct=()=>{ const dft=st.draft; if(!dft.name) return; const iso=this._todayISO(); const stock=+dft.stock||0; let url=(dft.amazonUrl||'').trim(); if(url && !/^https?:\/\//i.test(url)) url='https://'+url; const np={ id:'p'+Math.random().toString(36).slice(2,8), name:dft.name, asin:dft.asin||'—', amazonUrl:url, price:+dft.price||0, productionCost:+dft.productionCost||0, fbaFee:+dft.fbaFee||0, shipping:+dft.shipping||0, stock:stock, dims:dft.dims||'—', leadTime:+dft.leadTime||45, safetyDays:+dft.safetyDays||14, targetAcos:+dft.targetAcos||15, stars:(parseFloat(String(dft.stars).replace(',','.'))||0), listingRating:'green', aplusRating:'green', keywordRating:'green', monthly:{}, targets:{}, stockRef:{value:stock,date:iso} }; this.setState(s=>({products:[...s.products,np], modalOpen:false}), ()=>this._persist()); };
 
     // ---- stock modal ----
     V.stockModalOpen=!!st.stockModal;
@@ -1741,7 +2506,7 @@ class Component extends DCLogic {
     if(scp){
       const sv = (st.scenario && st.scenario.productId===scp.id) ? st.scenario : this._scenDefaults(scp);
       const base = this._scenDefaults(scp);
-      const calc=(price,ad,units,prod)=>{ const vat=(price-(+scp.fbaFee||0))*0.19; const net=price-vat; const up=net-(+scp.fbaFee||0)-(+scp.shipping||0)-prod; const mp=price>0?up/price:0; const rev=units*price; const profit=units*up-ad; const acos=rev>0?ad/rev*100:0; return {up,mp,rev,profit,acos,be:mp*100}; };
+      const calc=(price,ad,units,prod)=>{ const net=price/1.19; const vat=price-net; const up=net-(+scp.fbaFee||0)-(+scp.shipping||0)-prod; const mp=price>0?up/price:0; const rev=units*price; const profit=units*up-ad; const acos=rev>0?ad/rev*100:0; return {up,mp,rev,profit,acos,be:mp*100}; };
       const cur=calc(sv.price,sv.adSpend,sv.units,sv.prodCost);
       const bas=calc(base.price,base.adSpend,base.units,base.prodCost);
       const dProfit=cur.profit-bas.profit, dUp=cur.up-bas.up;
