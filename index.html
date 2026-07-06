@@ -111,6 +111,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
         <button onClick="{{ goEmpfehlungen }}" style="{{ tabStyle6 }}">Empfehlungen</button>
         <button onClick="{{ goBerichte }}" style="{{ tabStyle7 }}">Berichte</button>
         <button onClick="{{ goBuero }}" style="{{ tabStyle8 }}">Büro</button>
+        <button onClick="{{ goTodo }}" style="{{ tabStyle9 }}">To-Do</button>
       </div>
     </div>
   </sc-if>
@@ -162,6 +163,10 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
           <button onClick="{{ goBuero }}" style="{{ nav8 }}">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21V8l7-5 7 5v13"/><path d="M17 21V11l4 2v8"/><path d="M8 21v-5h4v5"/><path d="M8 11h4"/></svg>
             <span>Büro</span>
+          </button>
+          <button onClick="{{ goTodo }}" style="{{ nav9 }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></svg>
+            <span>To-Do</span>
           </button>
         </nav>
         <div style="padding:16px 20px;border-top:1px solid #EEEEEB">
@@ -1052,6 +1057,69 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
         </div>
       </sc-if>
 
+      <sc-if value="{{ isTodo }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Todo" style="max-width:1000px;margin:0 auto;padding:30px 40px 72px;animation:ppfade .25s ease">
+          <div style="padding-bottom:20px;border-bottom:2px solid #0A0A0A;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px">
+            <div>
+              <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9A96;margin-bottom:8px">To-Do</div>
+              <h1 style="font-family:'Archivo';font-weight:800;font-size:30px;letter-spacing:-.02em;margin:0;line-height:1">Aufgaben</h1>
+            </div>
+            <div style="font-size:13px;color:#8A8A86;font-feature-settings:'tnum' 1">{{ todoCountLabel }}</div>
+          </div>
+
+          <!-- Anlegen -->
+          <div style="background:#fff;border:1px solid #E4E4E0;margin-top:26px;padding:20px 22px">
+            <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#9A9A96;margin-bottom:12px">Neues To-Do</div>
+            <input type="text" value="{{ todoTitle }}" onInput="{{ setTodoTitle }}" onKeyDown="{{ todoTitleKey }}" placeholder="Was ist zu tun?" style="width:100%;border:1px solid #E2E2E2;padding:12px 13px;font-size:14.5px;font-family:inherit;box-sizing:border-box">
+            <div style="display:flex;gap:26px;flex-wrap:wrap;margin-top:16px">
+              <div>
+                <div style="font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#7A7A76;margin-bottom:7px">Priorität</div>
+                <div style="display:flex;gap:7px">
+                  <sc-for list="{{ todoPrioChips }}" as="c" hint-placeholder-count="3"><button onClick="{{ c.sel }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#7A7A76;margin-bottom:7px">Zuständigkeit</div>
+                <div style="display:flex;gap:7px">
+                  <sc-for list="{{ todoOwnerChips }}" as="c" hint-placeholder-count="3"><button onClick="{{ c.sel }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
+                </div>
+              </div>
+              <div style="display:flex;align-items:flex-end;flex:1;justify-content:flex-end;min-width:140px">
+                <button onClick="{{ todoSubmit }}" style="padding:11px 22px;border:none;background:#0A0A0A;color:#fff;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="background:#FF5A00">Hinzufügen</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter -->
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:24px">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <span style="font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;margin-right:2px">Zuständig</span>
+              <sc-for list="{{ todoFilterChips }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.sel }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
+            </div>
+            <button onClick="{{ todoToggleDone }}" style="padding:7px 13px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12.5px;font-weight:500;cursor:pointer">{{ todoDoneToggleLabel }}</button>
+          </div>
+
+          <!-- Liste -->
+          <div style="background:#fff;border:1px solid #E4E4E0;margin-top:14px">
+            <sc-if value="{{ todoHasRows }}" hint-placeholder-val="{{ true }}">
+              <sc-for list="{{ todoRows }}" as="t" hint-placeholder-count="4">
+                <div style="{{ t.rowStyle }}">
+                  <div onClick="{{ t.toggle }}" style="{{ t.checkStyle }}"><sc-if value="{{ t.done }}" hint-placeholder-val="{{ true }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5"><path d="M5 12l5 5L20 7"/></svg></sc-if></div>
+                  <div style="{{ t.titleStyle }}">{{ t.title }}</div>
+                  <button onClick="{{ t.prioCycle }}" style="{{ t.prioBadge }}" title="Priorität wechseln">{{ t.prioLabel }}</button>
+                  <button onClick="{{ t.ownerCycle }}" style="{{ t.ownerBadge }}" title="Zuständigkeit wechseln">{{ t.ownerLabel }}</button>
+                  <button onClick="{{ t.remove }}" style="background:none;border:none;color:#C9C9C4;cursor:pointer;padding:4px;flex-shrink:0" title="Löschen"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2m2 0v14a1 1 0 01-1 1H7a1 1 0 01-1-1V6"/></svg></button>
+                </div>
+              </sc-for>
+            </sc-if>
+            <sc-if value="{{ todoEmpty }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:44px 22px;text-align:center;color:#9A9A96;font-size:14px">{{ todoEmptyText }}</div>
+            </sc-if>
+          </div>
+          <div style="font-size:12px;color:#9A9A96;margin-top:12px;line-height:1.5">Tipp: Kästchen abhaken erledigt eine Aufgabe · Priorität und Zuständigkeit lassen sich per Klick auf das Etikett direkt umschalten.</div>
+        </div>
+      </sc-if>
+
     </main>
   </div>
 
@@ -1220,6 +1288,7 @@ class Component extends DCLogic {
     try { saved = JSON.parse(localStorage.getItem('partypeak_v4') || 'null'); } catch(e){}
     const seed = saved || this._seed();
     seed.ideas = (seed.ideas || []).map(i => this._normIdea(i));
+    seed.todos = (seed.todos || []).map(t => this._normTodo(t));
     // data range from seeded/saved monthly keys
     let dmin=null,dmax=null;
     seed.products.forEach(p=>Object.keys(p.monthly||{}).forEach(ym=>{ if(dmin===null||ym<dmin)dmin=ym; if(dmax===null||ym>dmax)dmax=ym; }));
@@ -1228,6 +1297,7 @@ class Component extends DCLogic {
       sort:{key:'revenue', dir:'desc'},
       products: seed.products,
       ideas: seed.ideas,
+      todos: seed.todos,
       narrow: (typeof window!=='undefined' && window.innerWidth < 900),
       modalOpen:false,
       stockModal:null,
@@ -1249,7 +1319,8 @@ class Component extends DCLogic {
       period:{preset:'thisYear', from:(String(new Date().getFullYear())+'-01'), to:this._curYm()},
       chartYear:String(new Date().getFullYear()),
       chartYoy:false,
-      bueroTick:0
+      bueroTick:0,
+      todoTitle:'', todoPrio:'Mittel', todoOwner:'Beide', todoFilterOwner:'alle', todoShowDone:false
     };
   }
   componentDidMount(){ this._onResize = ()=> this.setState({narrow: window.innerWidth < 900}); window.addEventListener('resize', this._onResize); this._sbInit(); }
@@ -1261,7 +1332,7 @@ class Component extends DCLogic {
      Haelt products / ideas / recDismissed live zwischen mehreren
      Personen synchron. Aendert NICHTS an der uebrigen Logik.
      ============================================================ */
-  _snapshot(){ return { products:this.state.products, ideas:this.state.ideas, recDismissed:this.state.recDismissed }; }
+  _snapshot(){ return { products:this.state.products, ideas:this.state.ideas, todos:this.state.todos, recDismissed:this.state.recDismissed }; }
   // stabile Signatur (Reihenfolge der Keys egal) -> verhindert Sync-Schleifen
   _stableStringify(v){
     if(v===null || typeof v!=='object') return JSON.stringify(v);
@@ -1315,9 +1386,10 @@ class Component extends DCLogic {
       this._lastSyncedSig = sig;
       const products = Array.isArray(remote.products) ? remote.products : this.state.products;
       const ideas    = Array.isArray(remote.ideas)    ? remote.ideas.map(i=>this._normIdea(i)) : this.state.ideas;
+      const todos    = Array.isArray(remote.todos)    ? remote.todos.map(t=>this._normTodo(t)) : this.state.todos;
       const recDismissed = remote.recDismissed || this.state.recDismissed;
-      this.setState({ products, ideas, recDismissed }); // WICHTIG: ohne _persist() -> keine Schleife
-      try{ localStorage.setItem('partypeak_v4', JSON.stringify({products, ideas, recDismissed})); }catch(e){}
+      this.setState({ products, ideas, todos, recDismissed }); // WICHTIG: ohne _persist() -> keine Schleife
+      try{ localStorage.setItem('partypeak_v4', JSON.stringify({products, ideas, todos, recDismissed})); }catch(e){}
     }catch(e){ console.warn('[Party Peak] Uebernahme fehlgeschlagen:', e); }
   }
   _sbPush(){
@@ -1373,7 +1445,12 @@ class Component extends DCLogic {
       {id:'i5', title:'Ballon-Set: Foto-Shooting neu', description:'Frische Produktbilder für bessere Klickrate im Hauptbild.', category:'listing', statuses:['Inbox'], priority:'Niedrig', potential:39, progress:0, files:[], created_at:Date.now()-11*86400000, updated_at:Date.now()-11*86400000},
       {id:'i6', title:'Preis-Test Quiz auf 27,99 €', description:'A/B-Preistest über vier Wochen — Marge gegen Absatz prüfen.', category:'sonstiges', statuses:['Verworfen'], priority:'Niedrig', potential:22, progress:0, files:[], created_at:Date.now()-20*86400000, updated_at:Date.now()-14*86400000}
     ];
-    return {products, ideas};
+    const todos=[
+      {id:'td1', title:'Vine-Reviews für Wer zum Teufel? anstoßen', priority:'Hoch', owner:'Tom', done:false, created_at:Date.now()-2*86400000, done_at:null},
+      {id:'td2', title:'PPC-Kampagnen ACOS gegen Break-even prüfen', priority:'Mittel', owner:'Beide', done:false, created_at:Date.now()-86400000, done_at:null},
+      {id:'td3', title:'Backend-Keywords für Tipsy Horses aktualisieren', priority:'Niedrig', owner:'Daniel', done:false, created_at:Date.now()-3*3600000, done_at:null}
+    ];
+    return {products, ideas, todos};
   }
 
   // ---------- formatting ----------
@@ -1622,6 +1699,19 @@ class Component extends DCLogic {
   _ideaTimeAgo(ts){ if(!ts) return 'gerade angelegt'; const t=typeof ts==='number'?ts:new Date(ts).getTime(); const d=Date.now()-t; const m=60000,h=3600000,day=86400000; if(d<m) return 'gerade eben'; if(d<h) return 'vor '+Math.floor(d/m)+' Min'; if(d<day) return 'vor '+Math.floor(d/h)+' Std'; if(d<7*day) return 'vor '+Math.floor(d/day)+' Tg'; return new Date(t).toLocaleDateString('de-DE',{day:'numeric',month:'short'}); }
   _saveIdea(){ const f=this.state.ideaForm; if(!f.title.trim()) return; const base={title:f.title.trim(),description:(f.description||'').trim(),category:f.category||'produkt',statuses:[...f.statuses],priority:f.priority||'Mittel',potential:+f.potential||0,progress:+f.progress||0,files:[...f.files]}; this.setState(s=>{ let ideas; if(s.ideaEditingId){ ideas=s.ideas.map(i=>i.id===s.ideaEditingId?{...i,...base,updated_at:Date.now()}:i); } else { ideas=[{id:'i'+Math.random().toString(36).slice(2,7),created_at:Date.now(),updated_at:Date.now(),...base},...s.ideas]; } return {ideas, ideaModalOpen:false}; }, ()=>this._persist()); }
   _removeIdea(id){ this.setState(s=>({ideas:s.ideas.filter(i=>i.id!==id)}), ()=>this._persist()); }
+
+  // ---------- To-Dos ----------
+  _normTodo(t){ t=t||{}; const prio=['Hoch','Mittel','Niedrig'].includes(t.priority)?t.priority:'Mittel';
+    const owner=['Daniel','Tom','Beide'].includes(t.owner)?t.owner:'Beide';
+    return { id:t.id||('t'+Math.random().toString(36).slice(2,8)), title:String(t.title||'').slice(0,300), priority:prio, owner, done:!!t.done,
+      created_at:t.created_at||Date.now(), done_at:t.done_at||null }; }
+  _addTodo(){ const st=this.state; const title=(st.todoTitle||'').trim(); if(!title) return;
+    const nt=this._normTodo({title, priority:st.todoPrio, owner:st.todoOwner});
+    this.setState(s=>({ todos:[nt, ...(s.todos||[])], todoTitle:'' }), ()=>this._persist()); }
+  _toggleTodo(id){ this.setState(s=>({todos:s.todos.map(t=> t.id===id?{...t, done:!t.done, done_at:!t.done?Date.now():null}:t)}), ()=>this._persist()); }
+  _removeTodo(id){ this.setState(s=>({todos:s.todos.filter(t=>t.id!==id)}), ()=>this._persist()); }
+  _setTodoPrioOf(id,prio){ this.setState(s=>({todos:s.todos.map(t=> t.id===id?{...t,priority:prio}:t)}), ()=>this._persist()); }
+  _setTodoOwnerOf(id,owner){ this.setState(s=>({todos:s.todos.map(t=> t.id===id?{...t,owner}:t)}), ()=>this._persist()); }
   _openAbgleich(p){ this.setState({stockModal:{productId:p.id, value:String(Math.max(0,Math.round(this._stockOf(p))))}}); }
   _saveAbgleich(){ const sm=this.state.stockModal; if(!sm) return; const v=Math.max(0,Math.round(+sm.value||0)); const iso=this._todayISO(); this.setState(s=>({products:s.products.map(p=> p.id===sm.productId?{...p,stockRef:{value:v,date:iso}}:p), stockModal:null}), ()=>this._persist()); }
   _shiftYm(ym,delta){ let [y,m]=ym.split('-').map(Number); const d=new Date(y,(m-1)+delta,1); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
@@ -2125,11 +2215,11 @@ class Component extends DCLogic {
     const V = {
       narrow:st.narrow, wide:!st.narrow,
       isCockpit: mod==='cockpit', isProdukteList: mod==='produkte' && !pid, isProdukteDetail: isDetail,
-      isLager: mod==='lager', isWerbung: mod==='werbung', isSzenarien: mod==='szenarien', isIdeen: mod==='ideen', isEmpfehlungen: mod==='empfehlungen', isBerichte: mod==='berichte', isBuero: mod==='buero',
+      isLager: mod==='lager', isWerbung: mod==='werbung', isSzenarien: mod==='szenarien', isIdeen: mod==='ideen', isEmpfehlungen: mod==='empfehlungen', isBerichte: mod==='berichte', isBuero: mod==='buero', isTodo: mod==='todo',
       goCockpit:()=>this._go('cockpit'), goProdukte:()=>this._go('produkte'), goLager:()=>this._go('lager'),
-      goWerbung:()=>this._go('werbung'), goSzenarien:()=>this._go('szenarien'), goIdeen:()=>this._go('ideen'), goEmpfehlungen:()=>this._go('empfehlungen'), goBerichte:()=>this._go('berichte'), goBuero:()=>this._go('buero'),
-      nav0:nv('cockpit'), nav1:nv('produkte'), nav2:nv('lager'), nav3:nv('werbung'), nav4:nv('szenarien'), nav5:nv('ideen'), nav6:nv('empfehlungen'), nav7:nv('berichte'), nav8:nv('buero'),
-      tabStyle0:tb('cockpit'), tabStyle1:tb('produkte'), tabStyle2:tb('lager'), tabStyle3:tb('werbung'), tabStyle4:tb('szenarien'), tabStyle5:tb('ideen'), tabStyle6:tb('empfehlungen'), tabStyle7:tb('berichte'), tabStyle8:tb('buero'),
+      goWerbung:()=>this._go('werbung'), goSzenarien:()=>this._go('szenarien'), goIdeen:()=>this._go('ideen'), goEmpfehlungen:()=>this._go('empfehlungen'), goBerichte:()=>this._go('berichte'), goBuero:()=>this._go('buero'), goTodo:()=>this._go('todo'),
+      nav0:nv('cockpit'), nav1:nv('produkte'), nav2:nv('lager'), nav3:nv('werbung'), nav4:nv('szenarien'), nav5:nv('ideen'), nav6:nv('empfehlungen'), nav7:nv('berichte'), nav8:nv('buero'), nav9:nv('todo'),
+      tabStyle0:tb('cockpit'), tabStyle1:tb('produkte'), tabStyle2:tb('lager'), tabStyle3:tb('werbung'), tabStyle4:tb('szenarien'), tabStyle5:tb('ideen'), tabStyle6:tb('empfehlungen'), tabStyle7:tb('berichte'), tabStyle8:tb('buero'), tabStyle9:tb('todo'),
       productCount: st.products.length, dataStamp:'Juli 2026',
       periodLabel: this._mlabel(from)+' – '+this._mlabel(to), periodDays: this._num(this._rangeDays(from,to)),
       periodFrom: per.from, periodTo: per.to,
@@ -2253,6 +2343,51 @@ class Component extends DCLogic {
     V.repProductCount = st.products.length;
     V.genProductReport = ()=> this._reportProductData();
     V.genBusinessReport = ()=> this._reportBusiness(this.state.reportMonth || this._curYm());
+
+    // ---- To-Dos ----
+    {
+      const prioTone={Hoch:red, Mittel:yellow, Niedrig:'#6E9A5A'};
+      const ownerTone={Daniel:'#2F6FED', Tom:'#7A3FF2', Beide:'#0A0A0A'};
+      const allTodos=st.todos||[];
+      const fOwner=st.todoFilterOwner||'alle';
+      const prioRank={Hoch:0,Mittel:1,Niedrig:2};
+      let list=allTodos.filter(t=> fOwner==='alle' || t.owner===fOwner);
+      if(!st.todoShowDone) list=list.filter(t=>!t.done);
+      list=list.slice().sort((a,b)=> (a.done-b.done) || (prioRank[a.priority]-prioRank[b.priority]) || (b.created_at-a.created_at));
+      const chip=(active,tone)=> active
+        ? 'padding:7px 13px;border:1px solid '+tone+';background:'+tone+';color:#fff;font-size:12.5px;font-weight:600;cursor:pointer'
+        : 'padding:7px 13px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12.5px;font-weight:500;cursor:pointer';
+      V.todoTitle=st.todoTitle||'';
+      V.setTodoTitle=(e)=>this.setState({todoTitle:e.target.value});
+      V.todoSubmit=()=>this._addTodo();
+      V.todoTitleKey=(e)=>{ if(e.key==='Enter'){ e.preventDefault(); this._addTodo(); } };
+      V.todoPrioChips=['Hoch','Mittel','Niedrig'].map(p=>({label:p, sel:()=>this.setState({todoPrio:p}), style:chip(st.todoPrio===p, prioTone[p])}));
+      V.todoOwnerChips=['Daniel','Tom','Beide'].map(o=>({label:o, sel:()=>this.setState({todoOwner:o}), style:chip(st.todoOwner===o, ownerTone[o])}));
+      V.todoFilterChips=['alle','Daniel','Tom','Beide'].map(o=>({label:o==='alle'?'Alle':o, sel:()=>this.setState({todoFilterOwner:o}), style:chip(fOwner===o, o==='alle'?'#0A0A0A':ownerTone[o])}));
+      V.todoShowDone=!!st.todoShowDone;
+      V.todoToggleDone=()=>this.setState(s=>({todoShowDone:!s.todoShowDone}));
+      const openCount=allTodos.filter(t=>!t.done).length, doneCount=allTodos.filter(t=>t.done).length;
+      V.todoOpenCount=openCount; V.todoDoneCount=doneCount;
+      V.todoCountLabel=openCount+' offen · '+doneCount+' erledigt';
+      V.todoHasRows=list.length>0;
+      V.todoEmpty=list.length===0;
+      V.todoDoneToggleLabel = st.todoShowDone ? 'Erledigte ausblenden' : ('Erledigte anzeigen ('+doneCount+')');
+      V.todoEmptyText = allTodos.length===0 ? 'Noch keine To-Dos — oben das erste anlegen.' : 'Keine To-Dos in dieser Ansicht.';
+      V.todoRows=list.map(t=>{
+        const pt=prioTone[t.priority]||yellow, ot=ownerTone[t.owner]||ink;
+        return { id:t.id, title:t.title, done:t.done,
+          prioLabel:t.priority, prioColor:pt, ownerLabel:t.owner, ownerColor:ot,
+          rowStyle:'display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid #F1F1EE;'+(t.done?'opacity:.55;':''),
+          titleStyle:'flex:1;min-width:180px;font-size:14px;font-weight:500;'+(t.done?'text-decoration:line-through;color:#9A9A96':'color:#16130F'),
+          checkStyle:'width:22px;height:22px;border:2px solid '+(t.done?'#1B7F4B':'#C9C9C4')+';background:'+(t.done?'#1B7F4B':'#fff')+';cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center',
+          toggle:()=>this._toggleTodo(t.id),
+          prioCycle:()=>{ const seq=['Hoch','Mittel','Niedrig']; this._setTodoPrioOf(t.id, seq[(seq.indexOf(t.priority)+1)%3]); },
+          ownerCycle:()=>{ const seq=['Daniel','Tom','Beide']; this._setTodoOwnerOf(t.id, seq[(seq.indexOf(t.owner)+1)%3]); },
+          prioBadge:'padding:4px 9px;border:1px solid '+pt+';color:'+pt+';font-size:11px;font-weight:700;letter-spacing:.03em;cursor:pointer;background:#fff;white-space:nowrap',
+          ownerBadge:'padding:4px 9px;background:'+ot+';color:#fff;font-size:11px;font-weight:700;letter-spacing:.03em;cursor:pointer;border:none;white-space:nowrap',
+          remove:()=>this._removeTodo(t.id) };
+      });
+    }
 
     // ---- Buero (animierte Szene) ----
     if(mod==='buero'){
