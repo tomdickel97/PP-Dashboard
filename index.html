@@ -112,6 +112,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
         <button onClick="{{ goBerichte }}" style="{{ tabStyle7 }}">Berichte</button>
         <button onClick="{{ goBuero }}" style="{{ tabStyle8 }}">Büro</button>
         <button onClick="{{ goTodo }}" style="{{ tabStyle9 }}">To-Do</button>
+        <button onClick="{{ goPpc }}" style="{{ tabStyle10 }}">PPC Analyse</button>
       </div>
     </div>
   </sc-if>
@@ -167,6 +168,10 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
           <button onClick="{{ goTodo }}" style="{{ nav9 }}">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></svg>
             <span>To-Do</span>
+          </button>
+          <button onClick="{{ goPpc }}" style="{{ nav10 }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3v18h18"/><path d="M7 14l3-4 4 3 5-7"/></svg>
+            <span>PPC Analyse</span>
           </button>
         </nav>
         <div style="padding:16px 20px;border-top:1px solid #EEEEEB">
@@ -1120,6 +1125,145 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
         </div>
       </sc-if>
 
+      <sc-if value="{{ isPpc }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="PPC" style="max-width:1240px;margin:0 auto;padding:30px 40px 72px;animation:ppfade .25s ease">
+          <div style="padding-bottom:20px;border-bottom:2px solid #0A0A0A">
+            <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9A96;margin-bottom:8px">PPC Analyse</div>
+            <h1 style="font-family:'Archivo';font-weight:800;font-size:30px;letter-spacing:-.02em;margin:0;line-height:1">Suchbegriff-Bericht auswerten</h1>
+            <div style="font-size:13.5px;color:#8A8A86;margin-top:10px;max-width:680px;line-height:1.55">Lade den Amazon <b style="color:#0A0A0A">Sponsored Products · Suchbegriff-Bericht</b> (.xlsx) hoch. Das Dashboard wertet je Suchbegriff Impressionen, Klicks, Verkäufe und ACOS aus und gibt Empfehlungen — was gut läuft, wo Potenzial ist und welche Keywords raus sollten.</div>
+          </div>
+
+          <!-- Upload -->
+          <div style="background:#fff;border:1px solid #E4E4E0;margin-top:26px;padding:22px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+              <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+                <label style="display:inline-flex;align-items:center;gap:9px;padding:11px 18px;background:#0A0A0A;color:#fff;font-size:13.5px;font-weight:600;cursor:pointer">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4M6 10l6-6 6 6M4 20h16"/></svg>
+                  Bericht hochladen (.xlsx)
+                  <input type="file" accept=".xlsx,.xls" onChange="{{ ppcOnFile }}" style="display:none">
+                </label>
+                <sc-if value="{{ ppcHasData }}" hint-placeholder-val="{{ true }}">
+                  <div style="font-size:13px;color:#6A6A66"><b style="color:#0A0A0A">{{ ppcFileName }}</b><sc-if value="{{ ppcPeriod }}" hint-placeholder-val="{{ true }}"> · Zeitraum {{ ppcPeriod }}</sc-if></div>
+                </sc-if>
+              </div>
+              <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#7A7A76">Ziel-ACOS</span>
+                  <input type="number" value="{{ ppcTargetAcos }}" onChange="{{ setPpcTarget }}" style="width:64px;border:1px solid #E2E2E2;padding:8px 9px;text-align:right;font-size:13.5px;font-feature-settings:'tnum' 1">
+                  <span style="font-size:13px;color:#9A9A96">%</span>
+                </div>
+                <sc-if value="{{ ppcHasData }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ ppcClear }}" style="padding:8px 14px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12.5px;font-weight:500;cursor:pointer">Zurücksetzen</button>
+                </sc-if>
+              </div>
+            </div>
+            <sc-if value="{{ ppcLoading }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:14px;font-size:13px;color:#8A8A86">Bericht wird ausgewertet …</div>
+            </sc-if>
+            <sc-if value="{{ ppcError }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:14px;background:#FDECEA;border:1px solid #F5C6C0;color:#B02A17;font-size:13px;padding:11px 14px">{{ ppcError }}</div>
+            </sc-if>
+          </div>
+
+          <sc-if value="{{ ppcHasData }}" hint-placeholder-val="{{ false }}">
+            <!-- Kennzahlen -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:#E4E4E0;border:1px solid #E4E4E0;margin-top:26px">
+              <sc-for list="{{ ppcTiles }}" as="t" hint-placeholder-count="6">
+                <div style="background:#fff;padding:16px 18px">
+                  <div style="font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96">{{ t.l }}</div>
+                  <div style="font-family:'Archivo';font-weight:800;font-size:22px;margin-top:6px;font-feature-settings:'tnum' 1">{{ t.v }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="font-size:12px;color:#9A9A96;margin-top:10px">{{ ppcTargetNote }} · {{ ppcRelevantCount }} relevante Suchbegriffe analysiert. {{ ppcBelowNote }}</div>
+
+            <!-- Empfehlungen -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:26px;align-items:start">
+              <!-- Gut -->
+              <div style="background:#fff;border:1px solid #E4E4E0;border-top:3px solid #1B7F4B">
+                <div style="padding:14px 18px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;justify-content:space-between">
+                  <span style="font-family:'Archivo';font-weight:800;font-size:14px">✓ Gut — skalieren</span>
+                  <span style="font-size:12px;font-weight:700;color:#1B7F4B">{{ ppcGoodCount }}</span>
+                </div>
+                <sc-if value="{{ ppcGoodEmpty }}" hint-placeholder-val="{{ true }}"><div style="padding:16px 18px;font-size:12.5px;color:#9A9A96">Keine Keywords in dieser Kategorie.</div></sc-if>
+                <sc-for list="{{ ppcGood }}" as="k" hint-placeholder-count="3">
+                  <div style="padding:12px 18px;border-bottom:1px solid #F4F4F1">
+                    <div style="font-size:13.5px;font-weight:600;color:#16130F">{{ k.term }}</div>
+                    <div style="font-size:11.5px;color:#8A8A86;margin-top:3px;font-feature-settings:'tnum' 1">{{ k.impr }} Impr · {{ k.clicks }} Klicks · {{ k.orders }} Verk. · ACOS {{ k.acos }}</div>
+                    <div style="font-size:12px;color:#1B7F4B;margin-top:4px">→ {{ k.action }}</div>
+                  </div>
+                </sc-for>
+              </div>
+              <!-- Prüfen -->
+              <div style="background:#fff;border:1px solid #E4E4E0;border-top:3px solid #D8930A">
+                <div style="padding:14px 18px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;justify-content:space-between">
+                  <span style="font-family:'Archivo';font-weight:800;font-size:14px">◐ Verbesserungspotenzial</span>
+                  <span style="font-size:12px;font-weight:700;color:#D8930A">{{ ppcOkayCount }}</span>
+                </div>
+                <sc-if value="{{ ppcOkayEmpty }}" hint-placeholder-val="{{ true }}"><div style="padding:16px 18px;font-size:12.5px;color:#9A9A96">Keine Keywords in dieser Kategorie.</div></sc-if>
+                <sc-for list="{{ ppcOkay }}" as="k" hint-placeholder-count="3">
+                  <div style="padding:12px 18px;border-bottom:1px solid #F4F4F1">
+                    <div style="font-size:13.5px;font-weight:600;color:#16130F">{{ k.term }}</div>
+                    <div style="font-size:11.5px;color:#8A8A86;margin-top:3px;font-feature-settings:'tnum' 1">{{ k.impr }} Impr · {{ k.clicks }} Klicks · {{ k.orders }} Verk. · ACOS {{ k.acos }}</div>
+                    <div style="font-size:12px;color:#B57708;margin-top:4px">→ {{ k.action }}</div>
+                  </div>
+                </sc-for>
+              </div>
+              <!-- Entfernen -->
+              <div style="background:#fff;border:1px solid #E4E4E0;border-top:3px solid #D42E12">
+                <div style="padding:14px 18px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;justify-content:space-between">
+                  <span style="font-family:'Archivo';font-weight:800;font-size:14px">✕ Entfernen / negativ</span>
+                  <span style="font-size:12px;font-weight:700;color:#D42E12">{{ ppcBadCount }}</span>
+                </div>
+                <sc-if value="{{ ppcBadEmpty }}" hint-placeholder-val="{{ true }}"><div style="padding:16px 18px;font-size:12.5px;color:#9A9A96">Keine Keywords in dieser Kategorie.</div></sc-if>
+                <sc-for list="{{ ppcBad }}" as="k" hint-placeholder-count="3">
+                  <div style="padding:12px 18px;border-bottom:1px solid #F4F4F1">
+                    <div style="font-size:13.5px;font-weight:600;color:#16130F">{{ k.term }}</div>
+                    <div style="font-size:11.5px;color:#8A8A86;margin-top:3px;font-feature-settings:'tnum' 1">{{ k.impr }} Impr · {{ k.clicks }} Klicks · {{ k.orders }} Verk. · ACOS {{ k.acos }}</div>
+                    <div style="font-size:12px;color:#C0392B;margin-top:4px">→ {{ k.action }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <!-- Volltabelle -->
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:32px">
+              <h2 style="font-family:'Archivo';font-weight:800;font-size:18px;margin:0">Alle relevanten Suchbegriffe</h2>
+              <div style="display:flex;align-items:center;gap:7px">
+                <span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Sortieren</span>
+                <sc-for list="{{ ppcSortChips }}" as="c" hint-placeholder-count="3"><button onClick="{{ c.sel }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #E4E4E0;margin-top:12px;overflow-x:auto">
+              <table style="width:100%;border-collapse:collapse;min-width:820px">
+                <thead><tr>
+                  <th style="text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Suchbegriff</th>
+                  <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Impr.</th>
+                  <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Klicks</th>
+                  <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Verkäufe</th>
+                  <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Ausgaben</th>
+                  <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">ACOS</th>
+                  <th style="text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Bewertung</th>
+                </tr></thead>
+                <tbody>
+                  <sc-for list="{{ ppcRows }}" as="k" hint-placeholder-count="8">
+                    <tr>
+                      <td style="padding:10px 14px;font-size:13px;font-weight:600;border-bottom:1px solid #F1F1EE">{{ k.term }}</td>
+                      <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.impr }}</td>
+                      <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.clicks }}</td>
+                      <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.orders }}</td>
+                      <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.spend }}</td>
+                      <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.acos }}</td>
+                      <td style="padding:10px 14px;border-bottom:1px solid #F1F1EE"><span style="display:inline-block;padding:3px 9px;font-size:11px;font-weight:700;color:#fff;background:{{ k.catColor }}">{{ k.catLabel }}</span></td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
     </main>
   </div>
 
@@ -1320,7 +1464,8 @@ class Component extends DCLogic {
       chartYear:String(new Date().getFullYear()),
       chartYoy:false,
       bueroTick:0,
-      todoTitle:'', todoPrio:'Mittel', todoOwner:'Beide', todoFilterOwner:'alle', todoShowDone:false
+      todoTitle:'', todoPrio:'Mittel', todoOwner:'Beide', todoFilterOwner:'alle', todoShowDone:false,
+      ppcRaw:null, ppcFileName:'', ppcError:'', ppcLoading:false, ppcTargetAcos:30, ppcSort:'spend', ppcPeriod:''
     };
   }
   componentDidMount(){ this._onResize = ()=> this.setState({narrow: window.innerWidth < 900}); window.addEventListener('resize', this._onResize); this._sbInit(); }
@@ -1712,6 +1857,75 @@ class Component extends DCLogic {
   _removeTodo(id){ this.setState(s=>({todos:s.todos.filter(t=>t.id!==id)}), ()=>this._persist()); }
   _setTodoPrioOf(id,prio){ this.setState(s=>({todos:s.todos.map(t=> t.id===id?{...t,priority:prio}:t)}), ()=>this._persist()); }
   _setTodoOwnerOf(id,owner){ this.setState(s=>({todos:s.todos.map(t=> t.id===id?{...t,owner}:t)}), ()=>this._persist()); }
+
+  // ---------- PPC-Analyse (Amazon Suchbegriff-Bericht) ----------
+  _ppcLoadLib(){ return new Promise((res,rej)=>{ if(window.XLSX) return res(window.XLSX);
+    const s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+    s.onload=()=>window.XLSX?res(window.XLSX):rej(new Error('XLSX nicht verfügbar')); s.onerror=()=>rej(new Error('Excel-Bibliothek konnte nicht geladen werden (Internet nötig).'));
+    document.head.appendChild(s); }); }
+  _ppcNorm(s){ return String(s==null?'':s).replace(/\u00a0/g,' ').replace(/\s+/g,' ').trim().toLowerCase(); }
+  _ppcHandleFile(file){
+    if(!file) return;
+    this.setState({ppcLoading:true, ppcError:'', ppcFileName:file.name});
+    const reader=new FileReader();
+    reader.onload=async (ev)=>{
+      try{
+        const XLSX=await this._ppcLoadLib();
+        const wb=XLSX.read(new Uint8Array(ev.target.result), {type:'array', cellDates:true});
+        const ws=wb.Sheets[wb.SheetNames[0]];
+        const rows=XLSX.utils.sheet_to_json(ws, {header:1, raw:true, defval:null});
+        this._ppcParse(rows);
+      }catch(e){ this.setState({ppcLoading:false, ppcError:(e&&e.message)||'Datei konnte nicht gelesen werden.'}); }
+    };
+    reader.onerror=()=>this.setState({ppcLoading:false, ppcError:'Datei konnte nicht gelesen werden.'});
+    reader.readAsArrayBuffer(file);
+  }
+  _ppcParse(rows){
+    // Kopfzeile finden (die Zeile, die "Suchbegriff" + "Impressionen" enthält)
+    let hRow=-1;
+    for(let i=0;i<Math.min(rows.length,8);i++){ const r=(rows[i]||[]).map(c=>this._ppcNorm(c));
+      if(r.some(x=>x.includes('suchbegriff')) && r.some(x=>x.includes('impressionen'))){ hRow=i; break; } }
+    if(hRow<0){ this.setState({ppcLoading:false, ppcError:'Kein gültiger Suchbegriff-Bericht erkannt (Kopfzeile nicht gefunden).', ppcRaw:null}); return; }
+    const H=(rows[hRow]||[]).map(c=>this._ppcNorm(c));
+    const find=(preds)=>{ for(let i=0;i<H.length;i++){ if(preds(H[i],i)) return i; } return -1; };
+    const col={
+      term: find(h=>h.includes('suchbegriff')),
+      camp: find(h=>h.includes('kampagnen-name')||h.includes('kampagnenname')),
+      match: find(h=>h.includes('übereinstimmungstyp')||h.includes('ubereinstimmungstyp')),
+      impr: find(h=>h==='impressionen'||h.includes('impressionen')),
+      clicks: find(h=>h==='klicks'),
+      spend: find(h=>h.includes('ausgaben')),
+      sales: find(h=>h.includes('umsatz gesamt')),
+      orders: find(h=>h.includes('aufträge gesamt')||h.includes('auftrage gesamt')),
+      units: find(h=>h.includes('einheiten gesamt')&&!h.includes('sku')),
+      start: find(h=>h.includes('startdatum')),
+      end: find(h=>h.includes('enddatum'))
+    };
+    if(col.term<0||col.impr<0){ this.setState({ppcLoading:false, ppcError:'Pflichtspalten (Suchbegriff / Impressionen) fehlen.', ppcRaw:null}); return; }
+    const num=(v)=>{ if(v==null||v==='') return 0; if(typeof v==='number') return v; const n=parseFloat(String(v).replace(/\./g,'').replace(',','.').replace(/[^0-9.\-]/g,'')); return isNaN(n)?0:n; };
+    const fmtD=(v)=>{ if(v==null) return null; if(v instanceof Date) return v.toISOString().slice(0,10); const s=String(v).slice(0,10); return s||null; };
+    // Aggregation je Suchbegriff (über alle Kampagnen)
+    const map=new Map(); let minD=null,maxD=null;
+    for(let i=hRow+1;i<rows.length;i++){ const r=rows[i]; if(!r) continue;
+      const term=String(r[col.term]==null?'':r[col.term]).trim(); if(!term||term==='-') continue;
+      const impr=num(r[col.impr]);
+      const sd=col.start>=0?fmtD(r[col.start]):null, ed=col.end>=0?fmtD(r[col.end]):null;
+      if(sd&&(!minD||sd<minD))minD=sd; if(ed&&(!maxD||ed>maxD))maxD=ed;
+      const key=term.toLowerCase();
+      let o=map.get(key); if(!o){ o={term, impr:0, clicks:0, spend:0, sales:0, orders:0, units:0, camps:new Set()}; map.set(key,o); }
+      o.impr+=impr; o.clicks+=num(r[col.clicks]); o.spend+=num(r[col.spend]); o.sales+=num(r[col.sales]);
+      o.orders+=col.orders>=0?num(r[col.orders]):0; o.units+=col.units>=0?num(r[col.units]):0;
+      if(col.camp>=0 && r[col.camp]) o.camps.add(String(r[col.camp]).trim());
+    }
+    const keywords=Array.from(map.values()).map(o=>({ term:o.term, impr:o.impr, clicks:o.clicks, spend:+o.spend.toFixed(2),
+      sales:+o.sales.toFixed(2), orders:o.orders, units:o.units, camps:Array.from(o.camps),
+      ctr:o.impr>0?o.clicks/o.impr:0, cpc:o.clicks>0?o.spend/o.clicks:0, acos:o.sales>0?o.spend/o.sales:null,
+      cvr:o.clicks>0?o.orders/o.clicks:0 }));
+    if(!keywords.length){ this.setState({ppcLoading:false, ppcError:'Keine Suchbegriff-Zeilen gefunden.', ppcRaw:null}); return; }
+    this.setState({ ppcLoading:false, ppcError:'', ppcRaw:keywords, ppcPeriod:(minD&&maxD)?(minD===maxD?minD:(minD+' – '+maxD)):'' });
+  }
+  _ppcClear(){ this.setState({ppcRaw:null, ppcFileName:'', ppcError:'', ppcPeriod:''}); }
+  _setPpcTarget(v){ const n=Math.max(1,Math.min(200,Math.round(+v||0))); this.setState({ppcTargetAcos:n||30}); }
   _openAbgleich(p){ this.setState({stockModal:{productId:p.id, value:String(Math.max(0,Math.round(this._stockOf(p))))}}); }
   _saveAbgleich(){ const sm=this.state.stockModal; if(!sm) return; const v=Math.max(0,Math.round(+sm.value||0)); const iso=this._todayISO(); this.setState(s=>({products:s.products.map(p=> p.id===sm.productId?{...p,stockRef:{value:v,date:iso}}:p), stockModal:null}), ()=>this._persist()); }
   _shiftYm(ym,delta){ let [y,m]=ym.split('-').map(Number); const d=new Date(y,(m-1)+delta,1); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
@@ -2215,11 +2429,11 @@ class Component extends DCLogic {
     const V = {
       narrow:st.narrow, wide:!st.narrow,
       isCockpit: mod==='cockpit', isProdukteList: mod==='produkte' && !pid, isProdukteDetail: isDetail,
-      isLager: mod==='lager', isWerbung: mod==='werbung', isSzenarien: mod==='szenarien', isIdeen: mod==='ideen', isEmpfehlungen: mod==='empfehlungen', isBerichte: mod==='berichte', isBuero: mod==='buero', isTodo: mod==='todo',
+      isLager: mod==='lager', isWerbung: mod==='werbung', isSzenarien: mod==='szenarien', isIdeen: mod==='ideen', isEmpfehlungen: mod==='empfehlungen', isBerichte: mod==='berichte', isBuero: mod==='buero', isTodo: mod==='todo', isPpc: mod==='ppc',
       goCockpit:()=>this._go('cockpit'), goProdukte:()=>this._go('produkte'), goLager:()=>this._go('lager'),
-      goWerbung:()=>this._go('werbung'), goSzenarien:()=>this._go('szenarien'), goIdeen:()=>this._go('ideen'), goEmpfehlungen:()=>this._go('empfehlungen'), goBerichte:()=>this._go('berichte'), goBuero:()=>this._go('buero'), goTodo:()=>this._go('todo'),
-      nav0:nv('cockpit'), nav1:nv('produkte'), nav2:nv('lager'), nav3:nv('werbung'), nav4:nv('szenarien'), nav5:nv('ideen'), nav6:nv('empfehlungen'), nav7:nv('berichte'), nav8:nv('buero'), nav9:nv('todo'),
-      tabStyle0:tb('cockpit'), tabStyle1:tb('produkte'), tabStyle2:tb('lager'), tabStyle3:tb('werbung'), tabStyle4:tb('szenarien'), tabStyle5:tb('ideen'), tabStyle6:tb('empfehlungen'), tabStyle7:tb('berichte'), tabStyle8:tb('buero'), tabStyle9:tb('todo'),
+      goWerbung:()=>this._go('werbung'), goSzenarien:()=>this._go('szenarien'), goIdeen:()=>this._go('ideen'), goEmpfehlungen:()=>this._go('empfehlungen'), goBerichte:()=>this._go('berichte'), goBuero:()=>this._go('buero'), goTodo:()=>this._go('todo'), goPpc:()=>this._go('ppc'),
+      nav0:nv('cockpit'), nav1:nv('produkte'), nav2:nv('lager'), nav3:nv('werbung'), nav4:nv('szenarien'), nav5:nv('ideen'), nav6:nv('empfehlungen'), nav7:nv('berichte'), nav8:nv('buero'), nav9:nv('todo'), nav10:nv('ppc'),
+      tabStyle0:tb('cockpit'), tabStyle1:tb('produkte'), tabStyle2:tb('lager'), tabStyle3:tb('werbung'), tabStyle4:tb('szenarien'), tabStyle5:tb('ideen'), tabStyle6:tb('empfehlungen'), tabStyle7:tb('berichte'), tabStyle8:tb('buero'), tabStyle9:tb('todo'), tabStyle10:tb('ppc'),
       productCount: st.products.length, dataStamp:'Juli 2026',
       periodLabel: this._mlabel(from)+' – '+this._mlabel(to), periodDays: this._num(this._rangeDays(from,to)),
       periodFrom: per.from, periodTo: per.to,
@@ -2343,6 +2557,71 @@ class Component extends DCLogic {
     V.repProductCount = st.products.length;
     V.genProductReport = ()=> this._reportProductData();
     V.genBusinessReport = ()=> this._reportBusiness(this.state.reportMonth || this._curYm());
+
+    // ---- PPC-Analyse ----
+    {
+      V.ppcFileName=st.ppcFileName||''; V.ppcError=st.ppcError||''; V.ppcLoading=!!st.ppcLoading;
+      V.ppcHasData=!!(st.ppcRaw && st.ppcRaw.length);
+      V.ppcPeriod=st.ppcPeriod||'';
+      V.ppcTargetAcos=st.ppcTargetAcos||30;
+      V.ppcOnFile=(e)=>{ const f=e.target.files&&e.target.files[0]; if(f) this._ppcHandleFile(f); e.target.value=''; };
+      V.ppcClear=()=>this._ppcClear();
+      V.setPpcTarget=(e)=>this._setPpcTarget(e.target.value);
+      const RELEVANT=1000;
+      if(V.ppcHasData){
+        const tgt=(st.ppcTargetAcos||30)/100;
+        const kws=st.ppcRaw;
+        const tot=kws.reduce((a,k)=>({impr:a.impr+k.impr,clicks:a.clicks+k.clicks,spend:a.spend+k.spend,sales:a.sales+k.sales,orders:a.orders+k.orders}),{impr:0,clicks:0,spend:0,sales:0,orders:0});
+        const totAcos=tot.sales>0?tot.spend/tot.sales:null;
+        V.ppcTiles=[
+          {l:'Suchbegriffe', v:this._num(kws.length)},
+          {l:'Impressionen', v:this._num(tot.impr)},
+          {l:'Klicks', v:this._num(tot.clicks)},
+          {l:'Ausgaben', v:this._eur(tot.spend)},
+          {l:'Umsatz (Werbung)', v:this._eur(tot.sales)},
+          {l:'Gesamt-ACOS', v: totAcos==null?'—':this._pct(totAcos*100,1)}
+        ];
+        // Klassifizierung nur fuer relevante Keywords (>= 1000 Impressionen)
+        const relevant=kws.filter(k=>k.impr>=RELEVANT);
+        const belowN=kws.length-relevant.length;
+        const classify=(k)=>{
+          if(k.orders>0){ const a=k.acos;
+            if(a<=tgt) return {cat:'gut', reason:'ACOS '+this._pct(a*100,0)+' unter Ziel — rentabel.', action:'Gebot/Budget erhöhen und skalieren.'};
+            if(a<=tgt*1.5) return {cat:'okay', reason:'ACOS '+this._pct(a*100,0)+' leicht über Ziel ('+this._pct(tgt*100,0)+').', action:'Gebot moderat senken, Konversion verbessern.'};
+            return {cat:'schlecht', reason:'ACOS '+this._pct(a*100,0)+' deutlich über Ziel — unrentabel.', action:'Gebot stark senken oder Keyword pausieren.'};
+          } else {
+            if(k.spend>0) return {cat:'schlecht', reason:this._eur(k.spend)+' Ausgaben, '+this._num(k.clicks)+' Klicks, kein Verkauf.', action:'Als negatives Keyword ausschließen / entfernen.'};
+            return {cat:'okay', reason:this._num(k.impr)+' Impressionen, kaum Klicks, kein Verkauf.', action:'Beobachten — evtl. Relevanz/Gebot prüfen.'};
+          }
+        };
+        const enrich=relevant.map(k=>{ const c=classify(k); return {...k, ...c}; });
+        const catRank={gut:0,okay:1,schlecht:2};
+        const sortKey=st.ppcSort||'spend';
+        const sorter=(a,b)=> sortKey==='acos' ? ((a.acos==null?9:a.acos)-(b.acos==null?9:b.acos))
+          : sortKey==='impr' ? b.impr-a.impr : b.spend-a.spend;
+        const mkRow=(k)=>({ term:k.term, impr:this._num(k.impr), clicks:this._num(k.clicks),
+          orders:this._num(k.orders), spend:this._eur(k.spend), sales:this._eur(k.sales),
+          acos:k.acos==null?'—':this._pct(k.acos*100,0),
+          catColor: k.cat==='gut'?green : k.cat==='okay'?yellow : red,
+          catLabel: k.cat==='gut'?'Gut':k.cat==='okay'?'Prüfen':'Entfernen',
+          reason:k.reason, action:k.action, camps:(k.camps||[]).join(', ') });
+        const good=enrich.filter(k=>k.cat==='gut').sort(sorter);
+        const okay=enrich.filter(k=>k.cat==='okay').sort(sorter);
+        const bad=enrich.filter(k=>k.cat==='schlecht').sort((a,b)=>b.spend-a.spend);
+        V.ppcRelevantCount=relevant.length;
+        V.ppcBelowNote = belowN>0 ? (belowN+' Suchbegriffe unter '+this._num(RELEVANT)+' Impressionen ausgeblendet (noch nicht aussagekräftig).') : '';
+        V.ppcTargetNote='Relevanz ab '+this._num(RELEVANT)+' Impressionen · Ziel-ACOS '+this._pct((st.ppcTargetAcos||30),0);
+        V.ppcGood=good.map(mkRow); V.ppcOkay=okay.map(mkRow); V.ppcBad=bad.map(mkRow);
+        V.ppcGoodCount=good.length; V.ppcOkayCount=okay.length; V.ppcBadCount=bad.length;
+        V.ppcGoodEmpty=good.length===0; V.ppcOkayEmpty=okay.length===0; V.ppcBadEmpty=bad.length===0;
+        V.ppcRows=enrich.slice().sort((a,b)=> (catRank[a.cat]-catRank[b.cat]) || sorter(a,b)).map(mkRow);
+        V.ppcTableEmpty=enrich.length===0;
+        V.ppcSort=sortKey;
+        V.ppcSortChips=[['spend','Ausgaben'],['impr','Impressionen'],['acos','ACOS']].map(([k,l])=>({label:l,
+          sel:()=>this.setState({ppcSort:k}),
+          style: (sortKey===k)?'padding:6px 12px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12px;font-weight:600;cursor:pointer':'padding:6px 12px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12px;font-weight:500;cursor:pointer' }));
+      }
+    }
 
     // ---- To-Dos ----
     {
