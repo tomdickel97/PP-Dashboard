@@ -1177,6 +1177,64 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
             </div>
             <div style="font-size:12px;color:#9A9A96;margin-top:10px">{{ ppcTargetNote }} · {{ ppcRelevantCount }} relevante Suchbegriffe analysiert. {{ ppcBelowNote }}</div>
 
+            <!-- Trend zum Vorbericht -->
+            <sc-if value="{{ ppcHasPrev }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:22px">
+                <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9A9A96;margin-bottom:8px">Vergleich zum Vorbericht · {{ ppcPrevLabel }}</div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:#E4E4E0;border:1px solid #E4E4E0">
+                  <sc-for list="{{ ppcTrendTiles }}" as="t" hint-placeholder-count="4">
+                    <div style="background:#fff;padding:14px 16px">
+                      <div style="font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96">{{ t.l }}</div>
+                      <div style="font-family:'Archivo';font-weight:800;font-size:17px;margin-top:6px;font-feature-settings:'tnum' 1;color:{{ t.c }}">{{ t.v }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- Kampagnen-Scorecard -->
+            <div style="background:#fff;border:1px solid #E4E4E0;margin-top:22px">
+              <div style="padding:16px 20px;border-bottom:1px solid #EEEEEB">
+                <div style="font-family:'Archivo';font-weight:800;font-size:16px">Kampagnen-Scorecard <span style="color:#9A9A96">({{ ppcCampCount }})</span></div>
+                <div style="font-size:12.5px;color:#8A8A86;margin-top:2px">Welche Kampagne ist profitabel, welche verbrennt Budget — inkl. Anteil an den Gesamtausgaben.</div>
+              </div>
+              <div style="overflow-x:auto">
+                <table style="width:100%;border-collapse:collapse;min-width:860px">
+                  <thead><tr>
+                    <th style="text-align:left;padding:10px 16px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Kampagne</th>
+                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Impr.</th>
+                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Klicks</th>
+                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Verk.</th>
+                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Ausgaben</th>
+                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Umsatz</th>
+                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">ACOS</th>
+                    <th style="text-align:left;padding:10px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A;min-width:130px">Budget-Anteil</th>
+                    <th style="text-align:left;padding:10px 16px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Status</th>
+                  </tr></thead>
+                  <tbody>
+                    <sc-for list="{{ ppcCampRows }}" as="c" hint-placeholder-count="4">
+                      <tr>
+                        <td style="padding:11px 16px;font-size:13px;font-weight:600;border-bottom:1px solid #F1F1EE">{{ c.name }}<div style="font-size:11px;font-weight:400;color:#9A9A96;margin-top:2px">{{ c.note }}</div></td>
+                        <td style="padding:11px 12px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ c.impr }}</td>
+                        <td style="padding:11px 12px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ c.clicks }}</td>
+                        <td style="padding:11px 12px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ c.orders }}</td>
+                        <td style="padding:11px 12px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ c.spend }}</td>
+                        <td style="padding:11px 12px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ c.sales }}</td>
+                        <td style="padding:11px 12px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ c.acos }}</td>
+                        <td style="padding:11px 12px;border-bottom:1px solid #F1F1EE">
+                          <div style="display:flex;align-items:center;gap:8px">
+                            <div style="flex:1;height:8px;background:#F1F1EE"><div style="height:8px;background:{{ c.catColor }};width:{{ c.barW }}"></div></div>
+                            <span style="font-size:11.5px;color:#6A6A66;font-feature-settings:'tnum' 1;white-space:nowrap">{{ c.shareStr }}</span>
+                          </div>
+                        </td>
+                        <td style="padding:11px 16px;border-bottom:1px solid #F1F1EE"><span style="display:inline-block;padding:3px 9px;font-size:11px;font-weight:700;color:#fff;background:{{ c.catColor }};white-space:nowrap">{{ c.catLabel }}</span></td>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
             <!-- Hebel 1: Keyword-Harvesting -->
             <div style="background:#fff;border:1px solid #E4E4E0;border-left:4px solid #1B7F4B;margin-top:26px">
               <div style="padding:16px 20px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
@@ -1300,6 +1358,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                   <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Ausgaben</th>
                   <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">ACOS</th>
                   <th style="text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Bewertung</th>
+                  <th style="text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Trend (ACOS)</th>
                 </tr></thead>
                 <tbody>
                   <sc-for list="{{ ppcRows }}" as="k" hint-placeholder-count="8">
@@ -1311,12 +1370,33 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                       <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.spend }}</td>
                       <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.acos }}</td>
                       <td style="padding:10px 14px;border-bottom:1px solid #F1F1EE"><span style="display:inline-block;padding:3px 9px;font-size:11px;font-weight:700;color:#fff;background:{{ k.catColor }}">{{ k.catLabel }}</span></td>
+                      <td style="padding:10px 14px;border-bottom:1px solid #F1F1EE;font-size:12px;white-space:nowrap"><span style="color:{{ k.trendColor }};font-weight:700">{{ k.trendArrow }}</span> <span style="color:#6A6A66;font-feature-settings:'tnum' 1">{{ k.trendText }}</span></td>
                     </tr>
                   </sc-for>
                 </tbody>
               </table>
             </div>
           </sc-if>
+
+          <!-- Berichts-Verlauf (persistiert, Basis fuer den Wochenvergleich) -->
+          <div style="background:#fff;border:1px solid #E4E4E0;margin-top:26px">
+            <div style="padding:14px 20px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+              <div>
+                <div style="font-family:'Archivo';font-weight:800;font-size:15px">Berichts-Verlauf <span style="color:#9A9A96">({{ ppcHistoryCount }}/12)</span></div>
+                <div style="font-size:12px;color:#8A8A86;margin-top:2px">Jeder Upload wird gespeichert und mit Tom synchronisiert — Grundlage für den Wochenvergleich. Der jeweils nächste Upload wird automatisch gegen den zeitlich vorherigen Bericht verglichen.</div>
+              </div>
+            </div>
+            <sc-if value="{{ ppcHistoryEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:16px 20px;font-size:12.5px;color:#9A9A96">Noch keine Berichte gespeichert.</div></sc-if>
+            <sc-for list="{{ ppcHistoryRows }}" as="h" hint-placeholder-count="3">
+              <div style="{{ h.style }}">
+                <sc-if value="{{ h.isCurrent }}" hint-placeholder-val="{{ false }}"><span style="display:inline-block;padding:2px 8px;font-size:10px;font-weight:700;background:#0A0A0A;color:#fff;letter-spacing:.05em">AKTUELL</span></sc-if>
+                <div style="font-size:13px;font-weight:600;min-width:150px">{{ h.label }}</div>
+                <div style="flex:1;font-size:12px;color:#9A9A96;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ h.file }}</div>
+                <div style="font-size:12px;color:#8A8A86;font-feature-settings:'tnum' 1;white-space:nowrap">{{ h.kwCount }} Begriffe</div>
+                <button onClick="{{ h.remove }}" style="background:none;border:none;color:#C9C9C4;cursor:pointer;padding:4px" title="Aus Verlauf löschen"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2m2 0v14a1 1 0 01-1 1H7a1 1 0 01-1-1V6"/></svg></button>
+              </div>
+            </sc-for>
+          </div>
         </div>
       </sc-if>
 
@@ -1521,7 +1601,9 @@ class Component extends DCLogic {
       chartYoy:false,
       bueroTick:0,
       todoTitle:'', todoPrio:'Mittel', todoOwner:'Beide', todoFilterOwner:'alle', todoShowDone:false,
-      ppcRaw:null, ppcFileName:'', ppcError:'', ppcLoading:false, ppcTargetAcos:30, ppcSort:'spend', ppcPeriod:'', ppcCopied:''
+      ppcRaw:null, ppcFileName:'', ppcError:'', ppcLoading:false, ppcTargetAcos:30, ppcSort:'spend', ppcPeriod:'', ppcCopied:'',
+      ppcCamps:null, ppcCurrentId:null,
+      ppcHistory:(saved && Array.isArray(saved.ppcHistory)) ? saved.ppcHistory.slice(0,12) : []
     };
   }
   componentDidMount(){ this._onResize = ()=> this.setState({narrow: window.innerWidth < 900}); window.addEventListener('resize', this._onResize); this._sbInit(); }
@@ -1533,7 +1615,7 @@ class Component extends DCLogic {
      Haelt products / ideas / recDismissed live zwischen mehreren
      Personen synchron. Aendert NICHTS an der uebrigen Logik.
      ============================================================ */
-  _snapshot(){ return { products:this.state.products, ideas:this.state.ideas, todos:this.state.todos, recDismissed:this.state.recDismissed }; }
+  _snapshot(){ return { products:this.state.products, ideas:this.state.ideas, todos:this.state.todos, recDismissed:this.state.recDismissed, ppcHistory:this.state.ppcHistory||[] }; }
   // stabile Signatur (Reihenfolge der Keys egal) -> verhindert Sync-Schleifen
   _stableStringify(v){
     if(v===null || typeof v!=='object') return JSON.stringify(v);
@@ -1588,9 +1670,10 @@ class Component extends DCLogic {
       const products = Array.isArray(remote.products) ? remote.products : this.state.products;
       const ideas    = Array.isArray(remote.ideas)    ? remote.ideas.map(i=>this._normIdea(i)) : this.state.ideas;
       const todos    = Array.isArray(remote.todos)    ? remote.todos.map(t=>this._normTodo(t)) : this.state.todos;
+      const ppcHistory = Array.isArray(remote.ppcHistory) ? remote.ppcHistory.slice(0,12) : (this.state.ppcHistory||[]);
       const recDismissed = remote.recDismissed || this.state.recDismissed;
-      this.setState({ products, ideas, todos, recDismissed }); // WICHTIG: ohne _persist() -> keine Schleife
-      try{ localStorage.setItem('partypeak_v4', JSON.stringify({products, ideas, todos, recDismissed})); }catch(e){}
+      this.setState({ products, ideas, todos, ppcHistory, recDismissed }); // WICHTIG: ohne _persist() -> keine Schleife
+      try{ localStorage.setItem('partypeak_v4', JSON.stringify({products, ideas, todos, ppcHistory, recDismissed})); }catch(e){}
     }catch(e){ console.warn('[Party Peak] Uebernahme fehlgeschlagen:', e); }
   }
   _sbPush(){
@@ -1964,7 +2047,7 @@ class Component extends DCLogic {
     const fmtD=(v)=>{ if(v==null) return null; if(v instanceof Date) return v.toISOString().slice(0,10); const s=String(v).slice(0,10); return s||null; };
     const normMatch=(m)=>{ m=this._ppcNorm(m); if(m.includes('exact')||m.includes('genau')) return 'exact'; if(m.includes('phrase')) return 'phrase'; if(m.includes('broad')||m.includes('weit')||m.includes('breit')) return 'broad'; return 'auto'; };
     // Aggregation je Suchbegriff (global) + je Kampagne/Anzeigengruppe (fuer Negatives) + Match-Typen (fuer Harvesting)
-    const map=new Map(); let minD=null,maxD=null;
+    const map=new Map(); const campMap=new Map(); let minD=null,maxD=null;
     for(let i=hRow+1;i<rows.length;i++){ const r=rows[i]; if(!r) continue;
       const term=String(r[col.term]==null?'':r[col.term]).trim(); if(!term||term==='-') continue;
       const impr=num(r[col.impr]), clicks=num(r[col.clicks]), spend=num(r[col.spend]), sales=num(r[col.sales]);
@@ -1975,8 +2058,11 @@ class Component extends DCLogic {
       const targeting=col.target>=0&&r[col.target]?String(r[col.target]).trim():'';
       const sd=col.start>=0?fmtD(r[col.start]):null, ed=col.end>=0?fmtD(r[col.end]):null;
       if(sd&&(!minD||sd<minD))minD=sd; if(ed&&(!maxD||ed>maxD))maxD=ed;
+      // Kampagnen-Aggregat
+      let cm=campMap.get(campaign); if(!cm){ cm={campaign, impr:0,clicks:0,spend:0,sales:0,orders:0,terms:0}; campMap.set(campaign,cm); }
+      cm.impr+=impr; cm.clicks+=clicks; cm.spend+=spend; cm.sales+=sales; cm.orders+=orders;
       const key=term.toLowerCase();
-      let o=map.get(key); if(!o){ o={term, impr:0, clicks:0, spend:0, sales:0, orders:0, units:0, matches:new Set(), byCamp:new Map()}; map.set(key,o); }
+      let o=map.get(key); if(!o){ o={term, impr:0, clicks:0, spend:0, sales:0, orders:0, units:0, matches:new Set(), byCamp:new Map()}; map.set(key,o); cm.terms++; }
       o.impr+=impr; o.clicks+=clicks; o.spend+=spend; o.sales+=sales; o.orders+=orders; o.units+=units; o.matches.add(mt);
       const ck=campaign+'||'+adgroup;
       let ce=o.byCamp.get(ck); if(!ce){ ce={campaign, adgroup, targeting, matches:new Set(), impr:0,clicks:0,spend:0,sales:0,orders:0}; o.byCamp.set(ck,ce); }
@@ -1991,10 +2077,19 @@ class Component extends DCLogic {
       ctr:o.impr>0?o.clicks/o.impr:0, cpc:o.clicks>0?o.spend/o.clicks:0, acos:o.sales>0?o.spend/o.sales:null,
       cvr:o.clicks>0?o.orders/o.clicks:0, aov:o.orders>0?o.sales/o.orders:0 }));
     if(!keywords.length){ this.setState({ppcLoading:false, ppcError:'Keine Suchbegriff-Zeilen gefunden.', ppcRaw:null}); return; }
-    this.setState({ ppcLoading:false, ppcError:'', ppcRaw:keywords, ppcPeriod:(minD&&maxD)?(minD===maxD?minD:(minD+' – '+maxD)):'' });
+    const camps=Array.from(campMap.values()).map(c=>({...c, spend:+c.spend.toFixed(2), sales:+c.sales.toFixed(2), acos:c.sales>0?c.spend/c.sales:null}));
+    const period=(minD&&maxD)?(minD===maxD?minD:(minD+' – '+maxD)):'';
+    // ---- Verlauf: kompakten Eintrag speichern (persistiert + synchronisiert), max 12 Berichte ----
+    const entry={ id:'r'+Date.now().toString(36), period, endDate:maxD||'', fileName:this.state.ppcFileName||'', uploadedAt:Date.now(),
+      keywords:keywords.map(k=>({term:k.term,impr:k.impr,clicks:k.clicks,spend:k.spend,sales:k.sales,orders:k.orders,isExact:k.isExact})),
+      camps:camps.map(c=>({campaign:c.campaign,impr:c.impr,clicks:c.clicks,spend:c.spend,sales:c.sales,orders:c.orders})) };
+    let hist=(this.state.ppcHistory||[]).filter(h=> !(h.period===period && period));   // gleicher Zeitraum -> ersetzen
+    hist=[entry, ...hist].sort((a,b)=> String(b.endDate).localeCompare(String(a.endDate)) || b.uploadedAt-a.uploadedAt).slice(0,12);
+    this.setState({ ppcLoading:false, ppcError:'', ppcRaw:keywords, ppcCamps:camps, ppcCurrentId:entry.id, ppcHistory:hist, ppcPeriod:period }, ()=>this._persist());
   }
+  _ppcDeleteHistory(id){ this.setState(s=>({ppcHistory:(s.ppcHistory||[]).filter(h=>h.id!==id)}), ()=>this._persist()); }
   _ppcCopy(text, tag){ try{ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text); } else { const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } this.setState({ppcCopied:tag}); clearTimeout(this._ppcCopyT); this._ppcCopyT=setTimeout(()=>this.setState({ppcCopied:''}),1800); }catch(e){} }
-  _ppcClear(){ this.setState({ppcRaw:null, ppcFileName:'', ppcError:'', ppcPeriod:''}); }
+  _ppcClear(){ this.setState({ppcRaw:null, ppcCamps:null, ppcCurrentId:null, ppcFileName:'', ppcError:'', ppcPeriod:''}); }
   _setPpcTarget(v){ const n=Math.max(1,Math.min(200,Math.round(+v||0))); this.setState({ppcTargetAcos:n||30}); }
   _openAbgleich(p){ this.setState({stockModal:{productId:p.id, value:String(Math.max(0,Math.round(this._stockOf(p))))}}); }
   _saveAbgleich(){ const sm=this.state.stockModal; if(!sm) return; const v=Math.max(0,Math.round(+sm.value||0)); const iso=this._todayISO(); this.setState(s=>({products:s.products.map(p=> p.id===sm.productId?{...p,stockRef:{value:v,date:iso}}:p), stockModal:null}), ()=>this._persist()); }
@@ -2684,7 +2779,8 @@ class Component extends DCLogic {
         V.ppcGood=good.map(mkRow); V.ppcOkay=okay.map(mkRow); V.ppcBad=bad.map(mkRow);
         V.ppcGoodCount=good.length; V.ppcOkayCount=okay.length; V.ppcBadCount=bad.length;
         V.ppcGoodEmpty=good.length===0; V.ppcOkayEmpty=okay.length===0; V.ppcBadEmpty=bad.length===0;
-        V.ppcRows=enrich.slice().sort((a,b)=> (catRank[a.cat]-catRank[b.cat]) || sorter(a,b)).map(mkRow);
+        const sortedEnrich=enrich.slice().sort((a,b)=> (catRank[a.cat]-catRank[b.cat]) || sorter(a,b));
+        V.ppcRows=sortedEnrich.map(mkRow);
         V.ppcTableEmpty=enrich.length===0;
         V.ppcSort=sortKey;
         V.ppcSortChips=[['spend','Ausgaben'],['impr','Impressionen'],['acos','ACOS']].map(([k,l])=>({label:l,
@@ -2729,7 +2825,77 @@ class Component extends DCLogic {
             hint: diff>0.03?('Luft nach oben — Gebot bis '+this._eur(bid,2)+' testen') : diff<-0.03?('Gebot auf ~'+this._eur(Math.max(0,bid),2)+' senken') : 'Gebot passt zum Ziel',
             _sort:Math.abs(diff)*k.clicks }; }).sort((a,b)=>b._sort-a._sort);
         V.ppcBids=bids; V.ppcBidsCount=bids.length; V.ppcBidsEmpty=bids.length===0;
+
+        // ===== Kampagnen-Scorecard =====
+        const camps=(st.ppcCamps||[]).slice().sort((a,b)=>b.spend-a.spend);
+        const totSpend=camps.reduce((s,c)=>s+c.spend,0)||1;
+        const campClass=(c)=>{
+          if(c.spend<=0) return {label:'Inaktiv', color:'#9A9A96', note:'Keine Ausgaben im Zeitraum.'};
+          if(c.orders===0) return {label:'Verbrennt Budget', color:red, note:this._eur(c.spend)+' ohne Verkauf — Suchbegriffe & Gebote prüfen.'};
+          if(c.acos!=null && c.acos<=tgt) return {label:'Profitabel', color:green, note:'ACOS unter Ziel — skalierbar.'};
+          if(c.acos!=null && c.acos<=tgt*1.5) return {label:'Grenzwertig', color:yellow, note:'ACOS über Ziel — optimieren.'};
+          return {label:'Unrentabel', color:red, note:'ACOS deutlich über Ziel — Struktur überarbeiten.'};
+        };
+        V.ppcCampRows=camps.map(c=>{ const cl=campClass(c); const share=c.spend/totSpend;
+          return { name:c.campaign, impr:this._num(c.impr), clicks:this._num(c.clicks), orders:this._num(c.orders),
+            spend:this._eur(c.spend), sales:this._eur(c.sales), acos:c.acos==null?'—':this._pct(c.acos*100,0),
+            shareStr:this._pct(share*100,0), barW:Math.max(2,Math.round(share*100))+'%',
+            catLabel:cl.label, catColor:cl.color, note:cl.note }; });
+        V.ppcCampEmpty=camps.length===0;
+        V.ppcCampCount=camps.length;
+
+        // ===== Multi-Wochen-Vergleich (Trend zum Vorbericht) =====
+        const hist=(st.ppcHistory||[]);
+        const curIdx=hist.findIndex(h=>h.id===st.ppcCurrentId);
+        const prev=(curIdx>=0 && curIdx+1<hist.length)?hist[curIdx+1]:null;
+        V.ppcHasPrev=!!prev;
+        V.ppcPrevLabel=prev?(prev.period||prev.fileName||'Vorbericht'):'';
+        const prevMap=new Map(); if(prev) prev.keywords.forEach(k=>prevMap.set(k.term.toLowerCase(),k));
+        const acosOf=(k)=> k.sales>0 ? k.spend/k.sales : null;
+        const trendOf=(k)=>{
+          if(!prev) return {arrow:'', color:'#B0B0AC', text:'—'};
+          const p=prevMap.get(k.term.toLowerCase());
+          if(!p) return {arrow:'●', color:'#8A8A86', text:'neu'};
+          const aN=k.acos!=null?k.acos:acosOf(k), aP=acosOf(p);
+          if(aN!=null && aP!=null){ const d=aN-aP;
+            if(d<-0.02) return {arrow:'▼', color:green, text:this._pct(aP*100,0)+' → '+this._pct(aN*100,0)};
+            if(d>0.02)  return {arrow:'▲', color:red,   text:this._pct(aP*100,0)+' → '+this._pct(aN*100,0)};
+            return {arrow:'—', color:'#8A8A86', text:'stabil '+this._pct(aN*100,0)}; }
+          if(aN!=null && aP==null) return {arrow:'▼', color:green, text:'jetzt mit Verkauf'};
+          if(aN==null && aP!=null) return {arrow:'▲', color:red, text:'Verkäufe weggefallen'};
+          const dS=k.spend-p.spend;
+          if(k.orders===0 && p.orders===0 && Math.abs(dS)>0.5) return dS>0?{arrow:'▲',color:red,text:'Ausgaben '+this._eur(p.spend)+' → '+this._eur(k.spend)+' o. Verkauf'}:{arrow:'▼',color:green,text:'Ausgaben gesenkt'};
+          return {arrow:'—', color:'#8A8A86', text:'stabil'};
+        };
+        V.ppcRows=sortedEnrich.map(k=>{ const r=mkRow(k); const t=trendOf(k); return {...r, trendArrow:t.arrow, trendColor:t.color, trendText:t.text}; });
+        if(prev){
+          const pTot=prev.keywords.reduce((a,k)=>({spend:a.spend+k.spend,sales:a.sales+k.sales,orders:a.orders+k.orders}),{spend:0,sales:0,orders:0});
+          const pAcos=pTot.sales>0?pTot.spend/pTot.sales:null;
+          const pWaste=prev.keywords.filter(k=>k.orders===0).reduce((s,k)=>s+k.spend,0);
+          const nWaste=kws.filter(k=>k.orders===0).reduce((s,k)=>s+k.spend,0);
+          let improved=0, worsened=0, added=0;
+          kws.forEach(k=>{ const p=prevMap.get(k.term.toLowerCase()); if(!p){ added++; return; }
+            const aN=acosOf(k), aP=acosOf(p);
+            if(aN!=null&&aP!=null){ if(aN<aP-0.02)improved++; else if(aN>aP+0.02)worsened++; }
+            else if(aN!=null&&aP==null)improved++; else if(aN==null&&aP!=null&&k.spend>0)worsened++; });
+          const fm=(a,b,inv)=>{ const good=inv? b<=a : b>=a; return {txt:(a==null?'—':a)+' → '+(b==null?'—':b), color: good?green:red}; };
+          const acosCmp=fm(pAcos==null?null:this._pct(pAcos*100,1), totAcos==null?null:this._pct(totAcos*100,1), true);
+          V.ppcTrendTiles=[
+            {l:'Gesamt-ACOS', v:acosCmp.txt, c:(pAcos!=null&&totAcos!=null)?(totAcos<=pAcos?green:red):ink},
+            {l:'Verbranntes Budget', v:this._eur(pWaste)+' → '+this._eur(nWaste), c: nWaste<=pWaste?green:red},
+            {l:'Verbessert / Verschlechtert', v:improved+' ▼ / '+worsened+' ▲', c: improved>=worsened?green:red},
+            {l:'Neue Suchbegriffe', v:this._num(added), c:ink}
+          ];
+        } else { V.ppcTrendTiles=[]; }
       }
+      // Verlaufs-Liste (auch ohne aktuellen Bericht sichtbar)
+      const histAll=(st.ppcHistory||[]);
+      V.ppcHistoryRows=histAll.map(h=>({ id:h.id, label:(h.period||'ohne Zeitraum'), file:h.fileName||'—',
+        kwCount:this._num((h.keywords||[]).length), isCurrent:h.id===st.ppcCurrentId,
+        style:'display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid #F1F1EE;'+(h.id===st.ppcCurrentId?'background:#FAFAF8;':''),
+        remove:()=>this._ppcDeleteHistory(h.id) }));
+      V.ppcHistoryEmpty=histAll.length===0;
+      V.ppcHistoryCount=histAll.length;
     }
 
     // ---- To-Dos ----
