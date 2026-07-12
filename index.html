@@ -1235,6 +1235,50 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
               </div>
             </div>
 
+            <!-- P&L-Uebernahme -->
+            <div style="background:#fff;border:1px solid #E4E4E0;border-left:4px solid #FF5A00;margin-top:20px">
+              <div style="padding:16px 20px;border-bottom:1px solid #EEEEEB">
+                <div style="font-family:'Archivo';font-weight:800;font-size:16px">→ In Produkt-P&amp;L übernehmen</div>
+                <div style="font-size:12.5px;color:#8A8A86;margin-top:2px">Kampagnen einem Produkt zuordnen — Werbekosten und PPC-Verkäufe werden direkt in die Monatswerte geschrieben. Die Zuordnung wird gespeichert und beim nächsten Bericht wiederverwendet.</div>
+              </div>
+              <sc-for list="{{ ppcMapRows }}" as="m" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;gap:14px;padding:11px 20px;border-bottom:1px solid #F4F4F1;flex-wrap:wrap">
+                  <div style="flex:1;min-width:180px;font-size:13.5px;font-weight:600">{{ m.name }}</div>
+                  <div style="font-size:12px;color:#8A8A86;font-feature-settings:'tnum' 1;white-space:nowrap">{{ m.spend }} · {{ m.orders }} Verk.</div>
+                  <select value="{{ m.value }}" onChange="{{ m.onChange }}" style="border:1px solid #E2E2E2;padding:8px 10px;font-size:13px;background:#fff;cursor:pointer;min-width:200px">
+                    <sc-for list="{{ m.options }}" as="o" hint-placeholder-count="4"><option value="{{ o.v }}">{{ o.l }}</option></sc-for>
+                  </select>
+                </div>
+              </sc-for>
+              <div style="padding:16px 20px;background:#FAFAF8;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                  <span style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#7A7A76">Monat</span>
+                  <select value="{{ ppcApplyYm }}" onChange="{{ setPpcApplyYm }}" style="border:1px solid #E2E2E2;padding:8px 10px;font-size:13px;background:#fff;cursor:pointer;font-feature-settings:'tnum' 1">
+                    <sc-for list="{{ ppcApplyYmOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.ym }}">{{ o.label }}</option></sc-for>
+                  </select>
+                  <sc-if value="{{ ppcApplyReady }}" hint-placeholder-val="{{ true }}">
+                    <div style="display:flex;gap:14px;flex-wrap:wrap">
+                      <sc-for list="{{ ppcApplyPreview }}" as="p" hint-placeholder-count="2">
+                        <span style="font-size:12.5px;color:#4A4A46"><b>{{ p.name }}</b>: +{{ p.ad }} Werbek. · +{{ p.units }} PPC-Stk</span>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ ppcApplyEmpty }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-size:12.5px;color:#9A9A96">Oben mindestens eine Kampagne einem Produkt zuordnen.</span>
+                  </sc-if>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                  <sc-if value="{{ ppcIsApplied }}" hint-placeholder-val="{{ false }}">
+                    <button onClick="{{ ppcUnapply }}" style="padding:9px 14px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12.5px;font-weight:500;cursor:pointer">Rückgängig</button>
+                  </sc-if>
+                  <button onClick="{{ ppcApply }}" style="padding:10px 18px;border:none;background:#0A0A0A;color:#fff;font-size:13px;font-weight:600;cursor:pointer" style-hover="background:#FF5A00">Werbekosten übernehmen</button>
+                </div>
+              </div>
+              <sc-if value="{{ ppcAppliedInfo }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:10px 20px;border-top:1px solid #EEEEEB;font-size:12px;color:#1B7F4B">✓ {{ ppcAppliedInfo }}</div>
+              </sc-if>
+            </div>
+
             <!-- Hebel 1: Keyword-Harvesting -->
             <div style="background:#fff;border:1px solid #E4E4E0;border-left:4px solid #1B7F4B;margin-top:26px">
               <div style="padding:16px 20px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
@@ -1383,7 +1427,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
             <div style="padding:14px 20px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
               <div>
                 <div style="font-family:'Archivo';font-weight:800;font-size:15px">Berichts-Verlauf <span style="color:#9A9A96">({{ ppcHistoryCount }}/12)</span></div>
-                <div style="font-size:12px;color:#8A8A86;margin-top:2px">Jeder Upload wird gespeichert und mit Tom synchronisiert — Grundlage für den Wochenvergleich. Der jeweils nächste Upload wird automatisch gegen den zeitlich vorherigen Bericht verglichen.</div>
+                <div style="font-size:12px;color:#8A8A86;margin-top:2px">Jeder Upload wird gespeichert und synchronisiert — Grundlage für den Wochenvergleich. Der jeweils nächste Upload wird automatisch gegen den zeitlich vorherigen Bericht verglichen. Über das Download-Symbol lässt sich die Original-Datei erneut herunterladen.</div>
               </div>
             </div>
             <sc-if value="{{ ppcHistoryEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:16px 20px;font-size:12.5px;color:#9A9A96">Noch keine Berichte gespeichert.</div></sc-if>
@@ -1393,6 +1437,10 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                 <div style="font-size:13px;font-weight:600;min-width:150px">{{ h.label }}</div>
                 <div style="flex:1;font-size:12px;color:#9A9A96;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ h.file }}</div>
                 <div style="font-size:12px;color:#8A8A86;font-feature-settings:'tnum' 1;white-space:nowrap">{{ h.kwCount }} Begriffe</div>
+                <sc-if value="{{ h.appliedNote }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;font-weight:600;color:#1B7F4B;white-space:nowrap">✓ {{ h.appliedNote }}</span></sc-if>
+                <sc-if value="{{ h.hasFile }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ h.download }}" style="background:none;border:none;color:#6A6A66;cursor:pointer;padding:4px" title="Original-Datei herunterladen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v12M6 10l6 6 6-6M4 20h16"/></svg></button>
+                </sc-if>
                 <button onClick="{{ h.remove }}" style="background:none;border:none;color:#C9C9C4;cursor:pointer;padding:4px" title="Aus Verlauf löschen"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2m2 0v14a1 1 0 01-1 1H7a1 1 0 01-1-1V6"/></svg></button>
               </div>
             </sc-for>
@@ -1602,7 +1650,8 @@ class Component extends DCLogic {
       bueroTick:0,
       todoTitle:'', todoPrio:'Mittel', todoOwner:'Beide', todoFilterOwner:'alle', todoShowDone:false,
       ppcRaw:null, ppcFileName:'', ppcError:'', ppcLoading:false, ppcTargetAcos:30, ppcSort:'spend', ppcPeriod:'', ppcCopied:'',
-      ppcCamps:null, ppcCurrentId:null,
+      ppcCamps:null, ppcCurrentId:null, ppcApplyYm:'',
+      ppcCampMap:(saved && saved.ppcCampMap) || {},
       ppcHistory:(saved && Array.isArray(saved.ppcHistory)) ? saved.ppcHistory.slice(0,12) : []
     };
   }
@@ -1615,7 +1664,7 @@ class Component extends DCLogic {
      Haelt products / ideas / recDismissed live zwischen mehreren
      Personen synchron. Aendert NICHTS an der uebrigen Logik.
      ============================================================ */
-  _snapshot(){ return { products:this.state.products, ideas:this.state.ideas, todos:this.state.todos, recDismissed:this.state.recDismissed, ppcHistory:this.state.ppcHistory||[] }; }
+  _snapshot(){ return { products:this.state.products, ideas:this.state.ideas, todos:this.state.todos, recDismissed:this.state.recDismissed, ppcHistory:this.state.ppcHistory||[], ppcCampMap:this.state.ppcCampMap||{} }; }
   // stabile Signatur (Reihenfolge der Keys egal) -> verhindert Sync-Schleifen
   _stableStringify(v){
     if(v===null || typeof v!=='object') return JSON.stringify(v);
@@ -1671,9 +1720,10 @@ class Component extends DCLogic {
       const ideas    = Array.isArray(remote.ideas)    ? remote.ideas.map(i=>this._normIdea(i)) : this.state.ideas;
       const todos    = Array.isArray(remote.todos)    ? remote.todos.map(t=>this._normTodo(t)) : this.state.todos;
       const ppcHistory = Array.isArray(remote.ppcHistory) ? remote.ppcHistory.slice(0,12) : (this.state.ppcHistory||[]);
+      const ppcCampMap = remote.ppcCampMap || this.state.ppcCampMap || {};
       const recDismissed = remote.recDismissed || this.state.recDismissed;
-      this.setState({ products, ideas, todos, ppcHistory, recDismissed }); // WICHTIG: ohne _persist() -> keine Schleife
-      try{ localStorage.setItem('partypeak_v4', JSON.stringify({products, ideas, todos, ppcHistory, recDismissed})); }catch(e){}
+      this.setState({ products, ideas, todos, ppcHistory, ppcCampMap, recDismissed }); // WICHTIG: ohne _persist() -> keine Schleife
+      try{ localStorage.setItem('partypeak_v4', JSON.stringify({products, ideas, todos, ppcHistory, ppcCampMap, recDismissed})); }catch(e){}
     }catch(e){ console.warn('[Party Peak] Uebernahme fehlgeschlagen:', e); }
   }
   _sbPush(){
@@ -2010,16 +2060,20 @@ class Component extends DCLogic {
     reader.onload=async (ev)=>{
       try{
         const XLSX=await this._ppcLoadLib();
-        const wb=XLSX.read(new Uint8Array(ev.target.result), {type:'array', cellDates:true});
+        const bytes=new Uint8Array(ev.target.result);
+        // Original fuer Download ablegen (base64, nur bis 400 KB — Berichte sind normalerweise klein)
+        let fileB64=null;
+        if(bytes.length<=400*1024){ let bin=''; for(let i=0;i<bytes.length;i+=8192){ bin+=String.fromCharCode.apply(null, bytes.subarray(i,i+8192)); } fileB64=btoa(bin); }
+        const wb=XLSX.read(bytes, {type:'array', cellDates:true});
         const ws=wb.Sheets[wb.SheetNames[0]];
         const rows=XLSX.utils.sheet_to_json(ws, {header:1, raw:true, defval:null});
-        this._ppcParse(rows);
+        this._ppcParse(rows, fileB64);
       }catch(e){ this.setState({ppcLoading:false, ppcError:(e&&e.message)||'Datei konnte nicht gelesen werden.'}); }
     };
     reader.onerror=()=>this.setState({ppcLoading:false, ppcError:'Datei konnte nicht gelesen werden.'});
     reader.readAsArrayBuffer(file);
   }
-  _ppcParse(rows){
+  _ppcParse(rows, fileB64){
     // Kopfzeile finden (die Zeile, die "Suchbegriff" + "Impressionen" enthält)
     let hRow=-1;
     for(let i=0;i<Math.min(rows.length,8);i++){ const r=(rows[i]||[]).map(c=>this._ppcNorm(c));
@@ -2081,13 +2135,61 @@ class Component extends DCLogic {
     const period=(minD&&maxD)?(minD===maxD?minD:(minD+' – '+maxD)):'';
     // ---- Verlauf: kompakten Eintrag speichern (persistiert + synchronisiert), max 12 Berichte ----
     const entry={ id:'r'+Date.now().toString(36), period, endDate:maxD||'', fileName:this.state.ppcFileName||'', uploadedAt:Date.now(),
+      fileB64:fileB64||null,
       keywords:keywords.map(k=>({term:k.term,impr:k.impr,clicks:k.clicks,spend:k.spend,sales:k.sales,orders:k.orders,isExact:k.isExact})),
       camps:camps.map(c=>({campaign:c.campaign,impr:c.impr,clicks:c.clicks,spend:c.spend,sales:c.sales,orders:c.orders})) };
     let hist=(this.state.ppcHistory||[]).filter(h=> !(h.period===period && period));   // gleicher Zeitraum -> ersetzen
     hist=[entry, ...hist].sort((a,b)=> String(b.endDate).localeCompare(String(a.endDate)) || b.uploadedAt-a.uploadedAt).slice(0,12);
-    this.setState({ ppcLoading:false, ppcError:'', ppcRaw:keywords, ppcCamps:camps, ppcCurrentId:entry.id, ppcHistory:hist, ppcPeriod:period }, ()=>this._persist());
+    // Standard-Monat fuer P&L-Uebernahme: Monat des Berichts-Endes
+    const applyYm = (maxD && this.months.includes(maxD.slice(0,7))) ? maxD.slice(0,7) : this._curYm();
+    this.setState({ ppcLoading:false, ppcError:'', ppcRaw:keywords, ppcCamps:camps, ppcCurrentId:entry.id, ppcHistory:hist, ppcPeriod:period, ppcApplyYm:applyYm }, ()=>this._persist());
   }
   _ppcDeleteHistory(id){ this.setState(s=>({ppcHistory:(s.ppcHistory||[]).filter(h=>h.id!==id)}), ()=>this._persist()); }
+  _ppcDownload(h){ if(!h||!h.fileB64) return;
+    try{ const bin=atob(h.fileB64); const bytes=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+      const blob=new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=h.fileName||'ppc-bericht.xlsx';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(()=>URL.revokeObjectURL(url),2000);
+    }catch(e){}
+  }
+  _setCampMap(campaign, pid){ this.setState(s=>({ppcCampMap:{...(s.ppcCampMap||{}), [campaign]:pid}}), ()=>this._persist()); }
+  _ppcApplyDelta(per, ym, sign){
+    // sign=+1 addieren, -1 abziehen (Werte nie unter 0)
+    this.setState(s=>({products:s.products.map(p=>{ const d=per[p.id]; if(!d) return p;
+      const mo={...p.monthly}; const m={...(mo[ym]||{units:0,views:0})};
+      m.adCost=+Math.max(0, (+m.adCost||0) + sign*d.ad).toFixed(2);
+      m.unitsPpc=Math.max(0, Math.round((+m.unitsPpc||0) + sign*d.units));
+      mo[ym]=m; return {...p, monthly:mo}; })}));
+  }
+  _ppcComputePer(){
+    const st=this.state, per={};
+    (st.ppcCamps||[]).forEach(c=>{ const pid=(st.ppcCampMap||{})[c.campaign];
+      if(!pid || pid==='ignore') return; if(!st.products.some(p=>p.id===pid)) return;
+      if(!per[pid]) per[pid]={ad:0, units:0};
+      per[pid].ad+=c.spend; per[pid].units+=c.orders; });
+    Object.keys(per).forEach(k=>{ per[k].ad=+per[k].ad.toFixed(2); });
+    return per;
+  }
+  _ppcApply(){
+    const st=this.state; const ym=st.ppcApplyYm || this._curYm();
+    const hist=(st.ppcHistory||[]).slice(); const idx=hist.findIndex(h=>h.id===st.ppcCurrentId);
+    if(idx<0) return;
+    const per=this._ppcComputePer(); if(!Object.keys(per).length) return;
+    const entry={...hist[idx]};
+    if(entry.applied) this._ppcApplyDelta(entry.applied.per, entry.applied.ym, -1);  // vorherige Uebernahme zurueckrechnen (idempotent)
+    this._ppcApplyDelta(per, ym, +1);
+    entry.applied={ym, per, at:Date.now()};
+    hist[idx]=entry;
+    this.setState({ppcHistory:hist}, ()=>this._persist());
+  }
+  _ppcUnapply(){
+    const st=this.state; const hist=(st.ppcHistory||[]).slice(); const idx=hist.findIndex(h=>h.id===st.ppcCurrentId);
+    if(idx<0 || !hist[idx].applied) return;
+    const entry={...hist[idx]};
+    this._ppcApplyDelta(entry.applied.per, entry.applied.ym, -1);
+    delete entry.applied; hist[idx]=entry;
+    this.setState({ppcHistory:hist}, ()=>this._persist());
+  }
   _ppcCopy(text, tag){ try{ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text); } else { const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } this.setState({ppcCopied:tag}); clearTimeout(this._ppcCopyT); this._ppcCopyT=setTimeout(()=>this.setState({ppcCopied:''}),1800); }catch(e){} }
   _ppcClear(){ this.setState({ppcRaw:null, ppcCamps:null, ppcCurrentId:null, ppcFileName:'', ppcError:'', ppcPeriod:''}); }
   _setPpcTarget(v){ const n=Math.max(1,Math.min(200,Math.round(+v||0))); this.setState({ppcTargetAcos:n||30}); }
@@ -2892,10 +2994,36 @@ class Component extends DCLogic {
       const histAll=(st.ppcHistory||[]);
       V.ppcHistoryRows=histAll.map(h=>({ id:h.id, label:(h.period||'ohne Zeitraum'), file:h.fileName||'—',
         kwCount:this._num((h.keywords||[]).length), isCurrent:h.id===st.ppcCurrentId,
+        hasFile:!!h.fileB64, download:()=>this._ppcDownload(h),
+        appliedNote: h.applied ? ('P&L: '+this._mlabel(h.applied.ym)) : '',
         style:'display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid #F1F1EE;'+(h.id===st.ppcCurrentId?'background:#FAFAF8;':''),
         remove:()=>this._ppcDeleteHistory(h.id) }));
       V.ppcHistoryEmpty=histAll.length===0;
       V.ppcHistoryCount=histAll.length;
+
+      // ===== P&L-Uebernahme (Kampagne -> Produkt) =====
+      if(V.ppcHasData){
+        const cm=st.ppcCampMap||{};
+        const prodOpts=[{v:'ignore', l:'— nicht übernehmen —'}].concat(st.products.map(p=>({v:p.id, l:p.name})));
+        V.ppcMapRows=(st.ppcCamps||[]).slice().sort((a,b)=>b.spend-a.spend).map(c=>({
+          name:c.campaign, spend:this._eur(c.spend), orders:this._num(c.orders),
+          value: cm[c.campaign]||'ignore',
+          options: prodOpts,
+          onChange:(e)=>this._setCampMap(c.campaign, e.target.value) }));
+        V.ppcApplyYm=st.ppcApplyYm||this._curYm();
+        V.ppcApplyYmOptions=this.months.filter(ym=>ym<=this._curYm()).sort().reverse().slice(0,18).map(ym=>({ym, label:this._mlabel(ym)}));
+        V.setPpcApplyYm=(e)=>this.setState({ppcApplyYm:e.target.value});
+        const per=this._ppcComputePer();
+        V.ppcApplyPreview=Object.keys(per).map(pid=>{ const p=st.products.find(x=>x.id===pid);
+          return { name:p?p.name:'?', ad:this._eur(per[pid].ad), units:this._num(per[pid].units) }; });
+        V.ppcApplyReady=V.ppcApplyPreview.length>0;
+        V.ppcApplyEmpty=!V.ppcApplyReady;
+        const curEntry=histAll.find(h=>h.id===st.ppcCurrentId);
+        V.ppcAppliedInfo = (curEntry&&curEntry.applied) ? ('Übernommen in '+this._mlabel(curEntry.applied.ym)+' — erneutes Übernehmen ersetzt die Werte (kein Doppelzählen).') : '';
+        V.ppcIsApplied=!!(curEntry&&curEntry.applied);
+        V.ppcApply=()=>this._ppcApply();
+        V.ppcUnapply=()=>this._ppcUnapply();
+      }
     }
 
     // ---- To-Dos ----
