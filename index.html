@@ -1438,6 +1438,9 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                 <div style="flex:1;font-size:12px;color:#9A9A96;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ h.file }}</div>
                 <div style="font-size:12px;color:#8A8A86;font-feature-settings:'tnum' 1;white-space:nowrap">{{ h.kwCount }} Begriffe</div>
                 <sc-if value="{{ h.appliedNote }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;font-weight:600;color:#1B7F4B;white-space:nowrap">✓ {{ h.appliedNote }}</span></sc-if>
+                <sc-if value="{{ h.canView }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ h.view }}" style="padding:4px 10px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap">Ansehen</button>
+                </sc-if>
                 <sc-if value="{{ h.hasFile }}" hint-placeholder-val="{{ true }}">
                   <button onClick="{{ h.download }}" style="background:none;border:none;color:#6A6A66;cursor:pointer;padding:4px" title="Original-Datei herunterladen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v12M6 10l6 6 6-6M4 20h16"/></svg></button>
                 </sc-if>
@@ -1654,6 +1657,9 @@ class Component extends DCLogic {
       ppcCampMap:(saved && saved.ppcCampMap) || {},
       ppcHistory:(saved && Array.isArray(saved.ppcHistory)) ? saved.ppcHistory.slice(0,12) : []
     };
+    // Letzte PPC-Analyse aus dem Verlauf wiederherstellen (uebersteht Reload, gleich auf allen Geraeten)
+    const hyd=this._ppcHydrate(this.state.ppcHistory[0]);
+    if(hyd) Object.assign(this.state, hyd);
   }
   componentDidMount(){ this._onResize = ()=> this.setState({narrow: window.innerWidth < 900}); window.addEventListener('resize', this._onResize); this._sbInit(); }
   componentWillUnmount(){ window.removeEventListener('resize', this._onResize); try{ if(this._sb && this._sbChannel) this._sb.removeChannel(this._sbChannel); }catch(e){} }
@@ -1722,7 +1728,11 @@ class Component extends DCLogic {
       const ppcHistory = Array.isArray(remote.ppcHistory) ? remote.ppcHistory.slice(0,12) : (this.state.ppcHistory||[]);
       const ppcCampMap = remote.ppcCampMap || this.state.ppcCampMap || {};
       const recDismissed = remote.recDismissed || this.state.recDismissed;
-      this.setState({ products, ideas, todos, ppcHistory, ppcCampMap, recDismissed }); // WICHTIG: ohne _persist() -> keine Schleife
+      // Aktuelle Analyse nachziehen, wenn dieses Geraet keine (oder eine veraltete) hat -> ueberall gleicher Stand
+      const newestId=ppcHistory[0]&&ppcHistory[0].id;
+      const needHydrate = newestId && (this.state.ppcCurrentId!==newestId || !this.state.ppcRaw) && !this.state.ppcLoading;
+      const hyd = needHydrate ? (this._ppcHydrate(ppcHistory[0])||{}) : {};
+      this.setState({ products, ideas, todos, ppcHistory, ppcCampMap, recDismissed, ...hyd }); // WICHTIG: ohne _persist() -> keine Schleife
       try{ localStorage.setItem('partypeak_v4', JSON.stringify({products, ideas, todos, ppcHistory, ppcCampMap, recDismissed})); }catch(e){}
     }catch(e){ console.warn('[Party Peak] Uebernahme fehlgeschlagen:', e); }
   }
@@ -2136,15 +2146,34 @@ class Component extends DCLogic {
     // ---- Verlauf: kompakten Eintrag speichern (persistiert + synchronisiert), max 12 Berichte ----
     const entry={ id:'r'+Date.now().toString(36), period, endDate:maxD||'', fileName:this.state.ppcFileName||'', uploadedAt:Date.now(),
       fileB64:fileB64||null,
-      keywords:keywords.map(k=>({term:k.term,impr:k.impr,clicks:k.clicks,spend:k.spend,sales:k.sales,orders:k.orders,isExact:k.isExact})),
+      keywords:keywords.map(k=>({term:k.term,impr:k.impr,clicks:k.clicks,spend:k.spend,sales:k.sales,orders:k.orders,isExact:k.isExact,
+        camps:k.camps.map(c=>({campaign:c.campaign,adgroup:c.adgroup,targeting:c.targeting,impr:c.impr,clicks:c.clicks,spend:c.spend,sales:c.sales,orders:c.orders}))})),
       camps:camps.map(c=>({campaign:c.campaign,impr:c.impr,clicks:c.clicks,spend:c.spend,sales:c.sales,orders:c.orders})) };
     let hist=(this.state.ppcHistory||[]).filter(h=> !(h.period===period && period));   // gleicher Zeitraum -> ersetzen
     hist=[entry, ...hist].sort((a,b)=> String(b.endDate).localeCompare(String(a.endDate)) || b.uploadedAt-a.uploadedAt).slice(0,12);
+    // Payload begrenzen: Original-Datei nur fuer die 3 neuesten, Kampagnen-Detail je Keyword fuer die 6 neuesten
+    hist=hist.map((h,i)=>({ ...h,
+      fileB64: i<3 ? h.fileB64 : null,
+      keywords: i<6 ? h.keywords : (h.keywords||[]).map(k=>{ const {camps, ...rest}=k; return rest; }) }));
     // Standard-Monat fuer P&L-Uebernahme: Monat des Berichts-Endes
     const applyYm = (maxD && this.months.includes(maxD.slice(0,7))) ? maxD.slice(0,7) : this._curYm();
     this.setState({ ppcLoading:false, ppcError:'', ppcRaw:keywords, ppcCamps:camps, ppcCurrentId:entry.id, ppcHistory:hist, ppcPeriod:period, ppcApplyYm:applyYm }, ()=>this._persist());
   }
-  _ppcDeleteHistory(id){ this.setState(s=>({ppcHistory:(s.ppcHistory||[]).filter(h=>h.id!==id)}), ()=>this._persist()); }
+  _ppcDeleteHistory(id){ this.setState(s=>{ const hist=(s.ppcHistory||[]).filter(h=>h.id!==id);
+    const extra = (id===s.ppcCurrentId) ? (this._ppcHydrate(hist[0]) || {ppcRaw:null,ppcCamps:null,ppcCurrentId:null,ppcPeriod:'',ppcFileName:''}) : {};
+    return {ppcHistory:hist, ...extra}; }, ()=>this._persist()); }
+  // Stellt eine Analyse aus einem Verlaufseintrag wieder her (Reload / anderes Geraet / "Ansehen")
+  _ppcHydrate(h){ if(!h || !Array.isArray(h.keywords) || !h.keywords.length) return null;
+    const keywords=h.keywords.map(k=>{ const camps=(k.camps||[]).map(c=>({...c}));
+      return {...k, camps,
+        campNames:camps.map(c=>c.campaign).filter((v,i,a)=>a.indexOf(v)===i),
+        matches:k.isExact?['exact']:['auto'],
+        ctr:k.impr>0?k.clicks/k.impr:0, cpc:k.clicks>0?k.spend/k.clicks:0,
+        acos:k.sales>0?k.spend/k.sales:null, cvr:k.clicks>0?k.orders/k.clicks:0, aov:k.orders>0?k.sales/k.orders:0}; });
+    const camps=(h.camps||[]).map(c=>({...c, acos:c.sales>0?c.spend/c.sales:null}));
+    const applyYm=(h.endDate && this.months.includes(String(h.endDate).slice(0,7))) ? String(h.endDate).slice(0,7) : this._curYm();
+    return { ppcRaw:keywords, ppcCamps:camps, ppcCurrentId:h.id, ppcPeriod:h.period||'', ppcFileName:h.fileName||'', ppcApplyYm:applyYm, ppcError:'' };
+  }
   _ppcDownload(h){ if(!h||!h.fileB64) return;
     try{ const bin=atob(h.fileB64); const bytes=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
       const blob=new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
@@ -2995,6 +3024,8 @@ class Component extends DCLogic {
       V.ppcHistoryRows=histAll.map(h=>({ id:h.id, label:(h.period||'ohne Zeitraum'), file:h.fileName||'—',
         kwCount:this._num((h.keywords||[]).length), isCurrent:h.id===st.ppcCurrentId,
         hasFile:!!h.fileB64, download:()=>this._ppcDownload(h),
+        canView: !!(h.keywords&&h.keywords.length) && h.id!==st.ppcCurrentId,
+        view:()=>{ const f=this._ppcHydrate(h); if(f) this.setState(f); },
         appliedNote: h.applied ? ('P&L: '+this._mlabel(h.applied.ym)) : '',
         style:'display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid #F1F1EE;'+(h.id===st.ppcCurrentId?'background:#FAFAF8;':''),
         remove:()=>this._ppcDeleteHistory(h.id) }));
