@@ -1177,6 +1177,62 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
             </div>
             <div style="font-size:12px;color:#9A9A96;margin-top:10px">{{ ppcTargetNote }} · {{ ppcRelevantCount }} relevante Suchbegriffe analysiert. {{ ppcBelowNote }}</div>
 
+            <!-- Hebel 1: Keyword-Harvesting -->
+            <div style="background:#fff;border:1px solid #E4E4E0;border-left:4px solid #1B7F4B;margin-top:26px">
+              <div style="padding:16px 20px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                <div>
+                  <div style="font-family:'Archivo';font-weight:800;font-size:16px">⤴ Keyword-Harvesting <span style="color:#1B7F4B">({{ ppcHarvestCount }})</span></div>
+                  <div style="font-size:12.5px;color:#8A8A86;margin-top:2px">Konvertierende Suchbegriffe, die noch nicht als Exact-Keyword laufen — als eigenes Exact-Target anlegen.</div>
+                </div>
+                <button onClick="{{ ppcHarvestCopy }}" style="padding:8px 14px;border:1px solid #1B7F4B;background:#fff;color:#1B7F4B;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap">{{ ppcHarvestCopyLabel }}</button>
+              </div>
+              <sc-if value="{{ ppcHarvestEmpty }}" hint-placeholder-val="{{ true }}"><div style="padding:16px 20px;font-size:12.5px;color:#9A9A96">Keine neuen Harvest-Kandidaten — konvertierende Begriffe laufen bereits als Exact.</div></sc-if>
+              <sc-for list="{{ ppcHarvest }}" as="h" hint-placeholder-count="4">
+                <div style="padding:12px 20px;border-bottom:1px solid #F4F4F1;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+                  <div style="flex:1;min-width:160px;font-size:13.5px;font-weight:600">{{ h.term }}</div>
+                  <div style="font-size:12px;color:#8A8A86;font-feature-settings:'tnum' 1">{{ h.orders }} Verk · ACOS {{ h.acos }} · {{ h.impr }} Impr</div>
+                  <div style="font-size:12px;color:#6A6A66">aus: {{ h.source }}</div>
+                  <div style="font-size:12.5px;font-weight:700;color:#1B7F4B;white-space:nowrap">Startgebot {{ h.bidStr }}</div>
+                </div>
+              </sc-for>
+            </div>
+
+            <!-- Hebel 2: Negativ-Keywords -->
+            <div style="background:#fff;border:1px solid #E4E4E0;border-left:4px solid #D42E12;margin-top:20px">
+              <div style="padding:16px 20px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                <div>
+                  <div style="font-family:'Archivo';font-weight:800;font-size:16px">⊘ Negativ-Keywords <span style="color:#D42E12">({{ ppcNegCount }})</span></div>
+                  <div style="font-size:12.5px;color:#8A8A86;margin-top:2px">Ausgaben ohne Verkauf — in der jeweiligen Kampagne als negatives Keyword ausschließen. Verbranntes Budget: <b style="color:#D42E12">{{ ppcNegWaste }}</b></div>
+                </div>
+                <button onClick="{{ ppcNegCopy }}" style="padding:8px 14px;border:1px solid #D42E12;background:#fff;color:#D42E12;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap">{{ ppcNegCopyLabel }}</button>
+              </div>
+              <sc-if value="{{ ppcNegEmpty }}" hint-placeholder-val="{{ true }}"><div style="padding:16px 20px;font-size:12.5px;color:#9A9A96">Kein Negativ-Bedarf — keine relevanten Ausgaben ohne Verkauf.</div></sc-if>
+              <sc-for list="{{ ppcNeg }}" as="n" hint-placeholder-count="4">
+                <div style="padding:12px 20px;border-bottom:1px solid #F4F4F1;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+                  <div style="flex:1;min-width:160px;font-size:13.5px;font-weight:600">{{ n.term }}</div>
+                  <div style="font-size:12px;color:#6A6A66">{{ n.campaign }} › {{ n.adgroup }}</div>
+                  <div style="font-size:12px;color:#8A8A86;font-feature-settings:'tnum' 1;white-space:nowrap">{{ n.clicks }} Klicks · {{ n.spend }} ohne Verkauf</div>
+                </div>
+              </sc-for>
+            </div>
+
+            <!-- Hebel 3: Gebotsempfehlungen -->
+            <div style="background:#fff;border:1px solid #E4E4E0;border-left:4px solid #2F6FED;margin-top:20px">
+              <div style="padding:16px 20px;border-bottom:1px solid #EEEEEB">
+                <div style="font-family:'Archivo';font-weight:800;font-size:16px">◎ Gebotsempfehlungen <span style="color:#2F6FED">({{ ppcBidsCount }})</span></div>
+                <div style="font-size:12.5px;color:#8A8A86;margin-top:2px">Max. Gebot = Ziel-ACOS × Umsatz je Klick. Vergleich mit aktuellem Ø-CPC.</div>
+              </div>
+              <sc-if value="{{ ppcBidsEmpty }}" hint-placeholder-val="{{ true }}"><div style="padding:16px 20px;font-size:12.5px;color:#9A9A96">Keine konvertierenden Keywords mit ausreichend Daten für eine Gebotsempfehlung.</div></sc-if>
+              <sc-for list="{{ ppcBids }}" as="bd" hint-placeholder-count="4">
+                <div style="padding:12px 20px;border-bottom:1px solid #F4F4F1;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+                  <div style="flex:1;min-width:150px;font-size:13.5px;font-weight:600">{{ bd.term }}</div>
+                  <div style="font-size:12px;color:#8A8A86;font-feature-settings:'tnum' 1;white-space:nowrap">akt. CPC {{ bd.cpcStr }} · ACOS {{ bd.acos }}</div>
+                  <div style="font-size:13px;font-weight:700;font-feature-settings:'tnum' 1;color:{{ bd.dirColor }};white-space:nowrap">→ {{ bd.bidStr }}</div>
+                  <div style="font-size:12px;color:{{ bd.dirColor }};min-width:150px">{{ bd.hint }}</div>
+                </div>
+              </sc-for>
+            </div>
+
             <!-- Empfehlungen -->
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:26px;align-items:start">
               <!-- Gut -->
@@ -1465,7 +1521,7 @@ class Component extends DCLogic {
       chartYoy:false,
       bueroTick:0,
       todoTitle:'', todoPrio:'Mittel', todoOwner:'Beide', todoFilterOwner:'alle', todoShowDone:false,
-      ppcRaw:null, ppcFileName:'', ppcError:'', ppcLoading:false, ppcTargetAcos:30, ppcSort:'spend', ppcPeriod:''
+      ppcRaw:null, ppcFileName:'', ppcError:'', ppcLoading:false, ppcTargetAcos:30, ppcSort:'spend', ppcPeriod:'', ppcCopied:''
     };
   }
   componentDidMount(){ this._onResize = ()=> this.setState({narrow: window.innerWidth < 900}); window.addEventListener('resize', this._onResize); this._sbInit(); }
@@ -1891,6 +1947,8 @@ class Component extends DCLogic {
     const col={
       term: find(h=>h.includes('suchbegriff')),
       camp: find(h=>h.includes('kampagnen-name')||h.includes('kampagnenname')),
+      adgroup: find(h=>h.includes('anzeigengruppenname')||h.includes('anzeigengruppe')),
+      target: find(h=>h==='ausrichtung'||h.includes('ausrichtung')),
       match: find(h=>h.includes('übereinstimmungstyp')||h.includes('ubereinstimmungstyp')),
       impr: find(h=>h==='impressionen'||h.includes('impressionen')),
       clicks: find(h=>h==='klicks'),
@@ -1904,26 +1962,38 @@ class Component extends DCLogic {
     if(col.term<0||col.impr<0){ this.setState({ppcLoading:false, ppcError:'Pflichtspalten (Suchbegriff / Impressionen) fehlen.', ppcRaw:null}); return; }
     const num=(v)=>{ if(v==null||v==='') return 0; if(typeof v==='number') return v; const n=parseFloat(String(v).replace(/\./g,'').replace(',','.').replace(/[^0-9.\-]/g,'')); return isNaN(n)?0:n; };
     const fmtD=(v)=>{ if(v==null) return null; if(v instanceof Date) return v.toISOString().slice(0,10); const s=String(v).slice(0,10); return s||null; };
-    // Aggregation je Suchbegriff (über alle Kampagnen)
+    const normMatch=(m)=>{ m=this._ppcNorm(m); if(m.includes('exact')||m.includes('genau')) return 'exact'; if(m.includes('phrase')) return 'phrase'; if(m.includes('broad')||m.includes('weit')||m.includes('breit')) return 'broad'; return 'auto'; };
+    // Aggregation je Suchbegriff (global) + je Kampagne/Anzeigengruppe (fuer Negatives) + Match-Typen (fuer Harvesting)
     const map=new Map(); let minD=null,maxD=null;
     for(let i=hRow+1;i<rows.length;i++){ const r=rows[i]; if(!r) continue;
       const term=String(r[col.term]==null?'':r[col.term]).trim(); if(!term||term==='-') continue;
-      const impr=num(r[col.impr]);
+      const impr=num(r[col.impr]), clicks=num(r[col.clicks]), spend=num(r[col.spend]), sales=num(r[col.sales]);
+      const orders=col.orders>=0?num(r[col.orders]):0, units=col.units>=0?num(r[col.units]):0;
+      const campaign=col.camp>=0&&r[col.camp]?String(r[col.camp]).trim():'—';
+      const adgroup=col.adgroup>=0&&r[col.adgroup]?String(r[col.adgroup]).trim():'';
+      const mt=col.match>=0?normMatch(r[col.match]):'auto';
+      const targeting=col.target>=0&&r[col.target]?String(r[col.target]).trim():'';
       const sd=col.start>=0?fmtD(r[col.start]):null, ed=col.end>=0?fmtD(r[col.end]):null;
       if(sd&&(!minD||sd<minD))minD=sd; if(ed&&(!maxD||ed>maxD))maxD=ed;
       const key=term.toLowerCase();
-      let o=map.get(key); if(!o){ o={term, impr:0, clicks:0, spend:0, sales:0, orders:0, units:0, camps:new Set()}; map.set(key,o); }
-      o.impr+=impr; o.clicks+=num(r[col.clicks]); o.spend+=num(r[col.spend]); o.sales+=num(r[col.sales]);
-      o.orders+=col.orders>=0?num(r[col.orders]):0; o.units+=col.units>=0?num(r[col.units]):0;
-      if(col.camp>=0 && r[col.camp]) o.camps.add(String(r[col.camp]).trim());
+      let o=map.get(key); if(!o){ o={term, impr:0, clicks:0, spend:0, sales:0, orders:0, units:0, matches:new Set(), byCamp:new Map()}; map.set(key,o); }
+      o.impr+=impr; o.clicks+=clicks; o.spend+=spend; o.sales+=sales; o.orders+=orders; o.units+=units; o.matches.add(mt);
+      const ck=campaign+'||'+adgroup;
+      let ce=o.byCamp.get(ck); if(!ce){ ce={campaign, adgroup, targeting, matches:new Set(), impr:0,clicks:0,spend:0,sales:0,orders:0}; o.byCamp.set(ck,ce); }
+      ce.impr+=impr; ce.clicks+=clicks; ce.spend+=spend; ce.sales+=sales; ce.orders+=orders; ce.matches.add(mt);
     }
     const keywords=Array.from(map.values()).map(o=>({ term:o.term, impr:o.impr, clicks:o.clicks, spend:+o.spend.toFixed(2),
-      sales:+o.sales.toFixed(2), orders:o.orders, units:o.units, camps:Array.from(o.camps),
+      sales:+o.sales.toFixed(2), orders:o.orders, units:o.units,
+      matches:Array.from(o.matches), isExact:o.matches.has('exact'),
+      camps:Array.from(o.byCamp.values()).map(c=>({campaign:c.campaign, adgroup:c.adgroup, targeting:c.targeting,
+        matches:Array.from(c.matches), impr:c.impr, clicks:c.clicks, spend:+c.spend.toFixed(2), sales:+c.sales.toFixed(2), orders:c.orders})),
+      campNames:Array.from(o.byCamp.values()).map(c=>c.campaign).filter((v,i,a)=>a.indexOf(v)===i),
       ctr:o.impr>0?o.clicks/o.impr:0, cpc:o.clicks>0?o.spend/o.clicks:0, acos:o.sales>0?o.spend/o.sales:null,
-      cvr:o.clicks>0?o.orders/o.clicks:0 }));
+      cvr:o.clicks>0?o.orders/o.clicks:0, aov:o.orders>0?o.sales/o.orders:0 }));
     if(!keywords.length){ this.setState({ppcLoading:false, ppcError:'Keine Suchbegriff-Zeilen gefunden.', ppcRaw:null}); return; }
     this.setState({ ppcLoading:false, ppcError:'', ppcRaw:keywords, ppcPeriod:(minD&&maxD)?(minD===maxD?minD:(minD+' – '+maxD)):'' });
   }
+  _ppcCopy(text, tag){ try{ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text); } else { const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } this.setState({ppcCopied:tag}); clearTimeout(this._ppcCopyT); this._ppcCopyT=setTimeout(()=>this.setState({ppcCopied:''}),1800); }catch(e){} }
   _ppcClear(){ this.setState({ppcRaw:null, ppcFileName:'', ppcError:'', ppcPeriod:''}); }
   _setPpcTarget(v){ const n=Math.max(1,Math.min(200,Math.round(+v||0))); this.setState({ppcTargetAcos:n||30}); }
   _openAbgleich(p){ this.setState({stockModal:{productId:p.id, value:String(Math.max(0,Math.round(this._stockOf(p))))}}); }
@@ -2604,7 +2674,7 @@ class Component extends DCLogic {
           acos:k.acos==null?'—':this._pct(k.acos*100,0),
           catColor: k.cat==='gut'?green : k.cat==='okay'?yellow : red,
           catLabel: k.cat==='gut'?'Gut':k.cat==='okay'?'Prüfen':'Entfernen',
-          reason:k.reason, action:k.action, camps:(k.camps||[]).join(', ') });
+          reason:k.reason, action:k.action, camps:(k.campNames||[]).join(', ') });
         const good=enrich.filter(k=>k.cat==='gut').sort(sorter);
         const okay=enrich.filter(k=>k.cat==='okay').sort(sorter);
         const bad=enrich.filter(k=>k.cat==='schlecht').sort((a,b)=>b.spend-a.spend);
@@ -2620,6 +2690,45 @@ class Component extends DCLogic {
         V.ppcSortChips=[['spend','Ausgaben'],['impr','Impressionen'],['acos','ACOS']].map(([k,l])=>({label:l,
           sel:()=>this.setState({ppcSort:k}),
           style: (sortKey===k)?'padding:6px 12px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12px;font-weight:600;cursor:pointer':'padding:6px 12px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12px;font-weight:500;cursor:pointer' }));
+
+        // ===== Hebel 1: Keyword-Harvesting =====
+        // Suchbegriffe, die konvertiert haben, aber noch NICHT als Exact laufen -> als Exact anlegen.
+        const harvest=kws.filter(k=>k.orders>0 && !k.isExact && k.clicks>0 && (k.impr>=RELEVANT || k.orders>=2) && (k.acos==null || k.acos<=tgt*2))
+          .sort((a,b)=> b.orders-a.orders || (a.acos||9)-(b.acos||9));
+        const bidOf=(k)=> k.clicks>0 ? tgt*(k.sales/k.clicks) : 0; // maxCPC = ZielACOS × Umsatz/Klick
+        V.ppcHarvest=harvest.map(k=>{ const best=(k.camps||[]).slice().sort((a,b)=>b.orders-a.orders||b.sales-a.sales)[0]||{};
+          const bid=bidOf(k);
+          return { term:k.term, orders:this._num(k.orders), acos:k.acos==null?'—':this._pct(k.acos*100,0),
+            impr:this._num(k.impr), source:(best.campaign||'—')+(best.targeting?(' · '+best.targeting):''),
+            bidStr:bid>0?this._eur(bid,2):'—' }; });
+        V.ppcHarvestCount=harvest.length; V.ppcHarvestEmpty=harvest.length===0;
+        V.ppcHarvestCopyLabel = (st.ppcCopied==='harvest')?'✓ Kopiert':'Keyword-Liste kopieren';
+        V.ppcHarvestCopy=()=>this._ppcCopy(harvest.map(k=>k.term).join('\n'),'harvest');
+
+        // ===== Hebel 2: Negativ-Keywords (kampagnenspezifisch) =====
+        // Kampagnen-Zeilen mit Ausgaben aber ohne Verkauf -> genau dort als negativ ausschließen.
+        const NEG_CLICKS=3; const negs=[];
+        kws.forEach(k=>{ if(!(k.impr>=RELEVANT || k.clicks>=8)) return;
+          (k.camps||[]).forEach(c=>{ if(c.spend>0 && c.orders===0 && c.clicks>=NEG_CLICKS){
+            negs.push({ term:k.term, campaign:c.campaign, adgroup:c.adgroup, spend:c.spend, clicks:c.clicks }); } }); });
+        negs.sort((a,b)=>b.spend-a.spend);
+        const negWaste=negs.reduce((s,n)=>s+n.spend,0);
+        V.ppcNeg=negs.map(n=>({ term:n.term, campaign:n.campaign, adgroup:n.adgroup||'—',
+          spend:this._eur(n.spend), clicks:this._num(n.clicks) }));
+        V.ppcNegCount=negs.length; V.ppcNegEmpty=negs.length===0;
+        V.ppcNegWaste=this._eur(negWaste);
+        V.ppcNegCopyLabel=(st.ppcCopied==='neg')?'✓ Kopiert':'Negativ-Liste kopieren';
+        V.ppcNegCopy=()=>this._ppcCopy(negs.map(n=>n.term).filter((v,i,a)=>a.indexOf(v)===i).join('\n'),'neg');
+
+        // ===== Hebel 3: Konkrete Gebotsempfehlungen =====
+        // maxGebot = ZielACOS × Umsatz/Klick; Vergleich mit aktuellem Ø-CPC.
+        const bids=relevant.filter(k=>k.orders>0 && k.clicks>0).map(k=>{ const bid=bidOf(k); const cpc=k.cpc; const diff=bid-cpc;
+          return { term:k.term, cpcStr:this._eur(cpc,2), bidStr:this._eur(Math.max(0,bid),2), acos:k.acos==null?'—':this._pct(k.acos*100,0),
+            dir: diff>0.03?'up' : diff<-0.03?'down' : 'ok',
+            dirColor: diff>0.03?green : diff<-0.03?red : '#8A8A86',
+            hint: diff>0.03?('Luft nach oben — Gebot bis '+this._eur(bid,2)+' testen') : diff<-0.03?('Gebot auf ~'+this._eur(Math.max(0,bid),2)+' senken') : 'Gebot passt zum Ziel',
+            _sort:Math.abs(diff)*k.clicks }; }).sort((a,b)=>b._sort-a._sort);
+        V.ppcBids=bids; V.ppcBidsCount=bids.length; V.ppcBidsEmpty=bids.length===0;
       }
     }
 
