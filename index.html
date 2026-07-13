@@ -1335,6 +1335,55 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
               </sc-for>
             </div>
 
+            <!-- CTR-/CVR-Diagnose -->
+            <div style="margin-top:26px">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px">
+                <h2 style="font-family:'Archivo';font-weight:800;font-size:18px;margin:0">Ursachen-Diagnose (CTR / CVR)</h2>
+                <div style="font-size:12px;color:#9A9A96">{{ ppcDiagBenchNote }} · {{ ppcDiagHealthy }} Keywords gesund</div>
+              </div>
+              <div style="font-size:12.5px;color:#8A8A86;margin-top:4px;max-width:720px;line-height:1.5">Trennt das <b style="color:#0A0A0A">Warum</b>: Viele Impressionen ohne Klicks = Bild/Titel/Preis (kein Gebotsproblem). Viele Klicks ohne Käufe = Produktseite/Preis/Bewertungen.</div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;margin-top:14px;align-items:start">
+                <!-- Klick-Problem (CTR) -->
+                <div style="background:#fff;border:1px solid #E4E4E0;border-top:3px solid #D8930A">
+                  <div style="padding:14px 18px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;justify-content:space-between">
+                    <span style="font-family:'Archivo';font-weight:800;font-size:14px">◱ Klick-Problem (niedrige CTR)</span>
+                    <span style="font-size:12px;font-weight:700;color:#D8930A">{{ ppcDiagCtrCount }}</span>
+                  </div>
+                  <div style="padding:10px 18px 4px;font-size:11.5px;color:#9A9A96">Sichtbar, aber kaum Klicks → Hauptbild, Titel, Preis.</div>
+                  <sc-if value="{{ ppcDiagCtrEmpty }}" hint-placeholder-val="{{ true }}"><div style="padding:10px 18px 16px;font-size:12.5px;color:#9A9A96">Keine auffälligen Keywords — CTR überall im Rahmen.</div></sc-if>
+                  <sc-for list="{{ ppcDiagCtr }}" as="d" hint-placeholder-count="3">
+                    <div style="padding:11px 18px;border-bottom:1px solid #F4F4F1">
+                      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+                        <span style="font-size:13.5px;font-weight:600;color:#16130F">{{ d.term }}</span>
+                        <span style="font-size:11.5px;color:#8A8A86;font-feature-settings:'tnum' 1;white-space:nowrap">CTR {{ d.ctrStr }}</span>
+                      </div>
+                      <div style="font-size:11.5px;color:#8A8A86;margin-top:2px;font-feature-settings:'tnum' 1">{{ d.impr }} Impr · {{ d.clicks }} Klicks</div>
+                      <div style="font-size:12px;color:#B57708;margin-top:4px">{{ d.text }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+                <!-- Conversion-Problem (CVR) -->
+                <div style="background:#fff;border:1px solid #E4E4E0;border-top:3px solid #D42E12">
+                  <div style="padding:14px 18px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;justify-content:space-between">
+                    <span style="font-family:'Archivo';font-weight:800;font-size:14px">◲ Conversion-Problem (niedrige CVR)</span>
+                    <span style="font-size:12px;font-weight:700;color:#D42E12">{{ ppcDiagCvrCount }}</span>
+                  </div>
+                  <div style="padding:10px 18px 4px;font-size:11.5px;color:#9A9A96">Klicks da, keine Käufe → Produktseite, Preis, Bewertungen.</div>
+                  <sc-if value="{{ ppcDiagCvrEmpty }}" hint-placeholder-val="{{ true }}"><div style="padding:10px 18px 16px;font-size:12.5px;color:#9A9A96">Keine auffälligen Keywords — Conversion überall im Rahmen.</div></sc-if>
+                  <sc-for list="{{ ppcDiagCvr }}" as="d" hint-placeholder-count="3">
+                    <div style="padding:11px 18px;border-bottom:1px solid #F4F4F1">
+                      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+                        <span style="font-size:13.5px;font-weight:600;color:#16130F">{{ d.term }}</span>
+                        <span style="font-size:11.5px;color:#8A8A86;font-feature-settings:'tnum' 1;white-space:nowrap">CVR {{ d.cvrStr }}</span>
+                      </div>
+                      <div style="font-size:11.5px;color:#8A8A86;margin-top:2px;font-feature-settings:'tnum' 1">{{ d.clicks }} Klicks · {{ d.orders }} Verk · {{ d.acos }} ACOS</div>
+                      <div style="font-size:12px;color:#C0392B;margin-top:4px">{{ d.text }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+
             <!-- Empfehlungen -->
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:26px;align-items:start">
               <!-- Gut -->
@@ -1401,6 +1450,9 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                   <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Verkäufe</th>
                   <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Ausgaben</th>
                   <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">ACOS</th>
+                  <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">CTR</th>
+                  <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">CVR</th>
+                  <th style="text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Diagnose</th>
                   <th style="text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Bewertung</th>
                   <th style="text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Trend (ACOS)</th>
                 </tr></thead>
@@ -1413,6 +1465,9 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                       <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.orders }}</td>
                       <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.spend }}</td>
                       <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.acos }}</td>
+                      <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.ctrStr }}</td>
+                      <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.cvrStr }}</td>
+                      <td style="padding:10px 14px;border-bottom:1px solid #F1F1EE" title="{{ k.diagText }}"><span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#4A4A46;white-space:nowrap"><span style="width:8px;height:8px;background:{{ k.diagColor }};display:inline-block"></span>{{ k.diagLabel }}</span></td>
                       <td style="padding:10px 14px;border-bottom:1px solid #F1F1EE"><span style="display:inline-block;padding:3px 9px;font-size:11px;font-weight:700;color:#fff;background:{{ k.catColor }}">{{ k.catLabel }}</span></td>
                       <td style="padding:10px 14px;border-bottom:1px solid #F1F1EE;font-size:12px;white-space:nowrap"><span style="color:{{ k.trendColor }};font-weight:700">{{ k.trendArrow }}</span> <span style="color:#6A6A66;font-feature-settings:'tnum' 1">{{ k.trendText }}</span></td>
                     </tr>
@@ -2863,7 +2918,8 @@ class Component extends DCLogic {
       V.ppcOnFile=(e)=>{ const f=e.target.files&&e.target.files[0]; if(f) this._ppcHandleFile(f); e.target.value=''; };
       V.ppcClear=()=>this._ppcClear();
       V.setPpcTarget=(e)=>this._setPpcTarget(e.target.value);
-      const RELEVANT=1000;
+      const RELEVANT=1000, RELEVANT_CLICKS=10;
+      const isRelevant=(k)=> k.impr>=RELEVANT || k.clicks>=RELEVANT_CLICKS;
       if(V.ppcHasData){
         const tgt=(st.ppcTargetAcos||30)/100;
         const kws=st.ppcRaw;
@@ -2878,7 +2934,7 @@ class Component extends DCLogic {
           {l:'Gesamt-ACOS', v: totAcos==null?'—':this._pct(totAcos*100,1)}
         ];
         // Klassifizierung nur fuer relevante Keywords (>= 1000 Impressionen)
-        const relevant=kws.filter(k=>k.impr>=RELEVANT);
+        const relevant=kws.filter(isRelevant);
         const belowN=kws.length-relevant.length;
         const classify=(k)=>{
           if(k.orders>0){ const a=k.acos;
@@ -2891,6 +2947,26 @@ class Component extends DCLogic {
           }
         };
         const enrich=relevant.map(k=>{ const c=classify(k); return {...k, ...c}; });
+        // ===== CTR-/CVR-Diagnose: trennt Sichtbarkeits-/Klick- von Conversion-Problemen =====
+        const avgCtr= tot.impr>0 ? tot.clicks/tot.impr : 0;
+        const avgCvr= tot.clicks>0 ? tot.orders/tot.clicks : 0;
+        const CTR_FLOOR=0.0025, CVR_FLOOR=0.05, CVR_MIN_CLICKS=8;
+        const diagnose=(k)=>{
+          const ctr=k.ctr||0, cvr=k.cvr||0;
+          const ctrBench=Math.max(CTR_FLOOR, avgCtr*0.5);
+          const cvrBench=Math.max(CVR_FLOOR, avgCvr*0.5);
+          const clickProblem = k.impr>=RELEVANT && ctr<ctrBench;
+          const convProblem  = k.clicks>=CVR_MIN_CLICKS && cvr<cvrBench;
+          if(convProblem) return {diag:'cvr', diagLabel:'Conversion', diagColor:red,
+            diagText:'Klicks da ('+this._num(k.clicks)+'), aber kaum Käufe (CVR '+this._pct(cvr*100,1)+') — Produktseite, Preis oder Bewertungen prüfen. Kein Gebotsproblem.'};
+          if(clickProblem) return {diag:'ctr', diagLabel:'Klickrate', diagColor:yellow,
+            diagText:'Sichtbar ('+this._num(k.impr)+' Impr.), aber kaum Klicks (CTR '+this._pct(ctr*100,2)+') — Hauptbild, Titel oder Preis prüfen. Kein Gebotsproblem.'};
+          if(k.orders===0 && k.clicks<CVR_MIN_CLICKS) return {diag:'thin', diagLabel:'Wenig Daten', diagColor:'#8A8A86',
+            diagText:'Noch zu wenige Klicks für eine Conversion-Aussage — weiter beobachten.'};
+          return {diag:'ok', diagLabel:'Gesund', diagColor:green,
+            diagText:'CTR '+this._pct(ctr*100,2)+' & CVR '+this._pct(cvr*100,1)+' im Rahmen.'};
+        };
+        enrich.forEach(k=>{ Object.assign(k, diagnose(k)); });
         const catRank={gut:0,okay:1,schlecht:2};
         const sortKey=st.ppcSort||'spend';
         const sorter=(a,b)=> sortKey==='acos' ? ((a.acos==null?9:a.acos)-(b.acos==null?9:b.acos))
@@ -2898,6 +2974,8 @@ class Component extends DCLogic {
         const mkRow=(k)=>({ term:k.term, impr:this._num(k.impr), clicks:this._num(k.clicks),
           orders:this._num(k.orders), spend:this._eur(k.spend), sales:this._eur(k.sales),
           acos:k.acos==null?'—':this._pct(k.acos*100,0),
+          ctrStr:this._pct((k.ctr||0)*100,2), cvrStr:k.clicks>0?this._pct((k.cvr||0)*100,1):'—',
+          diagLabel:k.diagLabel||'', diagColor:k.diagColor||'#8A8A86', diagText:k.diagText||'',
           catColor: k.cat==='gut'?green : k.cat==='okay'?yellow : red,
           catLabel: k.cat==='gut'?'Gut':k.cat==='okay'?'Prüfen':'Entfernen',
           reason:k.reason, action:k.action, camps:(k.campNames||[]).join(', ') });
@@ -2905,8 +2983,8 @@ class Component extends DCLogic {
         const okay=enrich.filter(k=>k.cat==='okay').sort(sorter);
         const bad=enrich.filter(k=>k.cat==='schlecht').sort((a,b)=>b.spend-a.spend);
         V.ppcRelevantCount=relevant.length;
-        V.ppcBelowNote = belowN>0 ? (belowN+' Suchbegriffe unter '+this._num(RELEVANT)+' Impressionen ausgeblendet (noch nicht aussagekräftig).') : '';
-        V.ppcTargetNote='Relevanz ab '+this._num(RELEVANT)+' Impressionen · Ziel-ACOS '+this._pct((st.ppcTargetAcos||30),0);
+        V.ppcBelowNote = belowN>0 ? (belowN+' Suchbegriffe unter '+this._num(RELEVANT)+' Impressionen und '+RELEVANT_CLICKS+' Klicks ausgeblendet (noch nicht aussagekräftig).') : '';
+        V.ppcTargetNote='Relevanz ab '+this._num(RELEVANT)+' Impressionen oder '+RELEVANT_CLICKS+' Klicks · Ziel-ACOS '+this._pct((st.ppcTargetAcos||30),0);
         V.ppcGood=good.map(mkRow); V.ppcOkay=okay.map(mkRow); V.ppcBad=bad.map(mkRow);
         V.ppcGoodCount=good.length; V.ppcOkayCount=okay.length; V.ppcBadCount=bad.length;
         V.ppcGoodEmpty=good.length===0; V.ppcOkayEmpty=okay.length===0; V.ppcBadEmpty=bad.length===0;
@@ -2920,7 +2998,7 @@ class Component extends DCLogic {
 
         // ===== Hebel 1: Keyword-Harvesting =====
         // Suchbegriffe, die konvertiert haben, aber noch NICHT als Exact laufen -> als Exact anlegen.
-        const harvest=kws.filter(k=>k.orders>0 && !k.isExact && k.clicks>0 && (k.impr>=RELEVANT || k.orders>=2) && (k.acos==null || k.acos<=tgt*2))
+        const harvest=kws.filter(k=>k.orders>0 && !k.isExact && k.clicks>0 && (isRelevant(k) || k.orders>=2) && (k.acos==null || k.acos<=tgt*2))
           .sort((a,b)=> b.orders-a.orders || (a.acos||9)-(b.acos||9));
         const bidOf=(k)=> k.clicks>0 ? tgt*(k.sales/k.clicks) : 0; // maxCPC = ZielACOS × Umsatz/Klick
         V.ppcHarvest=harvest.map(k=>{ const best=(k.camps||[]).slice().sort((a,b)=>b.orders-a.orders||b.sales-a.sales)[0]||{};
@@ -2935,7 +3013,7 @@ class Component extends DCLogic {
         // ===== Hebel 2: Negativ-Keywords (kampagnenspezifisch) =====
         // Kampagnen-Zeilen mit Ausgaben aber ohne Verkauf -> genau dort als negativ ausschließen.
         const NEG_CLICKS=3; const negs=[];
-        kws.forEach(k=>{ if(!(k.impr>=RELEVANT || k.clicks>=8)) return;
+        kws.forEach(k=>{ if(!isRelevant(k)) return;
           (k.camps||[]).forEach(c=>{ if(c.spend>0 && c.orders===0 && c.clicks>=NEG_CLICKS){
             negs.push({ term:k.term, campaign:c.campaign, adgroup:c.adgroup, spend:c.spend, clicks:c.clicks }); } }); });
         negs.sort((a,b)=>b.spend-a.spend);
@@ -2956,6 +3034,17 @@ class Component extends DCLogic {
             hint: diff>0.03?('Luft nach oben — Gebot bis '+this._eur(bid,2)+' testen') : diff<-0.03?('Gebot auf ~'+this._eur(Math.max(0,bid),2)+' senken') : 'Gebot passt zum Ziel',
             _sort:Math.abs(diff)*k.clicks }; }).sort((a,b)=>b._sort-a._sort);
         V.ppcBids=bids; V.ppcBidsCount=bids.length; V.ppcBidsEmpty=bids.length===0;
+
+        // ===== CTR-/CVR-Diagnose-Buckets =====
+        const diagRow=(k)=>({ term:k.term, impr:this._num(k.impr), clicks:this._num(k.clicks), orders:this._num(k.orders),
+          ctrStr:this._pct((k.ctr||0)*100,2), cvrStr:k.clicks>0?this._pct((k.cvr||0)*100,1):'—',
+          acos:k.acos==null?'—':this._pct(k.acos*100,0), text:k.diagText });
+        const ctrProblems=enrich.filter(k=>k.diag==='ctr').sort((a,b)=>b.impr-a.impr);
+        const cvrProblems=enrich.filter(k=>k.diag==='cvr').sort((a,b)=>b.spend-a.spend);
+        V.ppcDiagCtr=ctrProblems.map(diagRow); V.ppcDiagCtrCount=ctrProblems.length; V.ppcDiagCtrEmpty=ctrProblems.length===0;
+        V.ppcDiagCvr=cvrProblems.map(diagRow); V.ppcDiagCvrCount=cvrProblems.length; V.ppcDiagCvrEmpty=cvrProblems.length===0;
+        V.ppcDiagHealthy=enrich.filter(k=>k.diag==='ok').length;
+        V.ppcDiagBenchNote='Konto-Schnitt: CTR '+this._pct(avgCtr*100,2)+' · CVR '+this._pct(avgCvr*100,1);
 
         // ===== Kampagnen-Scorecard =====
         const camps=(st.ppcCamps||[]).slice().sort((a,b)=>b.spend-a.spend);
