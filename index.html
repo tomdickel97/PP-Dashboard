@@ -1305,6 +1305,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                 <div>
                   <div style="font-family:'Archivo';font-weight:800;font-size:16px">⊘ Negativ-Keywords <span style="color:#D42E12">({{ ppcNegCount }})</span></div>
                   <div style="font-size:12.5px;color:#8A8A86;margin-top:2px">Ausgaben ohne Verkauf — in der jeweiligen Kampagne als negatives Keyword ausschließen. Verbranntes Budget: <b style="color:#D42E12">{{ ppcNegWaste }}</b></div>
+                  <div style="font-size:11.5px;color:#9A9A96;margin-top:3px">{{ ppcNegNote }}</div>
                 </div>
                 <button onClick="{{ ppcNegCopy }}" style="padding:8px 14px;border:1px solid #D42E12;background:#fff;color:#D42E12;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap">{{ ppcNegCopyLabel }}</button>
               </div>
@@ -1398,6 +1399,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                     <div style="font-size:13.5px;font-weight:600;color:#16130F">{{ k.term }}</div>
                     <div style="font-size:11.5px;color:#8A8A86;margin-top:3px;font-feature-settings:'tnum' 1">{{ k.impr }} Impr · {{ k.clicks }} Klicks · {{ k.orders }} Verk. · ACOS {{ k.acos }}</div>
                     <div style="font-size:12px;color:#1B7F4B;margin-top:4px">→ {{ k.action }}</div>
+                    <div style="font-size:11px;color:{{ k.confColor }};margin-top:4px;display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;background:{{ k.confColor }};display:inline-block"></span>Datenlage: {{ k.confLabel }}</div>
                   </div>
                 </sc-for>
               </div>
@@ -1413,6 +1415,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                     <div style="font-size:13.5px;font-weight:600;color:#16130F">{{ k.term }}</div>
                     <div style="font-size:11.5px;color:#8A8A86;margin-top:3px;font-feature-settings:'tnum' 1">{{ k.impr }} Impr · {{ k.clicks }} Klicks · {{ k.orders }} Verk. · ACOS {{ k.acos }}</div>
                     <div style="font-size:12px;color:#B57708;margin-top:4px">→ {{ k.action }}</div>
+                    <div style="font-size:11px;color:{{ k.confColor }};margin-top:4px;display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;background:{{ k.confColor }};display:inline-block"></span>Datenlage: {{ k.confLabel }}</div>
                   </div>
                 </sc-for>
               </div>
@@ -1428,6 +1431,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                     <div style="font-size:13.5px;font-weight:600;color:#16130F">{{ k.term }}</div>
                     <div style="font-size:11.5px;color:#8A8A86;margin-top:3px;font-feature-settings:'tnum' 1">{{ k.impr }} Impr · {{ k.clicks }} Klicks · {{ k.orders }} Verk. · ACOS {{ k.acos }}</div>
                     <div style="font-size:12px;color:#C0392B;margin-top:4px">→ {{ k.action }}</div>
+                    <div style="font-size:11px;color:{{ k.confColor }};margin-top:4px;display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;background:{{ k.confColor }};display:inline-block"></span>Datenlage: {{ k.confLabel }}</div>
                   </div>
                 </sc-for>
               </div>
@@ -1454,6 +1458,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                   <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">CVR</th>
                   <th style="text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Diagnose</th>
                   <th style="text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Bewertung</th>
+                  <th style="text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Datenlage</th>
                   <th style="text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Trend (ACOS)</th>
                 </tr></thead>
                 <tbody>
@@ -1469,6 +1474,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                       <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.cvrStr }}</td>
                       <td style="padding:10px 14px;border-bottom:1px solid #F1F1EE" title="{{ k.diagText }}"><span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#4A4A46;white-space:nowrap"><span style="width:8px;height:8px;background:{{ k.diagColor }};display:inline-block"></span>{{ k.diagLabel }}</span></td>
                       <td style="padding:10px 14px;border-bottom:1px solid #F1F1EE"><span style="display:inline-block;padding:3px 9px;font-size:11px;font-weight:700;color:#fff;background:{{ k.catColor }}">{{ k.catLabel }}</span></td>
+                      <td style="padding:10px 14px;border-bottom:1px solid #F1F1EE;white-space:nowrap"><span style="display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:#4A4A46"><span style="width:8px;height:8px;background:{{ k.confColor }};display:inline-block"></span>{{ k.confLabel }}</span></td>
                       <td style="padding:10px 14px;border-bottom:1px solid #F1F1EE;font-size:12px;white-space:nowrap"><span style="color:{{ k.trendColor }};font-weight:700">{{ k.trendArrow }}</span> <span style="color:#6A6A66;font-feature-settings:'tnum' 1">{{ k.trendText }}</span></td>
                     </tr>
                   </sc-for>
@@ -2936,14 +2942,30 @@ class Component extends DCLogic {
         // Klassifizierung nur fuer relevante Keywords (>= 1000 Impressionen)
         const relevant=kws.filter(isRelevant);
         const belowN=kws.length-relevant.length;
+        const NEG_CLICKS_MIN=30;  // Faustregel: erst ab 30 Klicks ohne Verkauf ist "Entfernen" belastbar
+        const confMeta={ hoch:{color:green,label:'belastbar'}, mittel:{color:'#D8930A',label:'mittlere Datenlage'}, gering:{color:'#8A8A86',label:'dünne Datenlage'} };
+        const clicksConf=(cl)=> cl>=30?'hoch': cl>=15?'mittel':'gering';
+        const ordersConf=(or,cl)=> (or>=5&&cl>=20)?'hoch': (or>=2)?'mittel':'gering';
         const classify=(k)=>{
-          if(k.orders>0){ const a=k.acos;
-            if(a<=tgt) return {cat:'gut', reason:'ACOS '+this._pct(a*100,0)+' unter Ziel — rentabel.', action:'Gebot/Budget erhöhen und skalieren.'};
-            if(a<=tgt*1.5) return {cat:'okay', reason:'ACOS '+this._pct(a*100,0)+' leicht über Ziel ('+this._pct(tgt*100,0)+').', action:'Gebot moderat senken, Konversion verbessern.'};
-            return {cat:'schlecht', reason:'ACOS '+this._pct(a*100,0)+' deutlich über Ziel — unrentabel.', action:'Gebot stark senken oder Keyword pausieren.'};
+          if(k.orders>0){ const a=k.acos; const cf=ordersConf(k.orders,k.clicks);
+            const thin = cf==='gering';
+            const oNote = k.orders===1 ? ' (nur 1 Verkauf)' : (k.orders<=2?' (nur '+k.orders+' Verkäufe)':'');
+            if(a<=tgt) return {cat:'gut', conf:cf, reason:'ACOS '+this._pct(a*100,0)+' unter Ziel — rentabel'+oNote+'.',
+              action: thin?'Vielversprechend — vor starkem Skalieren mehr Daten sammeln.':'Gebot/Budget erhöhen und skalieren.'};
+            if(a<=tgt*1.5) return {cat:'okay', conf:cf, reason:'ACOS '+this._pct(a*100,0)+' leicht über Ziel'+oNote+'.',
+              action: thin?'Beobachten — Datenlage für eine Gebotssenkung noch dünn.':'Gebot moderat senken, Konversion verbessern.'};
+            return {cat:'schlecht', conf:cf, reason:'ACOS '+this._pct(a*100,0)+' deutlich über Ziel'+oNote+'.',
+              action: thin?'Gebot senken; wegen dünner Datenlage noch nicht pausieren.':'Gebot stark senken oder Keyword pausieren.'};
           } else {
-            if(k.spend>0) return {cat:'schlecht', reason:this._eur(k.spend)+' Ausgaben, '+this._num(k.clicks)+' Klicks, kein Verkauf.', action:'Als negatives Keyword ausschließen / entfernen.'};
-            return {cat:'okay', reason:this._num(k.impr)+' Impressionen, kaum Klicks, kein Verkauf.', action:'Beobachten — evtl. Relevanz/Gebot prüfen.'};
+            // Kein Verkauf: "Entfernen" erst ab 30 Klicks (davor nur beobachten)
+            if(k.clicks>=NEG_CLICKS_MIN && k.spend>0) return {cat:'schlecht', conf:'hoch',
+              reason:this._num(k.clicks)+' Klicks, '+this._eur(k.spend)+' Ausgaben, kein Verkauf — belastbares Signal.',
+              action:'Als negatives Keyword ausschließen / entfernen.'};
+            if(k.spend>0) return {cat:'okay', conf:clicksConf(k.clicks),
+              reason:this._num(k.clicks)+' Klicks ohne Verkauf — unter '+NEG_CLICKS_MIN+' Klicks noch kein sicheres Signal.',
+              action:'Beobachten, bis ~'+NEG_CLICKS_MIN+' Klicks erreicht sind, bevor entfernt wird.'};
+            return {cat:'okay', conf:'gering', reason:this._num(k.impr)+' Impressionen, kaum Klicks, kein Verkauf.',
+              action:'Beobachten — evtl. Relevanz/Gebot prüfen.'};
           }
         };
         const enrich=relevant.map(k=>{ const c=classify(k); return {...k, ...c}; });
@@ -2976,6 +2998,7 @@ class Component extends DCLogic {
           acos:k.acos==null?'—':this._pct(k.acos*100,0),
           ctrStr:this._pct((k.ctr||0)*100,2), cvrStr:k.clicks>0?this._pct((k.cvr||0)*100,1):'—',
           diagLabel:k.diagLabel||'', diagColor:k.diagColor||'#8A8A86', diagText:k.diagText||'',
+          confLabel:(confMeta[k.conf]||confMeta.gering).label, confColor:(confMeta[k.conf]||confMeta.gering).color,
           catColor: k.cat==='gut'?green : k.cat==='okay'?yellow : red,
           catLabel: k.cat==='gut'?'Gut':k.cat==='okay'?'Prüfen':'Entfernen',
           reason:k.reason, action:k.action, camps:(k.campNames||[]).join(', ') });
@@ -3011,17 +3034,19 @@ class Component extends DCLogic {
         V.ppcHarvestCopy=()=>this._ppcCopy(harvest.map(k=>k.term).join('\n'),'harvest');
 
         // ===== Hebel 2: Negativ-Keywords (kampagnenspezifisch) =====
-        // Kampagnen-Zeilen mit Ausgaben aber ohne Verkauf -> genau dort als negativ ausschließen.
-        const NEG_CLICKS=3; const negs=[];
-        kws.forEach(k=>{ if(!isRelevant(k)) return;
-          (k.camps||[]).forEach(c=>{ if(c.spend>0 && c.orders===0 && c.clicks>=NEG_CLICKS){
-            negs.push({ term:k.term, campaign:c.campaign, adgroup:c.adgroup, spend:c.spend, clicks:c.clicks }); } }); });
+        // Nur belastbare Nicht-Konverter: Suchbegriff mit >=30 Klicks gesamt und 0 Verkäufen.
+        // Ausgeschlossen wird dann in den Kampagnen, in denen er Budget ohne Verkauf verbraucht hat.
+        const negs=[];
+        kws.forEach(k=>{ if(k.orders>0 || k.clicks<NEG_CLICKS_MIN) return;
+          (k.camps||[]).forEach(c=>{ if(c.spend>0 && c.orders===0){
+            negs.push({ term:k.term, campaign:c.campaign, adgroup:c.adgroup, spend:c.spend, clicks:c.clicks, totalClicks:k.clicks }); } }); });
         negs.sort((a,b)=>b.spend-a.spend);
         const negWaste=negs.reduce((s,n)=>s+n.spend,0);
         V.ppcNeg=negs.map(n=>({ term:n.term, campaign:n.campaign, adgroup:n.adgroup||'—',
           spend:this._eur(n.spend), clicks:this._num(n.clicks) }));
         V.ppcNegCount=negs.length; V.ppcNegEmpty=negs.length===0;
         V.ppcNegWaste=this._eur(negWaste);
+        V.ppcNegNote='Faustregel: erst ab '+NEG_CLICKS_MIN+' Klicks ohne Verkauf — darunter ist „kein Verkauf" oft nur Zufall.';
         V.ppcNegCopyLabel=(st.ppcCopied==='neg')?'✓ Kopiert':'Negativ-Liste kopieren';
         V.ppcNegCopy=()=>this._ppcCopy(negs.map(n=>n.term).filter((v,i,a)=>a.indexOf(v)===i).join('\n'),'neg');
 
