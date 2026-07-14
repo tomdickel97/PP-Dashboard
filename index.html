@@ -1347,6 +1347,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                         <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:3px;height:26px;background:{{ k.catColor }};display:inline-block"></span>{{ k.term }}</span>
                         <sc-if value="{{ k.tagHarvest }}" hint-placeholder-val="{{ true }}"><span style="display:inline-block;margin-left:8px;padding:2px 7px;font-size:10px;font-weight:700;color:#1B7F4B;border:1px solid #1B7F4B;vertical-align:middle">HARVEST</span></sc-if>
                         <sc-if value="{{ k.tagNeg }}" hint-placeholder-val="{{ true }}"><span style="display:inline-block;margin-left:8px;padding:2px 7px;font-size:10px;font-weight:700;color:#D42E12;border:1px solid #D42E12;vertical-align:middle">NEGATIV</span></sc-if>
+                        <sc-if value="{{ k.tagAsin }}" hint-placeholder-val="{{ true }}"><span style="display:inline-block;margin-left:8px;padding:2px 7px;font-size:10px;font-weight:700;color:#6E6C66;border:1px solid #C9C9C4;vertical-align:middle">PRODUKT-TARGET</span></sc-if>
                       </td>
                       <td style="padding:11px 10px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.impr }}</td>
                       <td style="padding:11px 10px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.clicks }}</td>
@@ -1386,6 +1387,12 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                                 <div style="font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#1B7F4B;margin-bottom:5px">Harvesting</div>
                                 <div style="font-size:12.5px;color:#16130F;line-height:1.5">Noch nicht als Exact — als Exact-Keyword anlegen. Startgebot <b>{{ k.harvestBid }}</b></div>
                                 <div style="font-size:12px;color:#8A8A86;margin-top:4px">aus: {{ k.harvestSource }}</div>
+                              </div>
+                            </sc-if>
+                            <sc-if value="{{ k.showAsin }}" hint-placeholder-val="{{ true }}">
+                              <div>
+                                <div style="font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#6E6C66;margin-bottom:5px">Produkt-Target (ASIN)</div>
+                                <div style="font-size:12.5px;color:#5A5A56;line-height:1.5">Das ist Produkt-Targeting auf eine fremde ASIN, kein Suchbegriff — es lässt sich nicht als Keyword anlegen. Bei Bedarf als ASIN-Target gezielt bieten oder ausschließen.</div>
                               </div>
                             </sc-if>
                             <sc-if value="{{ k.showNeg }}" hint-placeholder-val="{{ true }}">
@@ -2955,7 +2962,16 @@ class Component extends DCLogic {
 
         // Harvesting, Negatives, Gebote: berechnen und je Keyword anheften (statt getrennter Module)
         const bidOf=(k)=> k.clicks>0 ? tgt*(k.sales/k.clicks) : 0; // maxCPC = ZielACOS × Umsatz/Klick
-        const harvestSet=new Set(kws.filter(k=>k.orders>0 && !k.isExact && k.clicks>0 && (isRelevant(k) || k.orders>=2) && (k.acos==null || k.acos<=tgt*2)).map(k=>k.term));
+        // ASIN-/Produkt-Targeting ist KEIN Keyword (kann nicht als Exact-Keyword angelegt werden)
+        const isAsinTarget=(k)=> /^b0[a-z0-9]{8}$/i.test(k.term) || (k.camps||[]).some(c=>/asin\s*=/i.test(c.targeting||''));
+        // Harvest nur für echte Keywords, die rentabel genug sind (bis zur Entfernen-Grenze) und belastbare Daten haben.
+        // -> schließt den Widerspruch aus, dass ein Keyword gleichzeitig „Harvest" und „Entfernen" sein kann.
+        const harvestSet=new Set(kws.filter(k=>
+          k.orders>0 && !k.isExact && k.clicks>0
+          && !isAsinTarget(k)
+          && (k.acos!=null && k.acos<=tgt*1.5)
+          && ordersConf(k.orders,k.clicks)!=='gering'
+        ).map(k=>k.term));
         const negByTerm=new Map();
         kws.forEach(k=>{ if(k.orders>0 || k.clicks<NEG_CLICKS_MIN) return;
           const rows=(k.camps||[]).filter(c=>c.spend>0 && c.orders===0)
@@ -2964,6 +2980,7 @@ class Component extends DCLogic {
         const harvestList=Array.from(harvestSet), negTerms=Array.from(negByTerm.keys());
         enrich.forEach(k=>{
           k._harvest = harvestSet.has(k.term);
+          k._asin = isAsinTarget(k);
           k._neg = negByTerm.has(k.term);
           k._negCamps = negByTerm.get(k.term)||[];
           if(k.orders>0 && k.clicks>0){ const bid=bidOf(k), diff=bid-k.cpc;
@@ -3053,9 +3070,10 @@ class Component extends DCLogic {
             confHint:confHintMap[k.conf]||'',
             trendArrow:t.arrow, trendColor:t.color, trendText:t.text,
             reason:k.reason, action:k.action, diagText:k.diagText, diagColor:k.diagColor||'#8A8A86',
-            tagHarvest:!!k._harvest, tagNeg:!!k._neg,
+            tagHarvest:!!k._harvest, tagNeg:!!k._neg, tagAsin:!!k._asin,
             showBid:!!(k._bid&&k._bid.show), cpcStr:k._bid&&k._bid.cpcStr, bidStr:k._bid&&k._bid.bidStr, bidColor:k._bid&&k._bid.color, bidHint:k._bid&&k._bid.hint,
             showHarvest:!!k._harvest, harvestBid:k._harvestBid, harvestSource:k._harvestSource,
+            showAsin:!!k._asin,
             showNeg:!!k._neg, negCamps:k._negCamps||[],
             showCamps:(k.campNames||[]).length>0, campsList:(k.campNames||[]).join(', '),
             expanded:isOpen, chevron:isOpen?'▲':'▼',
