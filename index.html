@@ -1303,208 +1303,116 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
               </sc-if>
             </div>
 
-            <!-- Hebel 1: Keyword-Harvesting -->
-            <div style="background:#fff;border:1px solid #E4E4E0;border-left:4px solid #1B7F4B;margin-top:26px">
-              <div style="padding:16px 20px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-                <div>
-                  <div style="font-family:'Archivo';font-weight:800;font-size:16px">⤴ Keyword-Harvesting <span style="color:#1B7F4B">({{ ppcHarvestCount }})</span></div>
-                  <div style="font-size:12.5px;color:#8A8A86;margin-top:2px">Konvertierende Suchbegriffe, die noch nicht als Exact-Keyword laufen — als eigenes Exact-Target anlegen.</div>
-                </div>
-                <button onClick="{{ ppcHarvestCopy }}" style="padding:8px 14px;border:1px solid #1B7F4B;background:#fff;color:#1B7F4B;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap">{{ ppcHarvestCopyLabel }}</button>
-              </div>
-              <sc-if value="{{ ppcHarvestEmpty }}" hint-placeholder-val="{{ true }}"><div style="padding:16px 20px;font-size:12.5px;color:#9A9A96">Keine neuen Harvest-Kandidaten — konvertierende Begriffe laufen bereits als Exact.</div></sc-if>
-              <sc-for list="{{ ppcHarvest }}" as="h" hint-placeholder-count="4">
-                <div style="padding:12px 20px;border-bottom:1px solid #F4F4F1;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-                  <div style="flex:1;min-width:160px;font-size:13.5px;font-weight:600">{{ h.term }}</div>
-                  <div style="font-size:12px;color:#8A8A86;font-feature-settings:'tnum' 1">{{ h.orders }} Verk · ACOS {{ h.acos }} · {{ h.impr }} Impr</div>
-                  <div style="font-size:12px;color:#6A6A66">aus: {{ h.source }}</div>
-                  <div style="font-size:12.5px;font-weight:700;color:#1B7F4B;white-space:nowrap">Startgebot {{ h.bidStr }}</div>
-                </div>
-              </sc-for>
+            <!-- Vereinheitlichte Keyword-Analyse: alles pro Keyword an einem Ort -->
+            <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:30px">
+              <h2 style="font-family:'Archivo';font-weight:800;font-size:19px;margin:0">Keyword-Analyse</h2>
+              <div style="font-size:12px;color:#9A9A96">{{ ppcKwCountLabel }} · {{ ppcDiagBenchNote }}</div>
             </div>
+            <div style="font-size:12.5px;color:#8A8A86;margin-top:4px;max-width:760px;line-height:1.5">Alles zu jedem Suchbegriff an einem Fleck — Bewertung, Datenlage, Ursachen-Diagnose, Gebot, Trend. Zeile anklicken für Details &amp; konkrete Handlung.</div>
 
-            <!-- Hebel 2: Negativ-Keywords -->
-            <div style="background:#fff;border:1px solid #E4E4E0;border-left:4px solid #D42E12;margin-top:20px">
-              <div style="padding:16px 20px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-                <div>
-                  <div style="font-family:'Archivo';font-weight:800;font-size:16px">⊘ Negativ-Keywords <span style="color:#D42E12">({{ ppcNegCount }})</span></div>
-                  <div style="font-size:12.5px;color:#8A8A86;margin-top:2px">Ausgaben ohne Verkauf — in der jeweiligen Kampagne als negatives Keyword ausschließen. Verbranntes Budget: <b style="color:#D42E12">{{ ppcNegWaste }}</b></div>
-                  <div style="font-size:11.5px;color:#9A9A96;margin-top:3px">{{ ppcNegNote }}</div>
-                </div>
-                <button onClick="{{ ppcNegCopy }}" style="padding:8px 14px;border:1px solid #D42E12;background:#fff;color:#D42E12;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap">{{ ppcNegCopyLabel }}</button>
+            <!-- Filter + Sortierung + Kopieren -->
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:14px">
+              <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+                <sc-for list="{{ ppcFilterChips }}" as="c" hint-placeholder-count="6"><button onClick="{{ c.sel }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
               </div>
-              <sc-if value="{{ ppcNegEmpty }}" hint-placeholder-val="{{ true }}"><div style="padding:16px 20px;font-size:12.5px;color:#9A9A96">Kein Negativ-Bedarf — keine relevanten Ausgaben ohne Verkauf.</div></sc-if>
-              <sc-for list="{{ ppcNeg }}" as="n" hint-placeholder-count="4">
-                <div style="padding:12px 20px;border-bottom:1px solid #F4F4F1;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-                  <div style="flex:1;min-width:160px;font-size:13.5px;font-weight:600">{{ n.term }}</div>
-                  <div style="font-size:12px;color:#6A6A66">{{ n.campaign }} › {{ n.adgroup }}</div>
-                  <div style="font-size:12px;color:#8A8A86;font-feature-settings:'tnum' 1;white-space:nowrap">{{ n.clicks }} Klicks · {{ n.spend }} ohne Verkauf</div>
-                </div>
-              </sc-for>
-            </div>
-
-            <!-- Hebel 3: Gebotsempfehlungen -->
-            <div style="background:#fff;border:1px solid #E4E4E0;border-left:4px solid #2F6FED;margin-top:20px">
-              <div style="padding:16px 20px;border-bottom:1px solid #EEEEEB">
-                <div style="font-family:'Archivo';font-weight:800;font-size:16px">◎ Gebotsempfehlungen <span style="color:#2F6FED">({{ ppcBidsCount }})</span></div>
-                <div style="font-size:12.5px;color:#8A8A86;margin-top:2px">Max. Gebot = Ziel-ACOS × Umsatz je Klick. Vergleich mit aktuellem Ø-CPC.</div>
-              </div>
-              <sc-if value="{{ ppcBidsEmpty }}" hint-placeholder-val="{{ true }}"><div style="padding:16px 20px;font-size:12.5px;color:#9A9A96">Keine konvertierenden Keywords mit ausreichend Daten für eine Gebotsempfehlung.</div></sc-if>
-              <sc-for list="{{ ppcBids }}" as="bd" hint-placeholder-count="4">
-                <div style="padding:12px 20px;border-bottom:1px solid #F4F4F1;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-                  <div style="flex:1;min-width:150px;font-size:13.5px;font-weight:600">{{ bd.term }}</div>
-                  <div style="font-size:12px;color:#8A8A86;font-feature-settings:'tnum' 1;white-space:nowrap">akt. CPC {{ bd.cpcStr }} · ACOS {{ bd.acos }}</div>
-                  <div style="font-size:13px;font-weight:700;font-feature-settings:'tnum' 1;color:{{ bd.dirColor }};white-space:nowrap">→ {{ bd.bidStr }}</div>
-                  <div style="font-size:12px;color:{{ bd.dirColor }};min-width:150px">{{ bd.hint }}</div>
-                </div>
-              </sc-for>
-            </div>
-
-            <!-- CTR-/CVR-Diagnose -->
-            <div style="margin-top:26px">
-              <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px">
-                <h2 style="font-family:'Archivo';font-weight:800;font-size:18px;margin:0">Ursachen-Diagnose (CTR / CVR)</h2>
-                <div style="font-size:12px;color:#9A9A96">{{ ppcDiagBenchNote }} · {{ ppcDiagHealthy }} Keywords gesund</div>
-              </div>
-              <div style="font-size:12.5px;color:#8A8A86;margin-top:4px;max-width:720px;line-height:1.5">Trennt das <b style="color:#0A0A0A">Warum</b>: Viele Impressionen ohne Klicks = Bild/Titel/Preis (kein Gebotsproblem). Viele Klicks ohne Käufe = Produktseite/Preis/Bewertungen.</div>
-              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;margin-top:14px;align-items:start">
-                <!-- Klick-Problem (CTR) -->
-                <div style="background:#fff;border:1px solid #E4E4E0;border-top:3px solid #D8930A">
-                  <div style="padding:14px 18px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;justify-content:space-between">
-                    <span style="font-family:'Archivo';font-weight:800;font-size:14px">◱ Klick-Problem (niedrige CTR)</span>
-                    <span style="font-size:12px;font-weight:700;color:#D8930A">{{ ppcDiagCtrCount }}</span>
-                  </div>
-                  <div style="padding:10px 18px 4px;font-size:11.5px;color:#9A9A96">Sichtbar, aber kaum Klicks → Hauptbild, Titel, Preis.</div>
-                  <sc-if value="{{ ppcDiagCtrEmpty }}" hint-placeholder-val="{{ true }}"><div style="padding:10px 18px 16px;font-size:12.5px;color:#9A9A96">Keine auffälligen Keywords — CTR überall im Rahmen.</div></sc-if>
-                  <sc-for list="{{ ppcDiagCtr }}" as="d" hint-placeholder-count="3">
-                    <div style="padding:11px 18px;border-bottom:1px solid #F4F4F1">
-                      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
-                        <span style="font-size:13.5px;font-weight:600;color:#16130F">{{ d.term }}</span>
-                        <span style="font-size:11.5px;color:#8A8A86;font-feature-settings:'tnum' 1;white-space:nowrap">CTR {{ d.ctrStr }}</span>
-                      </div>
-                      <div style="font-size:11.5px;color:#8A8A86;margin-top:2px;font-feature-settings:'tnum' 1">{{ d.impr }} Impr · {{ d.clicks }} Klicks</div>
-                      <div style="font-size:12px;color:#B57708;margin-top:4px">{{ d.text }}</div>
-                    </div>
-                  </sc-for>
-                </div>
-                <!-- Conversion-Problem (CVR) -->
-                <div style="background:#fff;border:1px solid #E4E4E0;border-top:3px solid #D42E12">
-                  <div style="padding:14px 18px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;justify-content:space-between">
-                    <span style="font-family:'Archivo';font-weight:800;font-size:14px">◲ Conversion-Problem (niedrige CVR)</span>
-                    <span style="font-size:12px;font-weight:700;color:#D42E12">{{ ppcDiagCvrCount }}</span>
-                  </div>
-                  <div style="padding:10px 18px 4px;font-size:11.5px;color:#9A9A96">Klicks da, keine Käufe → Produktseite, Preis, Bewertungen.</div>
-                  <sc-if value="{{ ppcDiagCvrEmpty }}" hint-placeholder-val="{{ true }}"><div style="padding:10px 18px 16px;font-size:12.5px;color:#9A9A96">Keine auffälligen Keywords — Conversion überall im Rahmen.</div></sc-if>
-                  <sc-for list="{{ ppcDiagCvr }}" as="d" hint-placeholder-count="3">
-                    <div style="padding:11px 18px;border-bottom:1px solid #F4F4F1">
-                      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
-                        <span style="font-size:13.5px;font-weight:600;color:#16130F">{{ d.term }}</span>
-                        <span style="font-size:11.5px;color:#8A8A86;font-feature-settings:'tnum' 1;white-space:nowrap">CVR {{ d.cvrStr }}</span>
-                      </div>
-                      <div style="font-size:11.5px;color:#8A8A86;margin-top:2px;font-feature-settings:'tnum' 1">{{ d.clicks }} Klicks · {{ d.orders }} Verk · {{ d.acos }} ACOS</div>
-                      <div style="font-size:12px;color:#C0392B;margin-top:4px">{{ d.text }}</div>
-                    </div>
-                  </sc-for>
-                </div>
-              </div>
-            </div>
-
-            <!-- Empfehlungen -->
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:26px;align-items:start">
-              <!-- Gut -->
-              <div style="background:#fff;border:1px solid #E4E4E0;border-top:3px solid #1B7F4B">
-                <div style="padding:14px 18px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;justify-content:space-between">
-                  <span style="font-family:'Archivo';font-weight:800;font-size:14px">✓ Gut — skalieren</span>
-                  <span style="font-size:12px;font-weight:700;color:#1B7F4B">{{ ppcGoodCount }}</span>
-                </div>
-                <sc-if value="{{ ppcGoodEmpty }}" hint-placeholder-val="{{ true }}"><div style="padding:16px 18px;font-size:12.5px;color:#9A9A96">Keine Keywords in dieser Kategorie.</div></sc-if>
-                <sc-for list="{{ ppcGood }}" as="k" hint-placeholder-count="3">
-                  <div style="padding:12px 18px;border-bottom:1px solid #F4F4F1">
-                    <div style="font-size:13.5px;font-weight:600;color:#16130F">{{ k.term }}</div>
-                    <div style="font-size:11.5px;color:#8A8A86;margin-top:3px;font-feature-settings:'tnum' 1">{{ k.impr }} Impr · {{ k.clicks }} Klicks · {{ k.orders }} Verk. · ACOS {{ k.acos }}</div>
-                    <div style="font-size:12px;color:#1B7F4B;margin-top:4px">→ {{ k.action }}</div>
-                    <div style="font-size:11px;color:{{ k.confColor }};margin-top:4px;display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;background:{{ k.confColor }};display:inline-block"></span>Datenlage: {{ k.confLabel }}</div>
-                  </div>
-                </sc-for>
-              </div>
-              <!-- Prüfen -->
-              <div style="background:#fff;border:1px solid #E4E4E0;border-top:3px solid #D8930A">
-                <div style="padding:14px 18px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;justify-content:space-between">
-                  <span style="font-family:'Archivo';font-weight:800;font-size:14px">◐ Verbesserungspotenzial</span>
-                  <span style="font-size:12px;font-weight:700;color:#D8930A">{{ ppcOkayCount }}</span>
-                </div>
-                <sc-if value="{{ ppcOkayEmpty }}" hint-placeholder-val="{{ true }}"><div style="padding:16px 18px;font-size:12.5px;color:#9A9A96">Keine Keywords in dieser Kategorie.</div></sc-if>
-                <sc-for list="{{ ppcOkay }}" as="k" hint-placeholder-count="3">
-                  <div style="padding:12px 18px;border-bottom:1px solid #F4F4F1">
-                    <div style="font-size:13.5px;font-weight:600;color:#16130F">{{ k.term }}</div>
-                    <div style="font-size:11.5px;color:#8A8A86;margin-top:3px;font-feature-settings:'tnum' 1">{{ k.impr }} Impr · {{ k.clicks }} Klicks · {{ k.orders }} Verk. · ACOS {{ k.acos }}</div>
-                    <div style="font-size:12px;color:#B57708;margin-top:4px">→ {{ k.action }}</div>
-                    <div style="font-size:11px;color:{{ k.confColor }};margin-top:4px;display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;background:{{ k.confColor }};display:inline-block"></span>Datenlage: {{ k.confLabel }}</div>
-                  </div>
-                </sc-for>
-              </div>
-              <!-- Entfernen -->
-              <div style="background:#fff;border:1px solid #E4E4E0;border-top:3px solid #D42E12">
-                <div style="padding:14px 18px;border-bottom:1px solid #EEEEEB;display:flex;align-items:center;justify-content:space-between">
-                  <span style="font-family:'Archivo';font-weight:800;font-size:14px">✕ Entfernen / negativ</span>
-                  <span style="font-size:12px;font-weight:700;color:#D42E12">{{ ppcBadCount }}</span>
-                </div>
-                <sc-if value="{{ ppcBadEmpty }}" hint-placeholder-val="{{ true }}"><div style="padding:16px 18px;font-size:12.5px;color:#9A9A96">Keine Keywords in dieser Kategorie.</div></sc-if>
-                <sc-for list="{{ ppcBad }}" as="k" hint-placeholder-count="3">
-                  <div style="padding:12px 18px;border-bottom:1px solid #F4F4F1">
-                    <div style="font-size:13.5px;font-weight:600;color:#16130F">{{ k.term }}</div>
-                    <div style="font-size:11.5px;color:#8A8A86;margin-top:3px;font-feature-settings:'tnum' 1">{{ k.impr }} Impr · {{ k.clicks }} Klicks · {{ k.orders }} Verk. · ACOS {{ k.acos }}</div>
-                    <div style="font-size:12px;color:#C0392B;margin-top:4px">→ {{ k.action }}</div>
-                    <div style="font-size:11px;color:{{ k.confColor }};margin-top:4px;display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;background:{{ k.confColor }};display:inline-block"></span>Datenlage: {{ k.confLabel }}</div>
-                  </div>
-                </sc-for>
-              </div>
-            </div>
-
-            <!-- Volltabelle -->
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:32px">
-              <h2 style="font-family:'Archivo';font-weight:800;font-size:18px;margin:0">Alle relevanten Suchbegriffe</h2>
-              <div style="display:flex;align-items:center;gap:7px">
+              <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+                <sc-if value="{{ ppcShowCopy }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ ppcFilterCopy }}" style="padding:6px 12px;border:1px solid #0A0A0A;background:#fff;color:#0A0A0A;font-size:12px;font-weight:600;cursor:pointer">{{ ppcFilterCopyLabel }}</button>
+                </sc-if>
                 <span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Sortieren</span>
                 <sc-for list="{{ ppcSortChips }}" as="c" hint-placeholder-count="3"><button onClick="{{ c.sel }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
               </div>
             </div>
+
             <div style="background:#fff;border:1px solid #E4E4E0;margin-top:12px;overflow-x:auto">
-              <table style="width:100%;border-collapse:collapse;min-width:820px">
+              <table style="width:100%;border-collapse:collapse;min-width:900px">
                 <thead><tr>
                   <th style="text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Suchbegriff</th>
-                  <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Impr.</th>
-                  <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Klicks</th>
-                  <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Verkäufe</th>
-                  <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Ausgaben</th>
-                  <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">ACOS</th>
-                  <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">CTR</th>
-                  <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">CVR</th>
-                  <th style="text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Diagnose</th>
-                  <th style="text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Bewertung</th>
-                  <th style="text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Datenlage</th>
-                  <th style="text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Trend (ACOS)</th>
+                  <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Impr.</th>
+                  <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Klicks</th>
+                  <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Verk.</th>
+                  <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Ausg.</th>
+                  <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">ACOS</th>
+                  <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">CTR</th>
+                  <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">CVR</th>
+                  <th style="text-align:left;padding:11px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Bewertung</th>
+                  <th style="text-align:left;padding:11px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Datenlage</th>
+                  <th style="text-align:left;padding:11px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Trend</th>
+                  <th style="border-bottom:1.5px solid #0A0A0A"></th>
                 </tr></thead>
                 <tbody>
-                  <sc-for list="{{ ppcRows }}" as="k" hint-placeholder-count="8">
-                    <tr>
-                      <td style="padding:10px 14px;font-size:13px;font-weight:600;border-bottom:1px solid #F1F1EE">{{ k.term }}</td>
-                      <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.impr }}</td>
-                      <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.clicks }}</td>
-                      <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.orders }}</td>
-                      <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.spend }}</td>
-                      <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.acos }}</td>
-                      <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.ctrStr }}</td>
-                      <td style="padding:10px 14px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.cvrStr }}</td>
-                      <td style="padding:10px 14px;border-bottom:1px solid #F1F1EE" title="{{ k.diagText }}"><span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#4A4A46;white-space:nowrap"><span style="width:8px;height:8px;background:{{ k.diagColor }};display:inline-block"></span>{{ k.diagLabel }}</span></td>
-                      <td style="padding:10px 14px;border-bottom:1px solid #F1F1EE"><span style="display:inline-block;padding:3px 9px;font-size:11px;font-weight:700;color:#fff;background:{{ k.catColor }}">{{ k.catLabel }}</span></td>
-                      <td style="padding:10px 14px;border-bottom:1px solid #F1F1EE;white-space:nowrap"><span style="display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:#4A4A46"><span style="width:8px;height:8px;background:{{ k.confColor }};display:inline-block"></span>{{ k.confLabel }}</span></td>
-                      <td style="padding:10px 14px;border-bottom:1px solid #F1F1EE;font-size:12px;white-space:nowrap"><span style="color:{{ k.trendColor }};font-weight:700">{{ k.trendArrow }}</span> <span style="color:#6A6A66;font-feature-settings:'tnum' 1">{{ k.trendText }}</span></td>
+                  <sc-for list="{{ ppcKw }}" as="k" hint-placeholder-count="8">
+                    <tr onClick="{{ k.toggle }}" style="cursor:pointer">
+                      <td style="padding:11px 14px;font-size:13px;font-weight:600;border-bottom:1px solid #F1F1EE">
+                        <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:3px;height:26px;background:{{ k.catColor }};display:inline-block"></span>{{ k.term }}</span>
+                        <sc-if value="{{ k.tagHarvest }}" hint-placeholder-val="{{ true }}"><span style="display:inline-block;margin-left:8px;padding:2px 7px;font-size:10px;font-weight:700;color:#1B7F4B;border:1px solid #1B7F4B;vertical-align:middle">HARVEST</span></sc-if>
+                        <sc-if value="{{ k.tagNeg }}" hint-placeholder-val="{{ true }}"><span style="display:inline-block;margin-left:8px;padding:2px 7px;font-size:10px;font-weight:700;color:#D42E12;border:1px solid #D42E12;vertical-align:middle">NEGATIV</span></sc-if>
+                      </td>
+                      <td style="padding:11px 10px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.impr }}</td>
+                      <td style="padding:11px 10px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.clicks }}</td>
+                      <td style="padding:11px 10px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.orders }}</td>
+                      <td style="padding:11px 10px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.spend }}</td>
+                      <td style="padding:11px 10px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.acos }}</td>
+                      <td style="padding:11px 10px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.ctrStr }}</td>
+                      <td style="padding:11px 10px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ k.cvrStr }}</td>
+                      <td style="padding:11px 12px;border-bottom:1px solid #F1F1EE"><span style="display:inline-block;padding:3px 9px;font-size:11px;font-weight:700;color:#fff;background:{{ k.catColor }}">{{ k.catLabel }}</span></td>
+                      <td style="padding:11px 12px;border-bottom:1px solid #F1F1EE;white-space:nowrap"><span style="display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:#4A4A46"><span style="width:8px;height:8px;background:{{ k.confColor }};display:inline-block"></span>{{ k.confLabel }}</span></td>
+                      <td style="padding:11px 12px;border-bottom:1px solid #F1F1EE;font-size:12px;white-space:nowrap"><span style="color:{{ k.trendColor }};font-weight:700">{{ k.trendArrow }}</span> <span style="color:#6A6A66;font-feature-settings:'tnum' 1">{{ k.trendText }}</span></td>
+                      <td style="padding:11px 12px;border-bottom:1px solid #F1F1EE;text-align:center;color:#B0B0AC;font-size:12px">{{ k.chevron }}</td>
                     </tr>
+                    <sc-if value="{{ k.expanded }}" hint-placeholder-val="{{ false }}">
+                      <tr>
+                        <td colspan="12" style="padding:0;border-bottom:1px solid #F1F1EE;background:#FAFAF8">
+                          <div style="padding:16px 22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
+                            <div>
+                              <div style="font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;margin-bottom:5px">Empfehlung</div>
+                              <div style="font-size:13px;color:#16130F;line-height:1.5">{{ k.action }}</div>
+                              <div style="font-size:12px;color:#8A8A86;margin-top:5px;line-height:1.5">{{ k.reason }}</div>
+                              <div style="font-size:11.5px;margin-top:6px;color:{{ k.confColor }}">Datenlage: {{ k.confLabel }}{{ k.confHint }}</div>
+                            </div>
+                            <div>
+                              <div style="font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;margin-bottom:5px">Ursachen-Diagnose</div>
+                              <div style="font-size:12.5px;color:#4A4A46;line-height:1.5;display:flex;align-items:flex-start;gap:6px"><span style="width:8px;height:8px;background:{{ k.diagColor }};display:inline-block;margin-top:4px;flex-shrink:0"></span><span>{{ k.diagText }}</span></div>
+                            </div>
+                            <sc-if value="{{ k.showBid }}" hint-placeholder-val="{{ true }}">
+                              <div>
+                                <div style="font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;margin-bottom:5px">Gebot</div>
+                                <div style="font-size:13px;color:#16130F;font-feature-settings:'tnum' 1">akt. CPC {{ k.cpcStr }} <span style="color:{{ k.bidColor }};font-weight:700">→ {{ k.bidStr }}</span></div>
+                                <div style="font-size:12px;color:{{ k.bidColor }};margin-top:4px">{{ k.bidHint }}</div>
+                              </div>
+                            </sc-if>
+                            <sc-if value="{{ k.showHarvest }}" hint-placeholder-val="{{ true }}">
+                              <div>
+                                <div style="font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#1B7F4B;margin-bottom:5px">Harvesting</div>
+                                <div style="font-size:12.5px;color:#16130F;line-height:1.5">Noch nicht als Exact — als Exact-Keyword anlegen. Startgebot <b>{{ k.harvestBid }}</b></div>
+                                <div style="font-size:12px;color:#8A8A86;margin-top:4px">aus: {{ k.harvestSource }}</div>
+                              </div>
+                            </sc-if>
+                            <sc-if value="{{ k.showNeg }}" hint-placeholder-val="{{ true }}">
+                              <div>
+                                <div style="font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#D42E12;margin-bottom:5px">Negativ ausschließen in</div>
+                                <sc-for list="{{ k.negCamps }}" as="n" hint-placeholder-count="2"><div style="font-size:12.5px;color:#16130F;line-height:1.5">{{ n.campaign }} › {{ n.adgroup }} <span style="color:#8A8A86">({{ n.clicks }} Klicks, {{ n.spend }})</span></div></sc-for>
+                              </div>
+                            </sc-if>
+                            <sc-if value="{{ k.showCamps }}" hint-placeholder-val="{{ true }}">
+                              <div>
+                                <div style="font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#9A9A96;margin-bottom:5px">Kampagnen</div>
+                                <div style="font-size:12.5px;color:#6A6A66;line-height:1.5">{{ k.campsList }}</div>
+                              </div>
+                            </sc-if>
+                          </div>
+                        </td>
+                      </tr>
+                    </sc-if>
                   </sc-for>
                 </tbody>
               </table>
+              <sc-if value="{{ ppcKwEmpty }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:30px 22px;text-align:center;color:#9A9A96;font-size:13.5px">Keine Keywords in dieser Ansicht.</div>
+              </sc-if>
             </div>
+            <div style="font-size:12px;color:#9A9A96;margin-top:10px">{{ ppcTargetNote }} · {{ ppcRelevantCount }} relevante Suchbegriffe. {{ ppcBelowNote }}</div>
+
           </sc-if>
 
           <!-- Berichts-Verlauf (persistiert, Basis fuer den Wochenvergleich) -->
@@ -1738,7 +1646,7 @@ class Component extends DCLogic {
       bueroTick:0,
       todoTitle:'', todoPrio:'Mittel', todoOwner:'Beide', todoFilterOwner:'alle', todoShowDone:false,
       ppcRaw:null, ppcFileName:'', ppcError:'', ppcLoading:false, ppcTargetAcos:30, ppcSort:'spend', ppcPeriod:'', ppcCopied:'',
-      ppcCamps:null, ppcCurrentId:null, ppcApplyYm:'', ppcInfoOpen:false,
+      ppcCamps:null, ppcCurrentId:null, ppcApplyYm:'', ppcInfoOpen:false, ppcFilter:'alle', ppcExpanded:{},
       ppcCampMap:(saved && saved.ppcCampMap) || {},
       ppcHistory:(saved && Array.isArray(saved.ppcHistory)) ? saved.ppcHistory.slice(0,12) : []
     };
@@ -3036,83 +2944,54 @@ class Component extends DCLogic {
         const sortKey=st.ppcSort||'spend';
         const sorter=(a,b)=> sortKey==='acos' ? ((a.acos==null?9:a.acos)-(b.acos==null?9:b.acos))
           : sortKey==='impr' ? b.impr-a.impr : b.spend-a.spend;
-        const mkRow=(k)=>({ term:k.term, impr:this._num(k.impr), clicks:this._num(k.clicks),
-          orders:this._num(k.orders), spend:this._eur(k.spend), sales:this._eur(k.sales),
-          acos:k.acos==null?'—':this._pct(k.acos*100,0),
-          ctrStr:this._pct((k.ctr||0)*100,2), cvrStr:k.clicks>0?this._pct((k.cvr||0)*100,1):'—',
-          diagLabel:k.diagLabel||'', diagColor:k.diagColor||'#8A8A86', diagText:k.diagText||'',
-          confLabel:(confMeta[k.conf]||confMeta.gering).label, confColor:(confMeta[k.conf]||confMeta.gering).color,
-          catColor: k.cat==='gut'?green : k.cat==='okay'?yellow : red,
-          catLabel: k.cat==='gut'?'Gut':k.cat==='okay'?'Prüfen':'Entfernen',
-          reason:k.reason, action:k.action, camps:(k.campNames||[]).join(', ') });
-        const good=enrich.filter(k=>k.cat==='gut').sort(sorter);
-        const okay=enrich.filter(k=>k.cat==='okay').sort(sorter);
-        const bad=enrich.filter(k=>k.cat==='schlecht').sort((a,b)=>b.spend-a.spend);
+
         V.ppcRelevantCount=relevant.length;
         V.ppcBelowNote = belowN>0 ? (belowN+' Suchbegriffe unter '+this._num(RELEVANT)+' Impressionen und '+RELEVANT_CLICKS+' Klicks ausgeblendet (noch nicht aussagekräftig).') : '';
         V.ppcTargetNote='Relevanz ab '+this._num(RELEVANT)+' Impressionen oder '+RELEVANT_CLICKS+' Klicks · Ziel-ACOS '+this._pct((st.ppcTargetAcos||30),0);
-        V.ppcGood=good.map(mkRow); V.ppcOkay=okay.map(mkRow); V.ppcBad=bad.map(mkRow);
-        V.ppcGoodCount=good.length; V.ppcOkayCount=okay.length; V.ppcBadCount=bad.length;
-        V.ppcGoodEmpty=good.length===0; V.ppcOkayEmpty=okay.length===0; V.ppcBadEmpty=bad.length===0;
-        const sortedEnrich=enrich.slice().sort((a,b)=> (catRank[a.cat]-catRank[b.cat]) || sorter(a,b));
-        V.ppcRows=sortedEnrich.map(mkRow);
-        V.ppcTableEmpty=enrich.length===0;
         V.ppcSort=sortKey;
         V.ppcSortChips=[['spend','Ausgaben'],['impr','Impressionen'],['acos','ACOS']].map(([k,l])=>({label:l,
           sel:()=>this.setState({ppcSort:k}),
           style: (sortKey===k)?'padding:6px 12px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12px;font-weight:600;cursor:pointer':'padding:6px 12px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12px;font-weight:500;cursor:pointer' }));
 
-        // ===== Hebel 1: Keyword-Harvesting =====
-        // Suchbegriffe, die konvertiert haben, aber noch NICHT als Exact laufen -> als Exact anlegen.
-        const harvest=kws.filter(k=>k.orders>0 && !k.isExact && k.clicks>0 && (isRelevant(k) || k.orders>=2) && (k.acos==null || k.acos<=tgt*2))
-          .sort((a,b)=> b.orders-a.orders || (a.acos||9)-(b.acos||9));
+        // Harvesting, Negatives, Gebote: berechnen und je Keyword anheften (statt getrennter Module)
         const bidOf=(k)=> k.clicks>0 ? tgt*(k.sales/k.clicks) : 0; // maxCPC = ZielACOS × Umsatz/Klick
-        V.ppcHarvest=harvest.map(k=>{ const best=(k.camps||[]).slice().sort((a,b)=>b.orders-a.orders||b.sales-a.sales)[0]||{};
-          const bid=bidOf(k);
-          return { term:k.term, orders:this._num(k.orders), acos:k.acos==null?'—':this._pct(k.acos*100,0),
-            impr:this._num(k.impr), source:(best.campaign||'—')+(best.targeting?(' · '+best.targeting):''),
-            bidStr:bid>0?this._eur(bid,2):'—' }; });
-        V.ppcHarvestCount=harvest.length; V.ppcHarvestEmpty=harvest.length===0;
-        V.ppcHarvestCopyLabel = (st.ppcCopied==='harvest')?'✓ Kopiert':'Keyword-Liste kopieren';
-        V.ppcHarvestCopy=()=>this._ppcCopy(harvest.map(k=>k.term).join('\n'),'harvest');
-
-        // ===== Hebel 2: Negativ-Keywords (kampagnenspezifisch) =====
-        // Nur belastbare Nicht-Konverter: Suchbegriff mit >=30 Klicks gesamt und 0 Verkäufen.
-        // Ausgeschlossen wird dann in den Kampagnen, in denen er Budget ohne Verkauf verbraucht hat.
-        const negs=[];
+        const harvestSet=new Set(kws.filter(k=>k.orders>0 && !k.isExact && k.clicks>0 && (isRelevant(k) || k.orders>=2) && (k.acos==null || k.acos<=tgt*2)).map(k=>k.term));
+        const negByTerm=new Map();
         kws.forEach(k=>{ if(k.orders>0 || k.clicks<NEG_CLICKS_MIN) return;
-          (k.camps||[]).forEach(c=>{ if(c.spend>0 && c.orders===0){
-            negs.push({ term:k.term, campaign:c.campaign, adgroup:c.adgroup, spend:c.spend, clicks:c.clicks, totalClicks:k.clicks }); } }); });
-        negs.sort((a,b)=>b.spend-a.spend);
-        const negWaste=negs.reduce((s,n)=>s+n.spend,0);
-        V.ppcNeg=negs.map(n=>({ term:n.term, campaign:n.campaign, adgroup:n.adgroup||'—',
-          spend:this._eur(n.spend), clicks:this._num(n.clicks) }));
-        V.ppcNegCount=negs.length; V.ppcNegEmpty=negs.length===0;
-        V.ppcNegWaste=this._eur(negWaste);
-        V.ppcNegNote='Faustregel: erst ab '+NEG_CLICKS_MIN+' Klicks ohne Verkauf — darunter ist „kein Verkauf" oft nur Zufall.';
-        V.ppcNegCopyLabel=(st.ppcCopied==='neg')?'✓ Kopiert':'Negativ-Liste kopieren';
-        V.ppcNegCopy=()=>this._ppcCopy(negs.map(n=>n.term).filter((v,i,a)=>a.indexOf(v)===i).join('\n'),'neg');
-
-        // ===== Hebel 3: Konkrete Gebotsempfehlungen =====
-        // maxGebot = ZielACOS × Umsatz/Klick; Vergleich mit aktuellem Ø-CPC.
-        const bids=relevant.filter(k=>k.orders>0 && k.clicks>0).map(k=>{ const bid=bidOf(k); const cpc=k.cpc; const diff=bid-cpc;
-          return { term:k.term, cpcStr:this._eur(cpc,2), bidStr:this._eur(Math.max(0,bid),2), acos:k.acos==null?'—':this._pct(k.acos*100,0),
-            dir: diff>0.03?'up' : diff<-0.03?'down' : 'ok',
-            dirColor: diff>0.03?green : diff<-0.03?red : '#8A8A86',
-            hint: diff>0.03?('Luft nach oben — Gebot bis '+this._eur(bid,2)+' testen') : diff<-0.03?('Gebot auf ~'+this._eur(Math.max(0,bid),2)+' senken') : 'Gebot passt zum Ziel',
-            _sort:Math.abs(diff)*k.clicks }; }).sort((a,b)=>b._sort-a._sort);
-        V.ppcBids=bids; V.ppcBidsCount=bids.length; V.ppcBidsEmpty=bids.length===0;
-
-        // ===== CTR-/CVR-Diagnose-Buckets =====
-        const diagRow=(k)=>({ term:k.term, impr:this._num(k.impr), clicks:this._num(k.clicks), orders:this._num(k.orders),
-          ctrStr:this._pct((k.ctr||0)*100,2), cvrStr:k.clicks>0?this._pct((k.cvr||0)*100,1):'—',
-          acos:k.acos==null?'—':this._pct(k.acos*100,0), text:k.diagText });
-        const ctrProblems=enrich.filter(k=>k.diag==='ctr').sort((a,b)=>b.impr-a.impr);
-        const cvrProblems=enrich.filter(k=>k.diag==='cvr').sort((a,b)=>b.spend-a.spend);
-        V.ppcDiagCtr=ctrProblems.map(diagRow); V.ppcDiagCtrCount=ctrProblems.length; V.ppcDiagCtrEmpty=ctrProblems.length===0;
-        V.ppcDiagCvr=cvrProblems.map(diagRow); V.ppcDiagCvrCount=cvrProblems.length; V.ppcDiagCvrEmpty=cvrProblems.length===0;
+          const rows=(k.camps||[]).filter(c=>c.spend>0 && c.orders===0)
+            .map(c=>({campaign:c.campaign, adgroup:c.adgroup||'—', spend:this._eur(c.spend), clicks:this._num(c.clicks)}));
+          if(rows.length) negByTerm.set(k.term, rows); });
+        const harvestList=Array.from(harvestSet), negTerms=Array.from(negByTerm.keys());
+        enrich.forEach(k=>{
+          k._harvest = harvestSet.has(k.term);
+          k._neg = negByTerm.has(k.term);
+          k._negCamps = negByTerm.get(k.term)||[];
+          if(k.orders>0 && k.clicks>0){ const bid=bidOf(k), diff=bid-k.cpc;
+            k._bid={ show:true, cpcStr:this._eur(k.cpc,2), bidStr:this._eur(Math.max(0,bid),2),
+              color: diff>0.03?green : diff<-0.03?red : '#8A8A86',
+              hint: diff>0.03?('Luft nach oben — Gebot bis '+this._eur(bid,2)+' testen') : diff<-0.03?('Gebot auf ~'+this._eur(Math.max(0,bid),2)+' senken') : 'Gebot passt zum Ziel' };
+          } else k._bid={show:false};
+          if(k._harvest){ const best=(k.camps||[]).slice().sort((a,b)=>b.orders-a.orders||b.sales-a.sales)[0]||{};
+            k._harvestBid=this._eur(bidOf(k),2); k._harvestSource=(best.campaign||'—')+(best.targeting?(' · '+best.targeting):''); }
+        });
+        // Aggregat-Zahlen fuer Diagnose-Kopfzeile
         V.ppcDiagHealthy=enrich.filter(k=>k.diag==='ok').length;
         V.ppcDiagBenchNote='Konto-Schnitt: CTR '+this._pct(avgCtr*100,2)+' · CVR '+this._pct(avgCvr*100,1);
+
+        // Filter-Zaehlungen
+        const cnt={ alle:enrich.length, gut:enrich.filter(k=>k.cat==='gut').length, okay:enrich.filter(k=>k.cat==='okay').length,
+          schlecht:enrich.filter(k=>k.cat==='schlecht').length, harvest:harvestList.length, neg:negTerms.length,
+          diag:enrich.filter(k=>k.diag==='ctr'||k.diag==='cvr').length };
+        const flt=st.ppcFilter||'alle';
+        const filterDefs=[['alle','Alle',cnt.alle],['gut','Gut',cnt.gut],['okay','Prüfen',cnt.okay],['schlecht','Entfernen',cnt.schlecht],['harvest','Harvesting',cnt.harvest],['neg','Negativ',cnt.neg],['diag','Diagnose',cnt.diag]];
+        V.ppcFilterChips=filterDefs.map(([k,l,n])=>({ label:l+' ('+n+')',
+          sel:()=>this.setState({ppcFilter:k}),
+          style:(flt===k)?'padding:6px 12px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12px;font-weight:600;cursor:pointer':'padding:6px 12px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12px;font-weight:500;cursor:pointer' }));
+        // Kopier-Button nur bei Harvest-/Negativ-Filter
+        V.ppcShowCopy = (flt==='harvest'||flt==='neg');
+        V.ppcFilterCopyLabel = (st.ppcCopied===('flt_'+flt))?'✓ Kopiert':(flt==='harvest'?'Harvest-Keywords kopieren':'Negativ-Keywords kopieren');
+        V.ppcFilterCopy=()=>{ const list=(flt==='harvest')?harvestList:negTerms; this._ppcCopy(list.join('\n'),'flt_'+flt); };
+        this._ppcEnrich=enrich; this._ppcFilterState={flt, sorter, catRank}; // fuer ppcKw-Bau nach Trend-Berechnung
 
         // ===== Kampagnen-Scorecard =====
         const camps=(st.ppcCamps||[]).slice().sort((a,b)=>b.spend-a.spend);
@@ -3155,7 +3034,35 @@ class Component extends DCLogic {
           if(k.orders===0 && p.orders===0 && Math.abs(dS)>0.5) return dS>0?{arrow:'▲',color:red,text:'Ausgaben '+this._eur(p.spend)+' → '+this._eur(k.spend)+' o. Verkauf'}:{arrow:'▼',color:green,text:'Ausgaben gesenkt'};
           return {arrow:'—', color:'#8A8A86', text:'stabil'};
         };
-        V.ppcRows=sortedEnrich.map(k=>{ const r=mkRow(k); const t=trendOf(k); return {...r, trendArrow:t.arrow, trendColor:t.color, trendText:t.text}; });
+        // ===== Vereinheitlichte Keyword-Liste (Filter + Sortierung + Trend + Detail je Keyword) =====
+        const fs=this._ppcFilterState||{flt:'alle',sorter:sorter,catRank:catRank};
+        const flt2=fs.flt, expanded=st.ppcExpanded||{};
+        const passFilter=(k)=> flt2==='alle' ? true : flt2==='gut' ? k.cat==='gut' : flt2==='okay' ? k.cat==='okay'
+          : flt2==='schlecht' ? k.cat==='schlecht' : flt2==='harvest' ? k._harvest : flt2==='neg' ? k._neg
+          : flt2==='diag' ? (k.diag==='ctr'||k.diag==='cvr') : true;
+        const kwList=enrich.filter(passFilter).slice().sort((a,b)=> (fs.catRank[a.cat]-fs.catRank[b.cat]) || fs.sorter(a,b));
+        V.ppcKw=kwList.map(k=>{ const t=trendOf(k); const isOpen=!!expanded[k.term];
+          const confHintMap={ hoch:'', mittel:' — Aussage mit etwas Vorsicht', gering:' — noch wenige Daten, Empfehlung vorsichtig behandeln' };
+          return {
+            term:k.term, impr:this._num(k.impr), clicks:this._num(k.clicks), orders:this._num(k.orders),
+            spend:this._eur(k.spend), sales:this._eur(k.sales), acos:k.acos==null?'—':this._pct(k.acos*100,0),
+            ctrStr:this._pct((k.ctr||0)*100,2), cvrStr:k.clicks>0?this._pct((k.cvr||0)*100,1):'—',
+            catColor: k.cat==='gut'?green : k.cat==='okay'?yellow : red,
+            catLabel: k.cat==='gut'?'Gut':k.cat==='okay'?'Prüfen':'Entfernen',
+            confLabel:(confMeta[k.conf]||confMeta.gering).label, confColor:(confMeta[k.conf]||confMeta.gering).color,
+            confHint:confHintMap[k.conf]||'',
+            trendArrow:t.arrow, trendColor:t.color, trendText:t.text,
+            reason:k.reason, action:k.action, diagText:k.diagText, diagColor:k.diagColor||'#8A8A86',
+            tagHarvest:!!k._harvest, tagNeg:!!k._neg,
+            showBid:!!(k._bid&&k._bid.show), cpcStr:k._bid&&k._bid.cpcStr, bidStr:k._bid&&k._bid.bidStr, bidColor:k._bid&&k._bid.color, bidHint:k._bid&&k._bid.hint,
+            showHarvest:!!k._harvest, harvestBid:k._harvestBid, harvestSource:k._harvestSource,
+            showNeg:!!k._neg, negCamps:k._negCamps||[],
+            showCamps:(k.campNames||[]).length>0, campsList:(k.campNames||[]).join(', '),
+            expanded:isOpen, chevron:isOpen?'▲':'▼',
+            toggle:()=>this.setState(s=>{ const e={...(s.ppcExpanded||{})}; if(e[k.term]) delete e[k.term]; else e[k.term]=true; return {ppcExpanded:e}; })
+          }; });
+        V.ppcKwEmpty=kwList.length===0;
+        V.ppcKwCountLabel=kwList.length+(flt2==='alle'?' Suchbegriffe':' gefiltert');
         if(prev){
           const pTot=prev.keywords.reduce((a,k)=>({spend:a.spend+k.spend,sales:a.sales+k.sales,orders:a.orders+k.orders}),{spend:0,sales:0,orders:0});
           const pAcos=pTot.sales>0?pTot.spend/pTot.sales:null;
