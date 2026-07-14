@@ -1133,6 +1133,30 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
             <div style="font-size:13.5px;color:#8A8A86;margin-top:10px;max-width:680px;line-height:1.55">Lade den Amazon <b style="color:#0A0A0A">Sponsored Products · Suchbegriff-Bericht</b> (.xlsx) hoch. Das Dashboard wertet je Suchbegriff Impressionen, Klicks, Verkäufe und ACOS aus und gibt Empfehlungen — was gut läuft, wo Potenzial ist und welche Keywords raus sollten.</div>
           </div>
 
+          <!-- Info-Sheet: Erklaerung der Regeln (immer aktuell aus den echten Schwellen) -->
+          <div style="background:#fff;border:1px solid #E4E4E0;margin-top:20px">
+            <button onClick="{{ ppcInfoToggle }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;background:none;border:none;cursor:pointer;text-align:left">
+              <span style="display:flex;align-items:center;gap:10px">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF5A00" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+                <span style="font-family:'Archivo';font-weight:800;font-size:15px">So funktioniert die Analyse — Regeln &amp; Schwellenwerte</span>
+              </span>
+              <span style="font-size:12.5px;color:#8A8A86;white-space:nowrap">{{ ppcInfoToggleLabel }}</span>
+            </button>
+            <sc-if value="{{ ppcInfoOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:4px 20px 20px;border-top:1px solid #EEEEEB">
+                <div style="font-size:12px;color:#9A9A96;margin:14px 0 4px">Diese Werte werden live aus der aktuellen Einstellung berechnet — das Blatt ist immer auf dem neuesten Stand.</div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:#EEEEEB;border:1px solid #EEEEEB;margin-top:10px">
+                  <sc-for list="{{ ppcInfo }}" as="s" hint-placeholder-count="12">
+                    <div style="background:#fff;padding:14px 16px">
+                      <div style="font-family:'Archivo';font-weight:800;font-size:13px;color:#16130F">{{ s.h }}</div>
+                      <div style="font-size:12.5px;color:#5A5A56;margin-top:5px;line-height:1.55">{{ s.b }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+
           <!-- Upload -->
           <div style="background:#fff;border:1px solid #E4E4E0;margin-top:26px;padding:22px">
             <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
@@ -1714,7 +1738,7 @@ class Component extends DCLogic {
       bueroTick:0,
       todoTitle:'', todoPrio:'Mittel', todoOwner:'Beide', todoFilterOwner:'alle', todoShowDone:false,
       ppcRaw:null, ppcFileName:'', ppcError:'', ppcLoading:false, ppcTargetAcos:30, ppcSort:'spend', ppcPeriod:'', ppcCopied:'',
-      ppcCamps:null, ppcCurrentId:null, ppcApplyYm:'',
+      ppcCamps:null, ppcCurrentId:null, ppcApplyYm:'', ppcInfoOpen:false,
       ppcCampMap:(saved && saved.ppcCampMap) || {},
       ppcHistory:(saved && Array.isArray(saved.ppcHistory)) ? saved.ppcHistory.slice(0,12) : []
     };
@@ -2924,8 +2948,28 @@ class Component extends DCLogic {
       V.ppcOnFile=(e)=>{ const f=e.target.files&&e.target.files[0]; if(f) this._ppcHandleFile(f); e.target.value=''; };
       V.ppcClear=()=>this._ppcClear();
       V.setPpcTarget=(e)=>this._setPpcTarget(e.target.value);
-      const RELEVANT=1000, RELEVANT_CLICKS=10;
+      const RELEVANT=1000, RELEVANT_CLICKS=10, NEG_CLICKS_MIN=30;
+      const CONF_HI_CLICKS=30, CONF_MID_CLICKS=15, CONF_HI_ORDERS=5, CONF_MID_ORDERS=2;
       const isRelevant=(k)=> k.impr>=RELEVANT || k.clicks>=RELEVANT_CLICKS;
+      const tgtPct=this._pct((st.ppcTargetAcos||30),0);
+      // Info-Sheet: speist sich direkt aus den echten Schwellen -> nie veraltet
+      V.ppcInfoOpen=!!st.ppcInfoOpen;
+      V.ppcInfoToggle=()=>this.setState(s=>({ppcInfoOpen:!s.ppcInfoOpen}));
+      V.ppcInfoToggleLabel=st.ppcInfoOpen?'einklappen ▲':'aufklappen ▼';
+      V.ppcInfo=[
+        {h:'Welche Keywords werden analysiert?', b:'Ein Suchbegriff kommt in die Auswertung, sobald er '+this._num(RELEVANT)+' Impressionen ODER '+RELEVANT_CLICKS+' Klicks erreicht. Darunter ist die Datenmenge zu klein für ein verlässliches Urteil — diese Begriffe werden ausgeblendet (aber weiter gezählt).'},
+        {h:'Ziel-ACOS', b:'Der Ziel-ACOS (aktuell '+tgtPct+') ist die Grenze zwischen rentabel und unrentabel. Er ist frei einstellbar und sollte grob eurem Break-even-ACOS entsprechen: dem Punkt, ab dem Werbung mehr kostet als sie an Marge einbringt. Alle Bewertungen unten rechnen gegen diesen Wert.'},
+        {h:'Wann ist ein Keyword „Gut"?', b:'Es hat mindestens einen Verkauf und einen ACOS ≤ Ziel-ACOS ('+tgtPct+'). Heißt: die Werbung ist rentabel. Empfehlung: Gebot/Budget erhöhen und skalieren — sofern die Datenlage das trägt (siehe unten).'},
+        {h:'Wann „Verbesserungspotenzial" (Prüfen)?', b:'Zwei Fälle: (1) ACOS liegt über Ziel, aber höchstens beim 1,5-fachen ('+tgtPct+' bis '+this._pct((st.ppcTargetAcos||30)*1.5,0)+') → Gebot moderat senken. (2) Ausgaben ohne Verkauf, aber noch unter '+NEG_CLICKS_MIN+' Klicks → beobachten, noch kein sicheres Signal.'},
+        {h:'Wann „Entfernen / negativ"?', b:'Zwei Fälle: (1) ACOS deutlich über Ziel (mehr als das 1,5-fache) bei vorhandenen Verkäufen → Gebot stark senken oder pausieren. (2) '+NEG_CLICKS_MIN+' Klicks oder mehr OHNE einen einzigen Verkauf → als negatives Keyword ausschließen. Erst ab '+NEG_CLICKS_MIN+' Klicks, weil „kein Verkauf" bei wenigen Klicks meist nur Zufall ist.'},
+        {h:'Warum die 30-Klick-Regel?', b:'Bei geringen Verkaufszahlen kippt ein einzelner Kauf den ACOS komplett. Faustregel: Um bei typischer Conversion-Rate überhaupt einen Verkauf zu erwarten, braucht es rund '+NEG_CLICKS_MIN+' Klicks. Erst wenn die ohne Ergebnis verstreichen, ist „läuft nicht" ein echtes Signal statt Pech.'},
+        {h:'Wie wird die Datenlage bewertet?', b:'belastbar = genug Daten hinter der Aussage (Verkäufer-Keywords: ≥'+CONF_HI_ORDERS+' Verkäufe & ≥20 Klicks; Nicht-Konverter: ≥'+CONF_HI_CLICKS+' Klicks). mittlere Datenlage = ≥'+CONF_MID_CLICKS+' Klicks oder ≥'+CONF_MID_ORDERS+' Verkäufe. dünne Datenlage = darunter — die Empfehlung ist dann bewusst vorsichtiger formuliert (z. B. „erst mehr Daten sammeln" statt „skalieren").'},
+        {h:'Ursachen-Diagnose (CTR / CVR)', b:'Trennt das Warum: Viele Impressionen, aber kaum Klicks (niedrige CTR) = Hauptbild, Titel oder Preis — kein Gebotsproblem. Viele Klicks, aber kaum Käufe (niedrige CVR) = Produktseite, Preis oder Bewertungen. Schwellen sind der halbe Konto-Schnitt, mindestens aber CTR 0,25 % bzw. CVR 5 %.'},
+        {h:'Keyword-Harvesting', b:'Suchbegriffe, die bereits verkaufen, aber noch nicht als eigenes Exact-Keyword laufen (sie kommen aus Auto-/Broad-Kampagnen). Vorschlag: als Exact-Target anlegen, um Gebot und Sichtbarkeit gezielt zu steuern. Startgebot = Ziel-ACOS × Umsatz je Klick.'},
+        {h:'Gebotsempfehlung', b:'Max. Gebot = Ziel-ACOS × Umsatz je Klick. Das ist der CPC, bei dem ein Keyword im Schnitt genau den Ziel-ACOS erreicht. Liegt der aktuelle CPC darüber → senken; darunter → es ist Luft für höhere Gebote.'},
+        {h:'Kampagnen-Scorecard', b:'Fasst dieselbe Bewertung auf Kampagnen-Ebene zusammen: profitabel (ACOS ≤ Ziel), grenzwertig (bis 1,5×), unrentabel oder „verbrennt Budget" (Ausgaben ganz ohne Verkauf). Der Balken zeigt den Anteil an den Gesamtausgaben.'},
+        {h:'Wochenvergleich', b:'Jeder Upload wird gespeichert. Der neue Bericht wird automatisch gegen den zeitlich vorherigen verglichen — je Keyword als ACOS-Trend (▼ besser, ▲ schlechter, ● neu) und als Gesamt-Kennzahlen. So sieht man, ob eine Optimierung tatsächlich gewirkt hat.'}
+      ];
       if(V.ppcHasData){
         const tgt=(st.ppcTargetAcos||30)/100;
         const kws=st.ppcRaw;
@@ -2942,10 +2986,9 @@ class Component extends DCLogic {
         // Klassifizierung nur fuer relevante Keywords (>= 1000 Impressionen)
         const relevant=kws.filter(isRelevant);
         const belowN=kws.length-relevant.length;
-        const NEG_CLICKS_MIN=30;  // Faustregel: erst ab 30 Klicks ohne Verkauf ist "Entfernen" belastbar
         const confMeta={ hoch:{color:green,label:'belastbar'}, mittel:{color:'#D8930A',label:'mittlere Datenlage'}, gering:{color:'#8A8A86',label:'dünne Datenlage'} };
-        const clicksConf=(cl)=> cl>=30?'hoch': cl>=15?'mittel':'gering';
-        const ordersConf=(or,cl)=> (or>=5&&cl>=20)?'hoch': (or>=2)?'mittel':'gering';
+        const clicksConf=(cl)=> cl>=CONF_HI_CLICKS?'hoch': cl>=CONF_MID_CLICKS?'mittel':'gering';
+        const ordersConf=(or,cl)=> (or>=CONF_HI_ORDERS&&cl>=20)?'hoch': (or>=CONF_MID_ORDERS)?'mittel':'gering';
         const classify=(k)=>{
           if(k.orders>0){ const a=k.acos; const cf=ordersConf(k.orders,k.clicks);
             const thin = cf==='gering';
