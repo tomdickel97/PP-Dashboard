@@ -1504,6 +1504,17 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
             <div style="padding:16px 20px">
               <textarea value="{{ rankKwField }}" onInput="{{ setRankKwField }}" onBlur="{{ rankKwBlur }}" placeholder="Alle Keywords kommagetrennt, z. B.: wer zum teufel, partyspiel erwachsene, trinkspiel, saufspiel, …" style="width:100%;min-height:88px;border:1px solid #E2E2E2;padding:12px 14px;font-size:13.5px;line-height:1.6;font-family:'IBM Plex Sans';resize:vertical"></textarea>
               <div style="font-size:11.5px;color:#9A9A96;margin-top:6px">Kommagetrennt eintragen. Änderungen werden gespeichert und mit Tom synchronisiert.</div>
+              <sc-if value="{{ rankHasSugg }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:12px;padding-top:12px;border-top:1px dashed #E4E4E0">
+                  <div style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#FF5A00;margin-bottom:4px">Vorschläge aus dem PPC-Bericht</div>
+                  <div style="font-size:11.5px;color:#8A8A86;line-height:1.5;margin-bottom:8px">{{ rankSuggNote }}</div>
+                  <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+                    <sc-for list="{{ rankSugg }}" as="s" hint-placeholder-count="6">
+                      <button onClick="{{ s.sel }}" title="{{ s.meta }}" style="padding:6px 11px;border:1px solid #FF5A00;background:#fff;color:#FF5A00;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px">{{ s.label }} <span style="font-weight:400;color:#B0876A;font-size:10.5px">{{ s.meta }}</span></button>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
             </div>
           </div>
 
@@ -1548,6 +1559,9 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
             <h2 style="font-family:'Archivo';font-weight:800;font-size:18px;margin:0">Rankings — {{ rankActiveName }}</h2>
             <div style="font-size:12px;color:#9A9A96">Auswertungen: {{ rankScanCount }} · letzte 4 Wochen: {{ rankScanDates }}</div>
           </div>
+          <sc-if value="{{ rankHasSummary }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:12.5px;color:#6A6A66;margin-top:6px">{{ rankSummary }}</div>
+          </sc-if>
           <div style="background:#fff;border:1px solid #E4E4E0;margin-top:12px">
             <sc-if value="{{ rankEmpty }}" hint-placeholder-val="{{ false }}">
               <div style="padding:26px 20px;text-align:center;color:#9A9A96;font-size:13.5px">Noch keine Keywords — oben unter ① eintragen.</div>
@@ -1564,6 +1578,9 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                 </div>
                 <sc-if value="{{ r.expanded }}" hint-placeholder-val="{{ false }}">
                   <div style="padding:4px 18px 18px;background:#FAFAF8">
+                    <sc-if value="{{ r.isNotFound }}" hint-placeholder-val="{{ true }}">
+                      <div style="margin:8px 0 10px;background:#FDF1EF;border:1px solid #EFC5BD;padding:10px 14px;font-size:12.5px;color:#9B3324;line-height:1.55">{{ r.notFoundHint }}</div>
+                    </sc-if>
                     <div style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em;margin:8px 0 6px">4-Wochen-Verlauf</div>
                     <div style="background:#fff;border:1px solid #EEEEEB;padding:12px">{{ r.chart }}</div>
                   </div>
@@ -2340,6 +2357,9 @@ class Component extends DCLogic {
     raw.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean).forEach(k=>{ if(!seen.has(k)){ seen.add(k); out.push(k); } });
     return out; }
   _rankSetKw(pid, val){ this.setState(s=>({rankKw:{...(s.rankKw||{}), [pid]:val}})); }
+  _rankAddSuggested(pid, kw){ const cur=((this.state.rankKw||{})[pid]||'').trim();
+    const next = cur ? (cur.replace(/,\s*$/,'')+', '+kw) : kw;
+    this.setState(s=>({rankKw:{...(s.rankKw||{}), [pid]:next}}), ()=>this._persist()); }
   _rankPersistKw(){ this._persist(); }
   RANK_MAX_PAGE=7;
   // GraphQL-Query fuer alle Keywords x Seiten 1..7 generieren (Aliase k{i}p{j}; alles inline, keine Variablen noetig)
@@ -3335,10 +3355,15 @@ class Component extends DCLogic {
           if(rk){ const posStr=rk.pos!=null?('#'+rk.pos):'nicht gefunden';
             const prevStr=rk.prevPos!=null?(' (Vorwoche #'+rk.prevPos+')'):'';
             const spStr=rk.sponsoredPos!=null?(' · Anzeige #'+rk.sponsoredPos):'';
-            rankLine='Organisch '+posStr+prevStr+spStr+' — Stand '+rk.date;
+            const ageDays=Math.round((new Date(this._todayISO())-new Date(rk.date))/86400000);
+            const staleStr=ageDays>=10?(' — ⚠ Daten '+ageDays+' Tage alt, neuen Scan einspielen'):'';
+            rankLine='Organisch '+posStr+prevStr+spStr+' — Stand '+rk.date+staleStr;
             rankImproved = rk.pos!=null && rk.prevPos!=null && ((rk.prevPos-rk.pos)>=3 || ((rk.prevPos-rk.pos)>=1 && rk.pos<=5));
+            const stale=ageDays>=10;
             if(rankImproved && k.acos!=null && k.acos>tgt){
-              rankNote='Organisches Ranking verbessert sich ('+rk.prevPos+' → '+rk.pos+') — der erhöhte ACOS wirkt hier wie eine Investition ins Ranking und kann sich lohnen. Nicht vorschnell senken; nächste Woche erneut prüfen.'; }
+              rankNote= stale
+                ? 'Organisches Ranking hatte sich verbessert ('+rk.prevPos+' → '+rk.pos+'), aber die Daten sind '+ageDays+' Tage alt — vor einer Gebotsentscheidung erst einen frischen Scan einspielen.'
+                : 'Organisches Ranking verbessert sich ('+rk.prevPos+' → '+rk.pos+') — der erhöhte ACOS wirkt hier wie eine Investition ins Ranking und kann sich lohnen. Nicht vorschnell senken; nächste Woche erneut prüfen.'; }
             else if(rankImproved){ rankNote='Organisches Ranking verbessert sich ('+rk.prevPos+' → '+rk.pos+') — die Werbung zahlt aufs Ranking ein.'; }
             else if(rk.pos!=null && rk.prevPos!=null && (rk.pos-rk.prevPos)>=3){ rankNote='Organisches Ranking fällt ('+rk.prevPos+' → '+rk.pos+') — Ursache prüfen (Wettbewerb, Listing), bevor am Gebot gedreht wird.'; }
           }
@@ -3444,6 +3469,28 @@ class Component extends DCLogic {
       V.rankKwBlur=()=>this._rankPersistKw();
       V.rankKwCount=kws.length;
 
+      // Keyword-Vorschlaege aus dem PPC-Bericht: teuerste + verkaufende Suchbegriffe des Produkts, die noch nicht getrackt werden
+      {
+        const raw=st.ppcRaw||[];
+        const tracked=new Set(kws);
+        const campMapS=st.ppcCampMap||{};
+        const myCamps=new Set(Object.keys(campMapS).filter(c=>campMapS[c]===activePid));
+        const hasMapping=myCamps.size>0;
+        const isAsinT=(k)=> /^b0[a-z0-9]{8}$/i.test(k.term) || (k.camps||[]).some(c=>/asin\s*=/i.test(c.targeting||''));
+        const belongs=(k)=> !hasMapping || (k.campNames||[]).some(c=>myCamps.has(c));
+        const cands=raw.filter(k=> !tracked.has(k.term.toLowerCase()) && !isAsinT(k) && belongs(k) && (k.spend>0.5 || k.orders>0));
+        const totalSpend=cands.reduce((s,k)=>s+k.spend,0)||1;
+        const sugg=cands.slice().sort((a,b)=> (b.orders>0?1:0)-(a.orders>0?1:0) || b.spend-a.spend).slice(0,10);
+        V.rankSugg=sugg.map(k=>({ label:'+ '+k.term,
+          meta:(k.orders>0?(this._num(k.orders)+' Verk. · '):'')+this._eur(k.spend),
+          sel:()=>this._rankAddSuggested(activePid, k.term) }));
+        V.rankSuggEmpty=sugg.length===0;
+        V.rankHasSugg=raw.length>0;
+        const suggSpend=sugg.reduce((s,k)=>s+k.spend,0);
+        V.rankSuggNote= raw.length===0 ? '' : sugg.length===0 ? 'Alle relevanten PPC-Suchbegriffe werden bereits getrackt.'
+          : 'Aus dem PPC-Bericht: die '+sugg.length+' wichtigsten noch nicht getrackten Suchbegriffe ('+this._pct(suggSpend/totalSpend*100,0)+' der Ausgaben der Kandidaten). Klick fügt sie oben hinzu.'+(hasMapping?'':' Hinweis: Ohne Kampagnen-Zuordnung (PPC-Reiter, P&L-Übernahme) werden Suchbegriffe aller Produkte vorgeschlagen.');
+      }
+
       // GraphQL-Code generieren + kopieren
       V.rankQueryOpen=!!st.rankQueryOpen;
       V.rankGenToggle=()=>this.setState(s=>({rankQueryOpen:!s.rankQueryOpen, rankMsg:''}));
@@ -3473,23 +3520,32 @@ class Component extends DCLogic {
 
       const posClass=(pos)=> pos==null?{label:'nicht gefunden',color:'#B0B0AC'}: pos<=3?{label:'Top 3',color:green}: pos<=10?{label:'Seite 1',color:green}: pos<=20?{label:'Seite 2',color:'#D8930A'}: {label:'weiter hinten',color:red};
       const expanded=st.rankExpanded||{};
+      let nFound=0, nNotFound=0, nUnscanned=0;
       const rows=kws.map(kw=>{
+        const inScan = !!(cur && Object.prototype.hasOwnProperty.call(cur.results, kw));
         const c=cur&&cur.results[kw]||{}; const p=prev&&prev.results[kw]||{};
         const pos=c.pos||null, spPos=c.sponsoredPos||null, prevPos=p.pos||null;
-        const pc=posClass(pos);
+        const notFound = inScan && pos==null && spPos==null; // in Seite 1-7 nicht aufgetaucht -> schlechter als ~Platz 120
+        if(notFound) nNotFound++; else if(pos!=null||spPos!=null) nFound++; else nUnscanned++;
+        const pc= notFound ? {label:'nicht in Seite 1–7', color:red} : !inScan ? {label:'noch kein Scan', color:'#B0B0AC'} : posClass(pos);
         let trendArrow='—', trendColor='#8A8A86', trendText= pos!=null?('#'+pos):'—';
         if(pos!=null&&prevPos!=null){ if(pos<prevPos){trendArrow='▲';trendColor=green;trendText=prevPos+' → '+pos;} else if(pos>prevPos){trendArrow='▼';trendColor=red;trendText=prevPos+' → '+pos;} else {trendArrow='—';trendText='stabil '+pos;} }
         else if(pos!=null&&prev){ trendArrow='●'; trendColor='#2F6FED'; trendText='neu #'+pos; }
+        else if(notFound && prevPos!=null){ trendArrow='▼'; trendColor=red; trendText=prevPos+' → raus'; }
         const hist=this._rankHistoryFor(activePid, kw).slice(-4);
         const isOpen=!!expanded[kw];
         return { id:kw, keyword:kw,
-          curStr:pos!=null?('#'+pos):'—', posColor:pc.color, posLabel:pc.label,
+          curStr: notFound?'> S. 7' : pos!=null?('#'+pos):'—',
+          posColor:pc.color, posLabel:pc.label, isNotFound:notFound,
+          notFoundHint: notFound ? 'In den ersten 7 Suchergebnis-Seiten (~120+ Plätze) nicht gefunden — praktisch unsichtbar für Käufer. Kandidat für gezielten Ranking-Aufbau oder fürs Streichen, falls irrelevant.' : '',
           sponsoredStr:spPos!=null?('Ad #'+spPos):'', hasSponsored:spPos!=null,
           trendArrow, trendColor, trendText,
           expanded:isOpen, chevron:isOpen?'▲':'▼', toggle:()=>this._rankToggle(kw),
           chart:isOpen?this._rankChart(hist):null };
       });
       V.rankRows=rows; V.rankEmpty=rows.length===0;
+      V.rankSummary = V.rankHasScans ? (nFound+' sichtbar · '+nNotFound+' nicht in Seite 1–7'+(nUnscanned>0?(' · '+nUnscanned+' ohne Scan'):'')) : '';
+      V.rankHasSummary=!!V.rankSummary;
 
       // PPC-Uebernahme
       V.rankApply=()=>this._rankApplyToPpc();
