@@ -113,6 +113,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
         <button onClick="{{ goBuero }}" style="{{ tabStyle8 }}">Büro</button>
         <button onClick="{{ goTodo }}" style="{{ tabStyle9 }}">To-Do</button>
         <button onClick="{{ goPpc }}" style="{{ tabStyle10 }}">PPC Analyse</button>
+        <button onClick="{{ goRanking }}" style="{{ tabStyle11 }}">Rankings</button>
       </div>
     </div>
   </sc-if>
@@ -172,6 +173,10 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
           <button onClick="{{ goPpc }}" style="{{ nav10 }}">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3v18h18"/><path d="M7 14l3-4 4 3 5-7"/></svg>
             <span>PPC Analyse</span>
+          </button>
+          <button onClick="{{ goRanking }}" style="{{ nav11 }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 20V10M10 20V4M16 20v-6M20 20H2"/></svg>
+            <span>Rankings</span>
           </button>
         </nav>
         <div style="padding:16px 20px;border-top:1px solid #EEEEEB">
@@ -1451,6 +1456,97 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
         </div>
       </sc-if>
 
+      <sc-if value="{{ isRanking }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Rankings" style="max-width:1240px;margin:0 auto;padding:30px 40px 72px;animation:ppfade .25s ease">
+          <div style="padding-bottom:20px;border-bottom:2px solid #0A0A0A">
+            <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A9A96;margin-bottom:8px">Keyword-Rankings</div>
+            <h1 style="font-family:'Archivo';font-weight:800;font-size:30px;letter-spacing:-.02em;margin:0;line-height:1">Organische Position &amp; PPC-Wirkung</h1>
+            <div style="font-size:13.5px;color:#8A8A86;margin-top:10px;max-width:720px;line-height:1.55">Verfolgt die organische Suchposition je Keyword und verknüpft sie mit der PPC-Analyse — um zu sehen, ob Werbung Ranking kauft, wo sich ein Push lohnt und wo Anzeigen organische Klicks kannibalisieren.</div>
+          </div>
+
+          <!-- Produkt-Auswahl -->
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:20px">
+            <span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em;margin-right:2px">Produkt</span>
+            <sc-for list="{{ rankProductChips }}" as="c" hint-placeholder-count="3"><button onClick="{{ c.sel }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
+          </div>
+
+          <!-- PPC-Verknüpfungshinweis + Auto-Update -->
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:16px;background:#fff;border:1px solid #E4E4E0;padding:14px 18px">
+            <div style="font-size:12.5px;color:#6A6A66;line-height:1.5;flex:1;min-width:220px">{{ rankPpcNote }}</div>
+            <button onClick="{{ rankAutoUpdate }}" style="padding:8px 15px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:7px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Jetzt automatisch aktualisieren</button>
+          </div>
+          <sc-if value="{{ rankHasMsg }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:10px;background:#FFF8EE;border:1px solid #F0D9A8;padding:12px 16px;font-size:12.5px;color:#8A6D24;line-height:1.5">{{ rankMsg }}</div>
+          </sc-if>
+
+          <!-- Handlungsempfehlungen (Ranking × PPC) -->
+          <div style="margin-top:26px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px">
+              <h2 style="font-family:'Archivo';font-weight:800;font-size:18px;margin:0">Handlungsempfehlungen</h2>
+              <div style="font-size:12px;color:#9A9A96">{{ rankRecsCount }} aus {{ rankTrackedCount }} getrackten Keywords</div>
+            </div>
+            <sc-if value="{{ rankRecsEmpty }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:12px;background:#fff;border:1px solid #E4E4E0;padding:20px;font-size:13px;color:#9A9A96">Aktuell keine Handlungsempfehlung — sobald Messungen und ein PPC-Bericht vorliegen, erscheinen hier konkrete Vorschläge (Entwöhnen, Push, Kannibalisierung, Ranking-Abfall …).</div>
+            </sc-if>
+            <div style="margin-top:12px;display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ rankRecs }}" as="r" hint-placeholder-count="4">
+                <div style="background:#fff;border:1px solid #E4E4E0;border-left:4px solid {{ r.color }};padding:14px 18px">
+                  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                    <span style="font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:{{ r.color }};padding:2px 8px">{{ r.tag }}</span>
+                    <span style="font-size:13.5px;font-weight:700;color:#16130F">{{ r.keyword }}</span>
+                  </div>
+                  <div style="font-size:13px;color:#4A4A46;line-height:1.55;margin-top:7px">{{ r.text }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <!-- Getrackte Keywords -->
+          <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:30px">
+            <h2 style="font-family:'Archivo';font-weight:800;font-size:18px;margin:0">Getrackte Keywords — {{ rankActiveName }}</h2>
+          </div>
+          <!-- Keyword hinzufügen -->
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+            <input value="{{ rankDraftKw }}" onInput="{{ setRankDraftKw }}" onKeyDown="{{ rankDraftKwKey }}" placeholder="Keyword zum Tracken hinzufügen…" style="flex:1;min-width:220px;border:1px solid #E2E2E2;padding:10px 13px;font-size:14px">
+            <button onClick="{{ rankAdd }}" style="padding:10px 18px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:13px;font-weight:600;cursor:pointer">Hinzufügen</button>
+          </div>
+
+          <div style="background:#fff;border:1px solid #E4E4E0;margin-top:14px">
+            <sc-if value="{{ rankEmpty }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:26px 20px;text-align:center;color:#9A9A96;font-size:13.5px">Noch keine Keywords für dieses Produkt. Füge oben die wichtigsten Suchbegriffe hinzu.</div>
+            </sc-if>
+            <sc-for list="{{ rankRows }}" as="r" hint-placeholder-count="4">
+              <div style="border-bottom:1px solid #F1F1EE">
+                <div onClick="{{ r.toggle }}" style="display:flex;align-items:center;gap:14px;padding:13px 18px;cursor:pointer;flex-wrap:wrap">
+                  <span style="flex:1;min-width:160px;font-size:14px;font-weight:600;color:#16130F">{{ r.keyword }}</span>
+                  <span style="display:inline-block;padding:3px 9px;font-size:11px;font-weight:700;color:#fff;background:{{ r.posColor }}">{{ r.curStr }}</span>
+                  <sc-if value="{{ r.hasSponsored }}" hint-placeholder-val="{{ true }}"><span style="display:inline-block;padding:3px 9px;font-size:11px;font-weight:700;color:#2F6FED;border:1px solid #2F6FED">{{ r.sponsoredStr }}</span></sc-if>
+                  <span style="font-size:11.5px;color:#8A8A86;min-width:70px">{{ r.posLabel }}</span>
+                  <span style="font-size:12.5px;white-space:nowrap;min-width:80px"><span style="color:{{ r.trendColor }};font-weight:700">{{ r.trendArrow }}</span> <span style="color:#6A6A66;font-feature-settings:'tnum' 1">{{ r.trendText }}</span></span>
+                  <span style="display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:{{ r.recColor }};flex:1;min-width:140px"><span style="width:8px;height:8px;background:{{ r.recColor }};display:inline-block;flex-shrink:0"></span>{{ r.recTag }}</span>
+                  <span style="color:#B0B0AC;font-size:12px">{{ r.chevron }}</span>
+                </div>
+                <sc-if value="{{ r.expanded }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:4px 18px 18px;background:#FAFAF8">
+                    <div style="font-size:12.5px;color:#4A4A46;line-height:1.55;margin:8px 0 4px">{{ r.recText }}</div>
+                    <div style="font-size:12px;color:#8A8A86;margin-bottom:12px">{{ r.ppcLine }}</div>
+                    <div style="background:#fff;border:1px solid #EEEEEB;padding:12px">{{ r.chart }}</div>
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px">
+                      <span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Messung eintragen</span>
+                      <input value="{{ rankDraftPos }}" onInput="{{ setRankDraftPos }}" placeholder="organisch, z. B. 12" style="width:140px;border:1px solid #E2E2E2;padding:7px 10px;font-size:13px">
+                      <input value="{{ rankDraftSponsored }}" onInput="{{ setRankDraftSponsored }}" placeholder="gesponsert (optional)" style="width:150px;border:1px solid #E2E2E2;padding:7px 10px;font-size:13px">
+                      <button onClick="{{ r.addMeasure }}" style="padding:7px 14px;border:1px solid #0A0A0A;background:#fff;color:#0A0A0A;font-size:12px;font-weight:600;cursor:pointer">Speichern</button>
+                      <button onClick="{{ r.remove }}" style="padding:7px 12px;border:none;background:none;color:#C0392B;font-size:12px;font-weight:600;cursor:pointer;margin-left:auto">Keyword entfernen</button>
+                    </div>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <div style="font-size:12px;color:#9A9A96;margin-top:12px;line-height:1.5">Position: kleiner = besser (Platz 1 = ganz oben). Die organische Position ist geräteunabhängig verlässlich. Die Sponsored-Position (Ad #…) ist eine Momentaufnahme der Desktop-Anzeigen-Auktion und kann auf Mobilgeräten abweichen, da Amazon dort separat versteigert.</div>
+        </div>
+      </sc-if>
+
     </main>
   </div>
 
@@ -1655,8 +1751,12 @@ class Component extends DCLogic {
       ppcRaw:null, ppcFileName:'', ppcError:'', ppcLoading:false, ppcTargetAcos:30, ppcSort:'spend', ppcPeriod:'', ppcCopied:'',
       ppcCamps:null, ppcCurrentId:null, ppcApplyYm:'', ppcInfoOpen:false, ppcFilter:'alle', ppcExpanded:{},
       ppcCampMap:(saved && saved.ppcCampMap) || {},
-      ppcHistory:(saved && Array.isArray(saved.ppcHistory)) ? saved.ppcHistory.slice(0,12) : []
+      ppcHistory:(saved && Array.isArray(saved.ppcHistory)) ? saved.ppcHistory.slice(0,12) : [],
+      rankings:(saved && Array.isArray(saved.rankings)) ? saved.rankings : null,
+      rankProductId:null, rankDraftKw:'', rankDraftPos:'', rankDraftSponsored:'', rankMsg:'', rankExpanded:{}
     };
+    // Ranking-Tracking initial befuellen (Beispiel-Keywords), falls noch nichts gespeichert
+    if(!this.state.rankings) this.state.rankings=this._seedRankings(this.state.products);
     // Letzte PPC-Analyse aus dem Verlauf wiederherstellen (uebersteht Reload, gleich auf allen Geraeten)
     const hyd=this._ppcHydrate(this.state.ppcHistory[0]);
     if(hyd) Object.assign(this.state, hyd);
@@ -1670,7 +1770,7 @@ class Component extends DCLogic {
      Haelt products / ideas / recDismissed live zwischen mehreren
      Personen synchron. Aendert NICHTS an der uebrigen Logik.
      ============================================================ */
-  _snapshot(){ return { products:this.state.products, ideas:this.state.ideas, todos:this.state.todos, recDismissed:this.state.recDismissed, ppcHistory:this.state.ppcHistory||[], ppcCampMap:this.state.ppcCampMap||{} }; }
+  _snapshot(){ return { products:this.state.products, ideas:this.state.ideas, todos:this.state.todos, recDismissed:this.state.recDismissed, ppcHistory:this.state.ppcHistory||[], ppcCampMap:this.state.ppcCampMap||{}, rankings:this.state.rankings||[] }; }
   // stabile Signatur (Reihenfolge der Keys egal) -> verhindert Sync-Schleifen
   _stableStringify(v){
     if(v===null || typeof v!=='object') return JSON.stringify(v);
@@ -1728,12 +1828,13 @@ class Component extends DCLogic {
       const ppcHistory = Array.isArray(remote.ppcHistory) ? remote.ppcHistory.slice(0,12) : (this.state.ppcHistory||[]);
       const ppcCampMap = remote.ppcCampMap || this.state.ppcCampMap || {};
       const recDismissed = remote.recDismissed || this.state.recDismissed;
+      const rankings = Array.isArray(remote.rankings) ? remote.rankings : (this.state.rankings||[]);
       // Aktuelle Analyse nachziehen, wenn dieses Geraet keine (oder eine veraltete) hat -> ueberall gleicher Stand
       const newestId=ppcHistory[0]&&ppcHistory[0].id;
       const needHydrate = newestId && (this.state.ppcCurrentId!==newestId || !this.state.ppcRaw) && !this.state.ppcLoading;
       const hyd = needHydrate ? (this._ppcHydrate(ppcHistory[0])||{}) : {};
-      this.setState({ products, ideas, todos, ppcHistory, ppcCampMap, recDismissed, ...hyd }); // WICHTIG: ohne _persist() -> keine Schleife
-      try{ localStorage.setItem('partypeak_v4', JSON.stringify({products, ideas, todos, ppcHistory, ppcCampMap, recDismissed})); }catch(e){}
+      this.setState({ products, ideas, todos, ppcHistory, ppcCampMap, recDismissed, rankings, ...hyd }); // WICHTIG: ohne _persist() -> keine Schleife
+      try{ localStorage.setItem('partypeak_v4', JSON.stringify({products, ideas, todos, ppcHistory, ppcCampMap, recDismissed, rankings})); }catch(e){}
     }catch(e){ console.warn('[Party Peak] Uebernahme fehlgeschlagen:', e); }
   }
   _sbPush(){
@@ -2182,6 +2283,88 @@ class Component extends DCLogic {
     }catch(e){}
   }
   _setCampMap(campaign, pid){ this.setState(s=>({ppcCampMap:{...(s.ppcCampMap||{}), [campaign]:pid}}), ()=>this._persist()); }
+
+  // ===== Ranking-Tracking =====
+  _seedRankings(products){ const p=(products&&products[0])?products[0].id:null; if(!p) return [];
+    const mk=(kw,seq)=>({ id:'rk'+Math.random().toString(36).slice(2,8), productId:p, keyword:kw,
+      history:seq.map((pos,i)=>({ date:this._daysAgoISO((seq.length-1-i)*7), pos })) });
+    // Beispielhafte Startdaten, damit der Reiter sofort etwas zeigt (Position: kleiner = besser)
+    return [ mk('trinkspiel',[28,22,17,12]), mk('partyspiel erwachsene',[41,38,35,31]), mk('wer zum teufel',[15,11,8,6]) ];
+  }
+  _daysAgoISO(n){ const d=new Date(); d.setDate(d.getDate()-n); return d.toISOString().slice(0,10); }
+  _rankAdd(){ const kw=(this.state.rankDraftKw||'').trim().toLowerCase(); const pid=this._rankActiveProduct(); if(!kw||!pid) return;
+    if((this.state.rankings||[]).some(r=>r.productId===pid && r.keyword===kw)){ this.setState({rankDraftKw:'', rankMsg:'Keyword wird bereits getrackt.'}); return; }
+    const entry={ id:'rk'+Math.random().toString(36).slice(2,8), productId:pid, keyword:kw, history:[] };
+    this.setState(s=>({rankings:[...(s.rankings||[]), entry], rankDraftKw:'', rankMsg:''}), ()=>this._persist());
+  }
+  _rankAddMeasurement(id){ const raw=String(this.state.rankDraftPos||'').replace(',','.'); const pos=raw?Math.round(parseFloat(raw)):null;
+    const rawS=String(this.state.rankDraftSponsored||'').replace(',','.'); const sponsoredPos=rawS?Math.round(parseFloat(rawS)):null;
+    if(!pos && !sponsoredPos){ this.setState({rankMsg:'Bitte mindestens eine Position (organisch oder gesponsert) eingeben.'}); return; }
+    const today=this._todayISO();
+    this.setState(s=>({rankings:(s.rankings||[]).map(r=>{ if(r.id!==id) return r;
+      const hist=(r.history||[]).filter(h=>h.date!==today).concat([{date:today, pos:pos||null, sponsoredPos:sponsoredPos||null}]).sort((a,b)=>a.date<b.date?-1:1);
+      return {...r, history:hist}; }), rankDraftPos:'', rankDraftSponsored:'', rankMsg:''}), ()=>this._persist());
+  }
+  _rankRemove(id){ this.setState(s=>({rankings:(s.rankings||[]).filter(r=>r.id!==id)}), ()=>this._persist()); }
+  _rankActiveProduct(){ return this.state.rankProductId || ((this.state.products[0]||{}).id) || null; }
+  _rankToggle(id){ this.setState(s=>{ const e={...(s.rankExpanded||{})}; if(e[id]) delete e[id]; else e[id]=true; return {rankExpanded:e}; }); }
+  _rankAutoUpdate(){
+    // Ruft die Supabase Edge Function "rank-check" auf (siehe edge-function/EINRICHTUNG.md).
+    // Sobald sie eingerichtet ist, greift dieser Pfad automatisch — vorher zeigt er den Hinweis unten.
+    const cfg = window.PP_SUPABASE || {};
+    if(!cfg.url){ this.setState({rankMsg:'Automatischer Abruf ist vorbereitet, aber noch nicht verbunden. Sobald die Backend-Anbindung (Edge Function → Canopy) steht, holt dieser Knopf die Positionen automatisch. Bis dahin lassen sich Messungen manuell eintragen.'}); return; }
+    const pid = this._rankActiveProduct();
+    const product = (this.state.products||[]).find(p=>p.id===pid);
+    const tracked = (this.state.rankings||[]).filter(r=>r.productId===pid);
+    if(!product || !product.asin || !tracked.length){ this.setState({rankMsg:'Für den automatischen Abruf werden eine ASIN am Produkt und mindestens ein getracktes Keyword benötigt.'}); return; }
+    this.setState({rankMsg:'Frage aktuelle Positionen ab …'});
+    const endpoint = cfg.url.replace('.supabase.co','.supabase.co/functions/v1/rank-check');
+    fetch(endpoint, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+(cfg.key||'') },
+      body: JSON.stringify({ asin:product.asin, keywords:tracked.map(r=>r.keyword), marketplace:'DE' })
+    }).then(r=>r.json()).then(json=>{
+      if(json.error){ this.setState({rankMsg:'Abruf fehlgeschlagen: '+json.error}); return; }
+      const today=this._todayISO();
+      const byKw={}; (json.results||[]).forEach(r=>{ byKw[r.keyword]={pos:r.position, sponsoredPos:r.sponsoredPosition}; });
+      this.setState(s=>({ rankings:(s.rankings||[]).map(r=>{
+        if(r.productId!==pid || !(r.keyword in byKw)) return r;
+        const found=byKw[r.keyword]; if(found.pos==null && found.sponsoredPos==null) return r; // nichts gefunden -> Messung nicht überschreiben
+        const hist=(r.history||[]).filter(h=>h.date!==today).concat([{date:today, pos:found.pos, sponsoredPos:found.sponsoredPos}]).sort((a,b)=>a.date<b.date?-1:1);
+        return {...r, history:hist};
+      }), rankMsg:'Positionen aktualisiert.' }), ()=>this._persist());
+    }).catch(e=>{ this.setState({rankMsg:'Abruf fehlgeschlagen: '+e}); });
+  }
+  // Mini-Verlaufskurve fuer Ranking (invertiert: Platz 1 = oben). Zwei Serien: organisch (orange) + gesponsert (blau, gestrichelt).
+  _rankChart(history){ const all=(history||[]).filter(h=>h && (h.pos>0 || h.sponsoredPos>0));
+    const W=520,H=140,padL=34,padR=12,padT=14,padB=24;
+    const orgPts=all.filter(h=>h.pos>0), spPts=all.filter(h=>h.sponsoredPos>0);
+    if(all.length<2) return React.createElement('div',{style:{fontSize:'12px',color:'#9A9A96',padding:'8px 0'}},
+      all.length===1?('Aktuell organisch '+(all[0].pos?('#'+all[0].pos):'—')+' · gesponsert '+(all[0].sponsoredPos?('#'+all[0].sponsoredPos):'—')+' — mind. 2 Messungen für eine Kurve.'):'Noch keine Messungen erfasst.');
+    const vals=all.flatMap(h=>[h.pos,h.sponsoredPos].filter(v=>v>0));
+    const worst=Math.max(...vals), best=Math.min(...vals);
+    const lo=Math.max(1,best-2), hi=worst+2;
+    const iw=W-padL-padR, ih=H-padT-padB;
+    const x=i=> padL + (all.length<=1?0:(i/(all.length-1))*iw);
+    const y=v=> padT + ((v-lo)/((hi-lo)||1))*ih;
+    const pathFor=(key)=>{ const seg=[]; let cur=[]; all.forEach((h,i)=>{ if(h[key]>0){ cur.push((cur.length?'L':'M')+x(i).toFixed(1)+' '+y(h[key]).toFixed(1)); } else if(cur.length){ seg.push(cur.join(' ')); cur=[]; } }); if(cur.length) seg.push(cur.join(' ')); return seg; };
+    const orgPath=pathFor('pos'), spPath=pathFor('sponsoredPos');
+    const grid=[lo,Math.round((lo+hi)/2),hi].map((val,t)=>{ const gy=y(val); return React.createElement('g',{key:'g'+t},
+      React.createElement('line',{x1:padL,x2:W-padR,y1:gy,y2:gy,stroke:'#EEEEEB',strokeWidth:1}),
+      React.createElement('text',{x:padL-6,y:gy+4,textAnchor:'end',fontSize:10,fill:'#B0B0AC',fontFamily:'IBM Plex Sans'},'#'+Math.round(val))); });
+    const orgDots=all.map((h,i)=>h.pos>0?React.createElement('circle',{key:'do'+i,cx:x(i),cy:y(h.pos),r:2.6,fill:'#fff',stroke:'#FF5A00',strokeWidth:1.6}):null);
+    const spDots=all.map((h,i)=>h.sponsoredPos>0?React.createElement('circle',{key:'ds'+i,cx:x(i),cy:y(h.sponsoredPos),r:2.4,fill:'#fff',stroke:'#2F6FED',strokeWidth:1.6}):null);
+    const labels=all.map((h,i)=>(i%2===0||i===all.length-1)?React.createElement('text',{key:'l'+i,x:x(i),y:H-8,textAnchor:'middle',fontSize:9.5,fill:'#B0B0AC',fontFamily:'IBM Plex Sans'},(h.date||'').slice(5)):null);
+    const orgLines=orgPath.map((d,i)=>React.createElement('path',{key:'po'+i,d,fill:'none',stroke:'#FF5A00',strokeWidth:2.2,strokeLinejoin:'round',strokeLinecap:'round'}));
+    const spLines=spPath.map((d,i)=>React.createElement('path',{key:'ps'+i,d,fill:'none',stroke:'#2F6FED',strokeWidth:2,strokeDasharray:'4 3',strokeLinejoin:'round',strokeLinecap:'round'}));
+    const legend=React.createElement('g',{key:'leg'},
+      React.createElement('line',{x1:W-150,x2:W-132,y1:12,y2:12,stroke:'#FF5A00',strokeWidth:2.2}),
+      React.createElement('text',{x:W-128,y:15,fontSize:9.5,fill:'#6A6A66',fontFamily:'IBM Plex Sans'},'organisch'),
+      React.createElement('line',{x1:W-70,x2:W-52,y1:12,y2:12,stroke:'#2F6FED',strokeWidth:2,strokeDasharray:'4 3'}),
+      React.createElement('text',{x:W-48,y:15,fontSize:9.5,fill:'#6A6A66',fontFamily:'IBM Plex Sans'},'gesponsert'));
+    return React.createElement('svg',{viewBox:'0 0 '+W+' '+H,style:{width:'100%',height:'auto',display:'block'}},
+      grid, orgLines, spLines, orgDots, spDots, labels, legend);
+  }
   _ppcApplyDelta(per, ym, sign){
     // sign=+1 addieren, -1 abziehen (Werte nie unter 0)
     this.setState(s=>({products:s.products.map(p=>{ const d=per[p.id]; if(!d) return p;
@@ -2725,11 +2908,11 @@ class Component extends DCLogic {
     const V = {
       narrow:st.narrow, wide:!st.narrow,
       isCockpit: mod==='cockpit', isProdukteList: mod==='produkte' && !pid, isProdukteDetail: isDetail,
-      isLager: mod==='lager', isWerbung: mod==='werbung', isSzenarien: mod==='szenarien', isIdeen: mod==='ideen', isEmpfehlungen: mod==='empfehlungen', isBerichte: mod==='berichte', isBuero: mod==='buero', isTodo: mod==='todo', isPpc: mod==='ppc',
+      isLager: mod==='lager', isWerbung: mod==='werbung', isSzenarien: mod==='szenarien', isIdeen: mod==='ideen', isEmpfehlungen: mod==='empfehlungen', isBerichte: mod==='berichte', isBuero: mod==='buero', isTodo: mod==='todo', isPpc: mod==='ppc', isRanking: mod==='ranking',
       goCockpit:()=>this._go('cockpit'), goProdukte:()=>this._go('produkte'), goLager:()=>this._go('lager'),
-      goWerbung:()=>this._go('werbung'), goSzenarien:()=>this._go('szenarien'), goIdeen:()=>this._go('ideen'), goEmpfehlungen:()=>this._go('empfehlungen'), goBerichte:()=>this._go('berichte'), goBuero:()=>this._go('buero'), goTodo:()=>this._go('todo'), goPpc:()=>this._go('ppc'),
-      nav0:nv('cockpit'), nav1:nv('produkte'), nav2:nv('lager'), nav3:nv('werbung'), nav4:nv('szenarien'), nav5:nv('ideen'), nav6:nv('empfehlungen'), nav7:nv('berichte'), nav8:nv('buero'), nav9:nv('todo'), nav10:nv('ppc'),
-      tabStyle0:tb('cockpit'), tabStyle1:tb('produkte'), tabStyle2:tb('lager'), tabStyle3:tb('werbung'), tabStyle4:tb('szenarien'), tabStyle5:tb('ideen'), tabStyle6:tb('empfehlungen'), tabStyle7:tb('berichte'), tabStyle8:tb('buero'), tabStyle9:tb('todo'), tabStyle10:tb('ppc'),
+      goWerbung:()=>this._go('werbung'), goSzenarien:()=>this._go('szenarien'), goIdeen:()=>this._go('ideen'), goEmpfehlungen:()=>this._go('empfehlungen'), goBerichte:()=>this._go('berichte'), goBuero:()=>this._go('buero'), goTodo:()=>this._go('todo'), goPpc:()=>this._go('ppc'), goRanking:()=>this._go('ranking'),
+      nav0:nv('cockpit'), nav1:nv('produkte'), nav2:nv('lager'), nav3:nv('werbung'), nav4:nv('szenarien'), nav5:nv('ideen'), nav6:nv('empfehlungen'), nav7:nv('berichte'), nav8:nv('buero'), nav9:nv('todo'), nav10:nv('ppc'), nav11:nv('ranking'),
+      tabStyle0:tb('cockpit'), tabStyle1:tb('produkte'), tabStyle2:tb('lager'), tabStyle3:tb('werbung'), tabStyle4:tb('szenarien'), tabStyle5:tb('ideen'), tabStyle6:tb('empfehlungen'), tabStyle7:tb('berichte'), tabStyle8:tb('buero'), tabStyle9:tb('todo'), tabStyle10:tb('ppc'), tabStyle11:tb('ranking'),
       productCount: st.products.length, dataStamp:'Juli 2026',
       periodLabel: this._mlabel(from)+' – '+this._mlabel(to), periodDays: this._num(this._rangeDays(from,to)),
       periodFrom: per.from, periodTo: per.to,
@@ -3139,7 +3322,87 @@ class Component extends DCLogic {
       }
     }
 
-    // ---- To-Dos ----
+    // ---- Rankings (verknüpft mit PPC-Analyse) ----
+    {
+      const products=st.products||[];
+      const activePid = st.rankProductId || (products[0]&&products[0].id) || null;
+      const chip=(active)=> active
+        ? 'padding:7px 13px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12.5px;font-weight:600;cursor:pointer'
+        : 'padding:7px 13px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12.5px;font-weight:500;cursor:pointer';
+      V.rankProductChips = products.map(p=>({ label:p.name, sel:()=>this.setState({rankProductId:p.id, rankMsg:''}), style:chip(activePid===p.id) }));
+      V.rankActiveName = (products.find(p=>p.id===activePid)||{}).name || '';
+      V.rankDraftKw = st.rankDraftKw||'';
+      V.setRankDraftKw=(e)=>this.setState({rankDraftKw:e.target.value});
+      V.rankDraftKwKey=(e)=>{ if(e.key==='Enter'){e.preventDefault(); this._rankAdd();} };
+      V.rankAdd=()=>this._rankAdd();
+      V.rankMsg = st.rankMsg||''; V.rankHasMsg=!!(st.rankMsg);
+      V.rankAutoUpdate=()=>this._rankAutoUpdate();
+
+      const ppcMap=new Map(); (st.ppcRaw||[]).forEach(k=> ppcMap.set(k.term.toLowerCase(), k));
+      const tgt=(st.ppcTargetAcos||30)/100;
+      const hasPpc=!!(st.ppcRaw&&st.ppcRaw.length);
+      V.rankHasPpc=hasPpc;
+      V.rankPpcNote = hasPpc ? ('Verknüpft mit PPC-Bericht: '+(st.ppcPeriod||'aktueller Bericht')) : 'Kein PPC-Bericht geladen — Empfehlungen nutzen vorerst nur die Ranking-Daten. Für die volle Verknüpfung einen Bericht im Reiter „PPC Analyse" laden.';
+
+      const posClass=(pos)=> pos<=3?{label:'Top 3',color:green}: pos<=10?{label:'Seite 1',color:green}: pos<=20?{label:'Seite 2',color:'#D8930A'}: {label:'ab Seite 3',color:red};
+
+      const recFor=(cur,prev,ppc)=>{
+        if(cur==null) return {tag:'Messung fehlt', color:'#8A8A86', text:'Noch keine Position erfasst — trage eine Messung ein, um Empfehlungen zu erhalten.', action:false};
+        if(!hasPpc){
+          if(prev!=null && (cur-prev)>=5) return {tag:'Ranking gefallen', color:red, text:'Position von '+prev+' auf '+cur+' gefallen — Sichtbarkeitsverlust. Ursache prüfen (Wettbewerb, Listing, Verfügbarkeit).', action:true};
+          if(prev!=null && (prev-cur)>=5) return {tag:'Ranking gestiegen', color:green, text:'Position von '+prev+' auf '+cur+' verbessert. Lade den PPC-Bericht, um zu sehen, ob Werbung der Treiber war.', action:true};
+          const pc=posClass(cur); return {tag:pc.label, color:pc.color, text:'Rankt auf Platz '+cur+'. Für Handlungsempfehlungen einen PPC-Bericht laden — dann werden Ranking und Werbung verknüpft.', action:false};
+        }
+        const adv=!!ppc, spendSig=ppc&&ppc.spend>=5, converts=ppc&&ppc.orders>0&&ppc.acos!=null;
+        if(converts && cur<=3 && spendSig) return {tag:'Kannibalisierung', color:'#D8930A', text:'Rankt organisch auf Platz '+cur+' und wird zugleich stark beworben ('+this._eur(ppc.spend)+'). Ein Teil der Ad-Klicks bekämst du organisch ohnehin — Gebot testweise senken und prüfen, ob der Umsatz hält.', action:true};
+        if(converts && cur<=10 && ppc.acos>tgt) return {tag:'Entwöhnen', color:green, text:'Steht organisch auf Seite 1 (Platz '+cur+'), ACOS liegt mit '+this._pct(ppc.acos*100,0)+' über Ziel. Gebot senken — die Position trägt sich zunehmend selbst.', action:true};
+        if(converts && cur>20 && ppc.acos<=tgt*1.5) return {tag:'Push', color:green, text:'Konvertiert rentabel (ACOS '+this._pct(ppc.acos*100,0)+'), rankt organisch aber nur auf Platz '+cur+'. Hier lohnt der Ranking-Aufbau: mit Ads gezielt pushen, um auf Seite 1 zu kommen.', action:true};
+        if(prev!=null && (prev-cur)>=5 && adv) return {tag:'Werbung wirkt', color:green, text:'Position von '+prev+' auf '+cur+' verbessert, während beworben — die Werbung zahlt aufs Ranking ein. Dranbleiben, bis die Position stabil auf Seite 1 sitzt.', action:true};
+        if(prev!=null && (cur-prev)>=5) return {tag:'Ranking gefallen', color:red, text:'Position von '+prev+' auf '+cur+' gefallen. Sichtbarkeitsverlust — Ursache außerhalb der Gebote prüfen (Wettbewerber, Listing, Verfügbarkeit), bevor du am PPC schraubst.', action:true};
+        if(!adv && cur<=10) return {tag:'Nicht beworben', color:'#2F6FED', text:'Rankt organisch auf Platz '+cur+', taucht im PPC-Bericht aber nicht auf. Mit gezielten Ads ließe sich die Seite-1-Position absichern und ausbauen.', action:true};
+        if(!adv && cur>20) return {tag:'Chance', color:'#2F6FED', text:'Rankt schwach (Platz '+cur+') und wird nicht beworben. Falls relevant, wäre ein gezielter Ad-Push ein Kandidat, um Sichtbarkeit aufzubauen.', action:true};
+        return {tag:'Stabil', color:'#8A8A86', text:'Position '+cur+', im unauffälligen Bereich — aktuell kein Eingriff nötig.', action:false};
+      };
+
+      const expanded=st.rankExpanded||{};
+      const tracked=(st.rankings||[]).filter(r=>r.productId===activePid);
+      const rows=tracked.map(r=>{
+        const hist=(r.history||[]).slice().filter(h=>h&&(h.pos>0||h.sponsoredPos>0)).sort((a,b)=>a.date<b.date?-1:1);
+        const cur=hist.length?hist[hist.length-1].pos:null;
+        const prev=hist.length>1?hist[hist.length-2].pos:null;
+        const curSp=hist.length?hist[hist.length-1].sponsoredPos:null;
+        const ppc=ppcMap.get(r.keyword);
+        const pc=cur!=null?posClass(cur):{label:'—',color:'#B0B0AC'};
+        let trendArrow='—', trendColor='#8A8A86', trendText=cur!=null?('Platz '+cur):'—';
+        if(cur!=null&&prev!=null){ if(cur<prev){trendArrow='▲';trendColor=green;trendText=prev+' → '+cur;} else if(cur>prev){trendArrow='▼';trendColor=red;trendText=prev+' → '+cur;} else {trendArrow='—';trendColor='#8A8A86';trendText='stabil '+cur;} }
+        const rec=recFor(cur,prev,ppc);
+        const isOpen=!!expanded[r.id];
+        const ppcLine = ppc ? ('PPC: ACOS '+(ppc.acos!=null?this._pct(ppc.acos*100,0):'—')+' · '+this._num(ppc.orders)+' Verk. · '+this._eur(ppc.spend)+' Ausg.') : (hasPpc?'Nicht im aktuellen PPC-Bericht':'Kein PPC-Bericht geladen');
+        return { id:r.id, keyword:r.keyword, posLabel:pc.label, posColor:pc.color,
+          curStr:cur!=null?('#'+cur):'—', sponsoredStr:curSp!=null?('Ad #'+curSp):'', hasSponsored:curSp!=null,
+          trendArrow, trendColor, trendText,
+          recTag:rec.tag, recColor:rec.color, recText:rec.text, isAction:rec.action,
+          ppcLine, hasPpcRow:!!ppc,
+          expanded:isOpen, chevron:isOpen?'▲':'▼', toggle:()=>this._rankToggle(r.id),
+          chart:this._rankChart(hist),
+          addMeasure:()=>this._rankAddMeasurement(r.id),
+          remove:()=>this._rankRemove(r.id) };
+      });
+      V.rankRows=rows;
+      V.rankEmpty=rows.length===0;
+      V.rankDraftPos=st.rankDraftPos||'';
+      V.setRankDraftPos=(e)=>this.setState({rankDraftPos:e.target.value});
+      V.rankDraftSponsored=st.rankDraftSponsored||'';
+      V.setRankDraftSponsored=(e)=>this.setState({rankDraftSponsored:e.target.value});
+      // Aggregierte Handlungsempfehlungen (nur die mit Handlung)
+      const actionRows=rows.filter(r=>r.isAction);
+      V.rankRecs=actionRows.map(r=>({ keyword:r.keyword, tag:r.recTag, color:r.recColor, text:r.recText }));
+      V.rankRecsEmpty=actionRows.length===0;
+      V.rankRecsCount=actionRows.length;
+      V.rankTrackedCount=rows.length;
+    }
+
+
     {
       const prioTone={Hoch:red, Mittel:yellow, Niedrig:'#6E9A5A'};
       const ownerTone={Daniel:'#2F6FED', Tom:'#7A3FF2', Beide:'#0A0A0A'};
