@@ -419,6 +419,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
             <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
               <label style="display:flex;align-items:center;gap:7px;padding:6px 12px;border:1px solid #E4E4E0;background:#fff"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Sterne</span><input type="number" min="0" max="5" step="0.1" value="{{ sel.starsVal }}" onChange="{{ editStars }}" style="width:56px;border:1px solid #E2E2E2;padding:5px 7px;text-align:right;font-size:13px;font-feature-settings:'tnum' 1"></label>
               <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid {{ sel.statusColor }}"><div style="width:9px;height:9px;background:{{ sel.statusColor }}"></div><span style="font-size:12.5px;font-weight:600">{{ sel.statusLabel }}</span></div>
+              <button onClick="{{ sel.noAdsToggle }}" title="Trinkspiele dürfen bei Amazon nicht beworben werden — blendet ACOS/TACOS und PPC-Ansichten für dieses Produkt aus" style="{{ sel.noAdsBtnStyle }}">{{ sel.noAdsBtnLabel }}</button>
               <button onClick="{{ askDelete }}" style="display:flex;align-items:center;gap:7px;padding:8px 14px;border:1px solid #E4C4BE;background:#fff;color:#D42E12;font-size:12.5px;font-weight:600;cursor:pointer" style-hover="background:#FBEDEB"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/></svg>Löschen</button>
             </div>
           </div>
@@ -435,11 +436,18 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
             <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Einheiten</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px">{{ sel.unitsStr }}</div></div>
             <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Ø Marge</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px">{{ sel.marginStr }}</div></div>
             <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Nettomarge / Stk</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px;color:{{ sel.unitProfitColor }}">{{ sel.unitProfitStr }}</div></div>
-            <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">ACOS</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px;color:{{ sel.acosColor }}">{{ sel.acosStr }}</div></div>
-            <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">TACOS</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px">{{ sel.tacosStr }}</div></div>
+            <sc-if value="{{ sel.adsOk }}" hint-placeholder-val="{{ true }}">
+              <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">ACOS</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px;color:{{ sel.acosColor }}">{{ sel.acosStr }}</div></div>
+              <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">TACOS</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px">{{ sel.tacosStr }}</div></div>
+            </sc-if>
+            <sc-if value="{{ sel.noAds }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Werbung</div><div style="font-size:12.5px;color:#B4530A;margin-top:9px;line-height:1.45;font-weight:600">Trinkspiel — bei Amazon nicht bewerbbar. Kein ACOS/TACOS.</div></div>
+            </sc-if>
             <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Conversion</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px;color:{{ sel.conversionColor }}">{{ sel.conversionStr }}</div></div>
-            <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Max. CPC</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px">{{ sel.maxCpcStr }}</div></div>
-            <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Org.-Rate</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px">{{ sel.organicRateStr }}</div></div>
+            <sc-if value="{{ sel.adsOk }}" hint-placeholder-val="{{ true }}">
+              <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Max. CPC</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px">{{ sel.maxCpcStr }}</div></div>
+              <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Org.-Rate</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px">{{ sel.organicRateStr }}</div></div>
+            </sc-if>
             <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Bestand</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px;color:{{ sel.stockColor }}">{{ sel.stockStr }}</div></div>
             <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Reichweite</div><div style="font-family:'Archivo';font-weight:800;font-size:22px;font-feature-settings:'tnum' 1;margin-top:6px;color:{{ sel.coverColor }}">{{ sel.coverStr }}</div></div>
             <div style="background:#fff;padding:15px 18px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Bewertung · {{ sel.starsStr }}</div><div style="margin-top:9px">{{ starEl }}</div></div>
@@ -1590,14 +1598,21 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
           </div>
 
           <!-- PPC-Uebernahme -->
-          <div style="background:#fff;border:1px solid #E4E4E0;border-left:4px solid #FF5A00;margin-top:18px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
-            <div style="flex:1;min-width:240px">
-              <div style="font-family:'Archivo';font-weight:800;font-size:15px">In PPC-Analyse übernehmen</div>
-              <div style="font-size:12.5px;color:#8A8A86;margin-top:4px;line-height:1.5">Spielt die aktuelle + Vorwochen-Position je Keyword in die PPC-Analyse ein. Die Empfehlungen berücksichtigen dann z. B., ob ein erhöhter ACOS durch ein steigendes organisches Ranking gerechtfertigt ist.</div>
-              <div style="font-size:11.5px;color:#9A9A96;margin-top:5px">{{ rankApplyNote }}</div>
+          <sc-if value="{{ rankApplyOk }}" hint-placeholder-val="{{ true }}">
+            <div style="background:#fff;border:1px solid #E4E4E0;border-left:4px solid #FF5A00;margin-top:18px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
+              <div style="flex:1;min-width:240px">
+                <div style="font-family:'Archivo';font-weight:800;font-size:15px">In PPC-Analyse übernehmen</div>
+                <div style="font-size:12.5px;color:#8A8A86;margin-top:4px;line-height:1.5">Spielt die aktuelle + Vorwochen-Position je Keyword in die PPC-Analyse ein. Die Empfehlungen berücksichtigen dann z. B., ob ein erhöhter ACOS durch ein steigendes organisches Ranking gerechtfertigt ist.</div>
+                <div style="font-size:11.5px;color:#9A9A96;margin-top:5px">{{ rankApplyNote }}</div>
+              </div>
+              <button onClick="{{ rankApply }}" style="padding:10px 18px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap">→ Übernehmen</button>
             </div>
-            <button onClick="{{ rankApply }}" style="padding:10px 18px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap">→ Übernehmen</button>
-          </div>
+          </sc-if>
+          <sc-if value="{{ rankApplyNoAds }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#FFF3EA;border:1px solid #E8C4A8;margin-top:18px;padding:14px 20px;font-size:12.5px;color:#8A5A2E;line-height:1.55">
+              <b>Trinkspiel — keine PPC-Verknüpfung.</b> Dieses Produkt darf bei Amazon nicht beworben werden, daher gibt es keine PPC-Analyse, keinen ACOS und keine Übernahme. Das organische Ranking-Tracking oben funktioniert unabhängig davon in vollem Umfang.
+            </div>
+          </sc-if>
 
           <div style="font-size:12px;color:#9A9A96;margin-top:12px;line-height:1.5">Position: kleiner = besser, kumulativ über Seite 1–7 gezählt. Die organische Position ist geräteunabhängig verlässlich; die Sponsored-Position (Ad #…) ist eine Momentaufnahme der Desktop-Anzeigen-Auktion und kann auf Mobilgeräten abweichen.</div>
         </div>
@@ -1928,7 +1943,7 @@ class Component extends DCLogic {
     const P = (o)=>({ id:'p'+Math.random().toString(36).slice(2,8), listingRating:'green', aplusRating:'green', keywordRating:'green', amazonUrl: o.asin ? ('https://www.amazon.de/dp/'+o.asin) : '', ...o });
     const products = [
       P({name:'Wackelturm Party XXL', asin:'B0C1PARTY1', price:24.99, productionCost:6.20, fbaFee:4.35, shipping:1.10, dims:'30×9×9 cm · 1,2 kg', stock:210, leadTime:45, safetyDays:14, dailyBudget:8, targetAcos:18, monthly:this._genMonthly(40,0.12,24.99,18,0.45)}),
-      P({name:'Trinkspiel Roulette Deluxe', asin:'B0C2PARTY2', price:19.99, productionCost:4.10, fbaFee:3.85, shipping:0.95, dims:'22×22×6 cm · 0,6 kg', stock:90, leadTime:40, safetyDays:14, dailyBudget:6.5, targetAcos:16, monthly:this._genMonthly(62,0.14,19.99,16,0.4)}),
+      P({name:'Trinkspiel Roulette Deluxe', asin:'B0C2PARTY2', price:19.99, productionCost:4.10, fbaFee:3.85, shipping:0.95, dims:'22×22×6 cm · 0,6 kg', stock:90, leadTime:40, safetyDays:14, dailyBudget:6.5, targetAcos:16, noAds:true, monthly:this._genMonthly(62,0.14,19.99,16,0.4)}),
       P({name:'Familien-Quiz „Wer weiß es?"', asin:'B0C3PARTY3', price:29.99, productionCost:5.60, fbaFee:4.10, shipping:1.20, dims:'20×13×5 cm · 0,5 kg', stock:480, leadTime:50, safetyDays:21, dailyBudget:3.5, targetAcos:15, monthly:this._genMonthly(30,0.11,29.99,15,0.35)}),
       P({name:'Ballon-Party Komplettset', asin:'B0C4PARTY4', price:14.99, productionCost:3.30, fbaFee:3.40, shipping:0.80, dims:'25×18×8 cm · 0,4 kg', stock:38, leadTime:35, safetyDays:10, dailyBudget:2.2, targetAcos:20, monthly:this._genMonthly(26,0.10,14.99,20,0.5)}),
       P({name:'Pärchen-Fragen Kartenspiel', asin:'B0C5PARTY5', price:12.99, productionCost:2.40, fbaFee:3.10, shipping:0.70, dims:'10×7×3 cm · 0,2 kg', stock:620, leadTime:42, safetyDays:14, dailyBudget:4.5, targetAcos:14, monthly:this._genMonthly(78,0.16,12.99,14,0.45)})
@@ -2346,6 +2361,8 @@ class Component extends DCLogic {
     }catch(e){}
   }
   _setCampMap(campaign, pid){ this.setState(s=>({ppcCampMap:{...(s.ppcCampMap||{}), [campaign]:pid}}), ()=>this._persist()); }
+  // Trinkspiel-Kennzeichen: Produkt darf bei Amazon nicht beworben werden -> keine PPC-Analyse/ACOS/TACOS
+  _toggleNoAds(pid){ this.setState(s=>({products:s.products.map(p=>p.id===pid?{...p, noAds:!p.noAds}:p)}), ()=>this._persist()); }
 
   // ===== Ranking-Tracking (Scan-basiert: Canopy-GraphQL-Auswertung einspielen) =====
   _daysAgoISO(n){ const d=new Date(); d.setDate(d.getDate()-n); return d.toISOString().slice(0,10); }
@@ -2412,6 +2429,8 @@ class Component extends DCLogic {
     .map(s=>({date:s.date, pos:(s.results[kw]||{}).pos||null, sponsoredPos:(s.results[kw]||{}).sponsoredPos||null})); }
   // Ranking-Daten in die PPC-Analyse uebernehmen (aktuelle + Vorwochen-Position je Keyword)
   _rankApplyToPpc(){ const pid=this._rankActiveProduct();
+    const prod=(this.state.products||[]).find(p=>p.id===pid);
+    if(prod && prod.noAds){ this.setState({rankMsg:'Trinkspiel — keine PPC-Analyse für dieses Produkt, Übernahme nicht möglich.'}); return; }
     const scans=(this.state.rankScans||[]).filter(s=>s.productId===pid).sort((a,b)=>a.date<b.date?-1:1);
     if(!scans.length){ this.setState({rankMsg:'Noch keine Auswertung vorhanden — zuerst eine Canopy-Antwort einspielen.'}); return; }
     const cur=scans[scans.length-1], prev=scans.length>1?scans[scans.length-2]:null;
@@ -3335,7 +3354,7 @@ class Component extends DCLogic {
           ? 'padding:6px 12px;border:1px solid #FF5A00;background:#FF5A00;color:#fff;font-size:12px;font-weight:600;cursor:pointer'
           : 'padding:6px 12px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12px;font-weight:500;cursor:pointer';
         V.ppcProductChips=[{label:'Alle Produkte', sel:()=>this.setState({ppcProductFilter:'alle'}), style:prodChip(pFlt==='alle')}]
-          .concat((st.products||[]).map(p=>({label:p.name, sel:()=>this.setState({ppcProductFilter:p.id}), style:prodChip(pFlt===p.id)})));
+          .concat((st.products||[]).filter(p=>!p.noAds).map(p=>({label:p.name, sel:()=>this.setState({ppcProductFilter:p.id}), style:prodChip(pFlt===p.id)})));
         V.ppcProductFilterNote = pFlt==='alle' ? '' : 'Gefiltert über die Kampagnen-Zuordnung (P&L-Übernahme unten) — nur Keywords aus Kampagnen dieses Produkts.';
         V.ppcHasProductFilterNote = pFlt!=='alle';
         // Ranking-Verknuepfung: uebernommene Ranking-Daten (aus dem Rankings-Reiter) je Keyword
@@ -3425,7 +3444,7 @@ class Component extends DCLogic {
       // ===== P&L-Uebernahme (Kampagne -> Produkt) =====
       if(V.ppcHasData){
         const cm=st.ppcCampMap||{};
-        const prodOpts=[{v:'ignore', l:'— nicht übernehmen —'}].concat(st.products.map(p=>({v:p.id, l:p.name})));
+        const prodOpts=[{v:'ignore', l:'— nicht übernehmen —'}].concat(st.products.filter(p=>!p.noAds).map(p=>({v:p.id, l:p.name})));
         V.ppcMapRows=(st.ppcCamps||[]).slice().sort((a,b)=>b.spend-a.spend).map(c=>({
           name:c.campaign, spend:this._eur(c.spend), orders:this._num(c.orders),
           value: cm[c.campaign]||'ignore',
@@ -3472,6 +3491,11 @@ class Component extends DCLogic {
       // Keyword-Vorschlaege aus dem PPC-Bericht: teuerste + verkaufende Suchbegriffe des Produkts, die noch nicht getrackt werden
       {
         const raw=st.ppcRaw||[];
+        if(activeProduct.noAds){
+          // Trinkspiel: keine Amazon-Werbung moeglich -> keine PPC-Vorschlaege, Keywords werden manuell gepflegt
+          V.rankSugg=[]; V.rankSuggEmpty=true; V.rankHasSugg=true;
+          V.rankSuggNote='Trinkspiel — bei Amazon nicht bewerbbar, daher keine PPC-Daten als Quelle. Keywords hier manuell pflegen; das organische Ranking-Tracking funktioniert ganz normal.';
+        } else {
         const tracked=new Set(kws);
         const campMapS=st.ppcCampMap||{};
         const myCamps=new Set(Object.keys(campMapS).filter(c=>campMapS[c]===activePid));
@@ -3489,6 +3513,7 @@ class Component extends DCLogic {
         const suggSpend=sugg.reduce((s,k)=>s+k.spend,0);
         V.rankSuggNote= raw.length===0 ? '' : sugg.length===0 ? 'Alle relevanten PPC-Suchbegriffe werden bereits getrackt.'
           : 'Aus dem PPC-Bericht: die '+sugg.length+' wichtigsten noch nicht getrackten Suchbegriffe ('+this._pct(suggSpend/totalSpend*100,0)+' der Ausgaben der Kandidaten). Klick fügt sie oben hinzu.'+(hasMapping?'':' Hinweis: Ohne Kampagnen-Zuordnung (PPC-Reiter, P&L-Übernahme) werden Suchbegriffe aller Produkte vorgeschlagen.');
+        }
       }
 
       // GraphQL-Code generieren + kopieren
@@ -3550,7 +3575,9 @@ class Component extends DCLogic {
       // PPC-Uebernahme
       V.rankApply=()=>this._rankApplyToPpc();
       const link=(st.ppcRankLink||{})[activePid];
-      V.rankApplyNote= link ? ('Zuletzt übernommen: Auswertung vom '+link.date+'. Die PPC-Analyse berücksichtigt diese Positionen.') : 'Noch nicht in die PPC-Analyse übernommen.';
+      V.rankApplyOk=!activeProduct.noAds;
+      V.rankApplyNoAds=!!activeProduct.noAds;
+      V.rankApplyNote= activeProduct.noAds ? '' : link ? ('Zuletzt übernommen: Auswertung vom '+link.date+'. Die PPC-Analyse berücksichtigt diese Positionen.') : 'Noch nicht in die PPC-Analyse übernommen.';
       V.rankTrackedCount=rows.length;
     }
 
@@ -3723,6 +3750,12 @@ class Component extends DCLogic {
         const qualityRows=[ mkRating('listingRating','Listing'), mkRating('aplusRating','A+ Content'), mkRating('keywordRating','Keywords aktuell',{green:'Keywords aktuell',yellow:'Teils veraltet — Auffrischung sinnvoll',red:'Veraltet — überarbeiten'}) ];
         const addMonthOptions=this.months.filter(ym=>!p.monthly[ym]).map(ym=>({ym, label:this._mlabel(ym)}));
         V.sel={ name:p.name, asin:p.asin, dims:p.dims, amazonUrl:p.amazonUrl||'', hasUrl:!!p.amazonUrl, price:p.price, productionCost:p.productionCost, fbaFee:p.fbaFee, shipping:p.shipping,
+          noAds:!!p.noAds, adsOk:!p.noAds,
+          noAdsToggle:()=>this._toggleNoAds(p.id),
+          noAdsBtnStyle: p.noAds
+            ? 'display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid #B4530A;background:#FFF3EA;color:#B4530A;font-size:12.5px;font-weight:600;cursor:pointer'
+            : 'display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid #E2E2E2;background:#fff;color:#8A8A86;font-size:12.5px;font-weight:600;cursor:pointer',
+          noAdsBtnLabel: p.noAds ? '🍺 Trinkspiel — nicht bewerbbar' : 'Als Trinkspiel markieren',
           qualityRows, activeYear,
           scopeLabel: detailScope==='year'?('Jahr '+activeYear):'Gesamtzeitraum',
           scopeGesamtStyle: scopeBtn(detailScope==='gesamt'), scopeYearStyle: scopeBtn(detailScope==='year'),
@@ -3781,7 +3814,7 @@ class Component extends DCLogic {
         }
       }
     }
-    if(!V.sel) V.sel={name:'',asin:'',dims:'',amazonUrl:'',hasUrl:false,price:0,productionCost:0,fbaFee:0,shipping:0,activeYear:'',unitProfitStr:'',unitProfitColor:ink,marginStr:'',conversionStr:'',conversionColor:ink,revenueStr:'',vatStr:'',unitsStr:'',acosStr:'',acosColor:ink,tacosStr:'',stockStr:'',stockColor:ink,coverStr:'',coverColor:'#9A9A96',maxCpcStr:'',organicRateStr:'',starsVal:'',starsStr:'',addMonthOptions:[],statusColor:'#9A9A96',statusLabel:'',recs:[],monthRows:[],detailYears:[],qualityRows:[]};
+    if(!V.sel) V.sel={name:'',asin:'',dims:'',amazonUrl:'',hasUrl:false,price:0,productionCost:0,fbaFee:0,shipping:0,noAds:false,adsOk:true,noAdsToggle:()=>{},noAdsBtnStyle:'',noAdsBtnLabel:'',activeYear:'',unitProfitStr:'',unitProfitColor:ink,marginStr:'',conversionStr:'',conversionColor:ink,revenueStr:'',vatStr:'',unitsStr:'',acosStr:'',acosColor:ink,tacosStr:'',stockStr:'',stockColor:ink,coverStr:'',coverColor:'#9A9A96',maxCpcStr:'',organicRateStr:'',starsVal:'',starsStr:'',addMonthOptions:[],statusColor:'#9A9A96',statusLabel:'',recs:[],monthRows:[],detailYears:[],qualityRows:[]};
     if(!V.starEl) V.starEl=null; if(!V.editStars) V.editStars=()=>{}; if(!V.editUrl) V.editUrl=()=>{}; if(!V.askDelete) V.askDelete=()=>{};
     if(V.detailAddYm===undefined) V.detailAddYm=''; if(!V.setDetailAddYm) V.setDetailAddYm=()=>{}; if(!V.addSelectedMonth) V.addSelectedMonth=()=>{};
     if(!V.goal) V.goal={monthLabel:'',tone:'#9A9A96',statusLabel:'',ringEl:null,actualStr:'',targetStr:'',remainingStr:'',curVelStr:'',reqVelStr:'',reqColor:ink,dayStr:'',targetInput:'',setTarget:()=>{}};
@@ -3835,7 +3868,8 @@ class Component extends DCLogic {
     V.werbeAvgActual= actCount>0 ? this._pct(avgAct/actCount) : '—';
     V.adRows=st.products.map(p=>{ const d=this.derive(p,from,to); const be=d.breakEvenAcos, act=d.actualAcos, tgt=+p.targetAcos||0; const hasAcos=d.ppcRevenue>0;
       const scaleMax=Math.max(be,act,tgt,1)*1.18; let recTone,recText,recBg,fillColor;
-      if(!hasAcos){ recTone='#9A9A96'; recText='Keine PPC-Verkäufe im Zeitraum erfasst'; recBg='#F4F4F2'; fillColor='#C9C9C4'; }
+      if(p.noAds){ recTone='#B4530A'; recText='Trinkspiel — bei Amazon nicht bewerbbar (keine PPC-Kennzahlen)'; recBg='#FFF3EA'; fillColor='#C9C9C4'; }
+      else if(!hasAcos){ recTone='#9A9A96'; recText='Keine PPC-Verkäufe im Zeitraum erfasst'; recBg='#F4F4F2'; fillColor='#C9C9C4'; }
       else if(act>be){ recTone=red; recText='Verlustzone – Werbekosten senken'; recBg='#FBEDEB'; fillColor=red; }
       else if(act>tgt){ recTone=orange; recText='Über Ziel – Gebote optimieren'; recBg='#FFF3EC'; fillColor=orange; }
       else { recTone=green; recText='Potenzial – Budget kann erhöht werden'; recBg='#ECF5EF'; fillColor=green; }
