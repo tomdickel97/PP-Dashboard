@@ -3454,27 +3454,33 @@ class Component extends DCLogic {
         V.ppcKwEmpty=kwList.length===0;
         V.ppcKwCountLabel=kwList.length+(flt2==='alle'?' Suchbegriffe':' gefiltert');
 
-        // ===== Konvertierende Suchbegriffe: alle mit mindestens einem Verkauf =====
+        // ===== Konvertierende Suchbegriffe: ALLE mit mindestens einem Verkauf =====
+        // Bewusst auf kws (alle Suchbegriffe) statt enrich (nur relevante) — ein Verkauf zaehlt,
+        // auch wenn der Begriff die Relevanz-Schwelle (1.000 Impr / 10 Klicks) nicht erreicht.
         {
-          const conv=enrich.filter(k=>k.orders>0 && (pFlt==='alle' || kwProductIds(k).has(pFlt)))
+          const conv=kws.filter(k=>k.orders>0 && (pFlt==='alle' || kwProductIds(k).has(pFlt)))
             .slice().sort((a,b)=> b.orders-a.orders || (a.acos==null?9:a.acos)-(b.acos==null?9:b.acos));
           const cTot=conv.reduce((a,k)=>({orders:a.orders+k.orders, clicks:a.clicks+k.clicks, sales:a.sales+k.sales, spend:a.spend+k.spend}),{orders:0,clicks:0,sales:0,spend:0});
           const cCvr=cTot.clicks>0?cTot.orders/cTot.clicks:0;
-          V.ppcConv=conv.map(k=>({ term:k.term,
-            clicks:this._num(k.clicks), orders:this._num(k.orders),
-            cvrStr:k.clicks>0?this._pct((k.cvr||0)*100,1):'—',
-            cvrColor: (k.cvr||0)>=cCvr ? green : (k.cvr||0)>=cCvr*0.5 ? yellow : red,
-            sales:this._eur(k.sales), spend:this._eur(k.spend),
-            acos:k.acos==null?'—':this._pct(k.acos*100,0),
-            acosColor: k.acos==null?'#8A8A86' : k.acos<=tgt?green : k.acos<=tgt*1.5?yellow : red,
-            confLabel:(confMeta[k.conf]||confMeta.gering).label, confColor:(confMeta[k.conf]||confMeta.gering).color,
-            tagAsin:!!k._asin }));
+          const isAsinC=(k)=> /^b0[a-z0-9]{8}$/i.test(k.term) || (k.camps||[]).some(c=>/asin\s*=/i.test(c.targeting||''));
+          V.ppcConv=conv.map(k=>{ const cf=ordersConf(k.orders,k.clicks);
+            return { term:k.term,
+              clicks:this._num(k.clicks), orders:this._num(k.orders),
+              cvrStr:k.clicks>0?this._pct((k.cvr||0)*100,1):'—',
+              cvrColor: (k.cvr||0)>=cCvr ? green : (k.cvr||0)>=cCvr*0.5 ? yellow : red,
+              sales:this._eur(k.sales), spend:this._eur(k.spend),
+              acos:k.acos==null?'—':this._pct(k.acos*100,0),
+              acosColor: k.acos==null?'#8A8A86' : k.acos<=tgt?green : k.acos<=tgt*1.5?yellow : red,
+              confLabel:(confMeta[cf]||confMeta.gering).label, confColor:(confMeta[cf]||confMeta.gering).color,
+              tagAsin:isAsinC(k) }; });
           V.ppcConvCount=conv.length; V.ppcConvEmpty=conv.length===0;
           V.ppcConvOrders=this._num(cTot.orders); V.ppcConvClicks=this._num(cTot.clicks);
           V.ppcConvSales=this._eur(cTot.sales); V.ppcConvSpend=this._eur(cTot.spend);
           V.ppcConvCvr=this._pct(cCvr*100,1);
           const shareO = tot.orders>0 ? cTot.orders/tot.orders : 0;
-          V.ppcConvNote=conv.length+' von '+enrich.length+' relevanten Suchbegriffen haben verkauft — sie tragen '+this._pct(shareO*100,0)+' der Bestellungen. Ø Conversion dieser Begriffe: '+this._pct(cCvr*100,1)+'.';
+          const belowRel = conv.filter(k=>!isRelevant(k)).length;
+          V.ppcConvNote=conv.length+' von '+kws.length+' Suchbegriffen im Bericht haben verkauft — sie tragen '+this._pct(shareO*100,0)+' der Bestellungen. Ø Conversion dieser Begriffe: '+this._pct(cCvr*100,1)+'.'
+            + (belowRel>0 ? (' Davon '+belowRel+' unterhalb der Relevanz-Schwelle — sie erscheinen nur hier, nicht in der Keyword-Analyse.') : '');
           V.ppcConvCopyLabel=(st.ppcCopied==='conv')?'✓ Kopiert':'Keywords kopieren';
           V.ppcConvCopy=()=>this._ppcCopy(conv.map(k=>k.term).join('\n'),'conv');
         }
