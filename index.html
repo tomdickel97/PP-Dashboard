@@ -1316,6 +1316,51 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
               </sc-if>
             </div>
 
+            <!-- Konvertierende Suchbegriffe: alle mit mindestens einem Verkauf -->
+            <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:30px">
+              <h2 style="font-family:'Archivo';font-weight:800;font-size:19px;margin:0">Verkaufende Suchbegriffe <span style="color:#1B7F4B">({{ ppcConvCount }})</span></h2>
+              <button onClick="{{ ppcConvCopy }}" style="padding:6px 12px;border:1px solid #0A0A0A;background:#fff;color:#0A0A0A;font-size:12px;font-weight:600;cursor:pointer">{{ ppcConvCopyLabel }}</button>
+            </div>
+            <div style="font-size:12.5px;color:#8A8A86;margin-top:4px;max-width:760px;line-height:1.5">{{ ppcConvNote }}</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:#EEEEEB;border:1px solid #E4E4E0;margin-top:12px">
+              <div style="background:#fff;padding:13px 16px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Bestellungen</div><div style="font-family:'Archivo';font-weight:800;font-size:20px;font-feature-settings:'tnum' 1;margin-top:5px">{{ ppcConvOrders }}</div></div>
+              <div style="background:#fff;padding:13px 16px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Klicks</div><div style="font-family:'Archivo';font-weight:800;font-size:20px;font-feature-settings:'tnum' 1;margin-top:5px">{{ ppcConvClicks }}</div></div>
+              <div style="background:#fff;padding:13px 16px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Ø Conversion</div><div style="font-family:'Archivo';font-weight:800;font-size:20px;font-feature-settings:'tnum' 1;margin-top:5px;color:#1B7F4B">{{ ppcConvCvr }}</div></div>
+              <div style="background:#fff;padding:13px 16px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Umsatz</div><div style="font-family:'Archivo';font-weight:800;font-size:20px;font-feature-settings:'tnum' 1;margin-top:5px">{{ ppcConvSales }}</div></div>
+              <div style="background:#fff;padding:13px 16px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Ausgaben</div><div style="font-family:'Archivo';font-weight:800;font-size:20px;font-feature-settings:'tnum' 1;margin-top:5px">{{ ppcConvSpend }}</div></div>
+            </div>
+            <div style="background:#fff;border:1px solid #E4E4E0;border-top:none;overflow-x:auto">
+              <sc-if value="{{ ppcConvEmpty }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:26px 20px;text-align:center;color:#9A9A96;font-size:13.5px">Kein Suchbegriff im Bericht hat verkauft.</div>
+              </sc-if>
+              <table style="width:100%;border-collapse:collapse;min-width:660px">
+                <thead><tr>
+                  <th style="text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Suchbegriff</th>
+                  <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Klicks</th>
+                  <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Verkäufe</th>
+                  <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Conversion</th>
+                  <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Umsatz</th>
+                  <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Ausgaben</th>
+                  <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">ACOS</th>
+                  <th style="text-align:left;padding:11px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Datenlage</th>
+                </tr></thead>
+                <tbody>
+                  <sc-for list="{{ ppcConv }}" as="v" hint-placeholder-count="6">
+                    <tr>
+                      <td style="padding:11px 14px;font-size:13px;font-weight:600;border-bottom:1px solid #F1F1EE">{{ v.term }}<sc-if value="{{ v.tagAsin }}" hint-placeholder-val="{{ true }}"><span style="display:inline-block;margin-left:8px;padding:2px 7px;font-size:10px;font-weight:700;color:#6E6C66;border:1px solid #C9C9C4;vertical-align:middle">PRODUKT-TARGET</span></sc-if></td>
+                      <td style="padding:11px 10px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ v.clicks }}</td>
+                      <td style="padding:11px 10px;font-size:13px;text-align:right;font-weight:700;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ v.orders }}</td>
+                      <td style="padding:11px 10px;font-size:13px;text-align:right;font-weight:700;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE;color:{{ v.cvrColor }}">{{ v.cvrStr }}</td>
+                      <td style="padding:11px 10px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ v.sales }}</td>
+                      <td style="padding:11px 10px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ v.spend }}</td>
+                      <td style="padding:11px 10px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE;color:{{ v.acosColor }}">{{ v.acos }}</td>
+                      <td style="padding:11px 12px;border-bottom:1px solid #F1F1EE;white-space:nowrap"><span style="display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:#4A4A46"><span style="width:8px;height:8px;background:{{ v.confColor }};display:inline-block"></span>{{ v.confLabel }}</span></td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
+
             <!-- Vereinheitlichte Keyword-Analyse: alles pro Keyword an einem Ort -->
             <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:30px">
               <h2 style="font-family:'Archivo';font-weight:800;font-size:19px;margin:0">Keyword-Analyse</h2>
@@ -3408,6 +3453,31 @@ class Component extends DCLogic {
           }; });
         V.ppcKwEmpty=kwList.length===0;
         V.ppcKwCountLabel=kwList.length+(flt2==='alle'?' Suchbegriffe':' gefiltert');
+
+        // ===== Konvertierende Suchbegriffe: alle mit mindestens einem Verkauf =====
+        {
+          const conv=enrich.filter(k=>k.orders>0 && (pFlt==='alle' || kwProductIds(k).has(pFlt)))
+            .slice().sort((a,b)=> b.orders-a.orders || (a.acos==null?9:a.acos)-(b.acos==null?9:b.acos));
+          const cTot=conv.reduce((a,k)=>({orders:a.orders+k.orders, clicks:a.clicks+k.clicks, sales:a.sales+k.sales, spend:a.spend+k.spend}),{orders:0,clicks:0,sales:0,spend:0});
+          const cCvr=cTot.clicks>0?cTot.orders/cTot.clicks:0;
+          V.ppcConv=conv.map(k=>({ term:k.term,
+            clicks:this._num(k.clicks), orders:this._num(k.orders),
+            cvrStr:k.clicks>0?this._pct((k.cvr||0)*100,1):'—',
+            cvrColor: (k.cvr||0)>=cCvr ? green : (k.cvr||0)>=cCvr*0.5 ? yellow : red,
+            sales:this._eur(k.sales), spend:this._eur(k.spend),
+            acos:k.acos==null?'—':this._pct(k.acos*100,0),
+            acosColor: k.acos==null?'#8A8A86' : k.acos<=tgt?green : k.acos<=tgt*1.5?yellow : red,
+            confLabel:(confMeta[k.conf]||confMeta.gering).label, confColor:(confMeta[k.conf]||confMeta.gering).color,
+            tagAsin:!!k._asin }));
+          V.ppcConvCount=conv.length; V.ppcConvEmpty=conv.length===0;
+          V.ppcConvOrders=this._num(cTot.orders); V.ppcConvClicks=this._num(cTot.clicks);
+          V.ppcConvSales=this._eur(cTot.sales); V.ppcConvSpend=this._eur(cTot.spend);
+          V.ppcConvCvr=this._pct(cCvr*100,1);
+          const shareO = tot.orders>0 ? cTot.orders/tot.orders : 0;
+          V.ppcConvNote=conv.length+' von '+enrich.length+' relevanten Suchbegriffen haben verkauft — sie tragen '+this._pct(shareO*100,0)+' der Bestellungen. Ø Conversion dieser Begriffe: '+this._pct(cCvr*100,1)+'.';
+          V.ppcConvCopyLabel=(st.ppcCopied==='conv')?'✓ Kopiert':'Keywords kopieren';
+          V.ppcConvCopy=()=>this._ppcCopy(conv.map(k=>k.term).join('\n'),'conv');
+        }
         if(prev){
           const pTot=prev.keywords.reduce((a,k)=>({spend:a.spend+k.spend,sales:a.sales+k.sales,orders:a.orders+k.orders}),{spend:0,sales:0,orders:0});
           const pAcos=pTot.sales>0?pTot.spend/pTot.sales:null;
