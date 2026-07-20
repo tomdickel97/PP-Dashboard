@@ -1374,6 +1374,93 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
               </table>
             </div>
 
+            <!-- Match-Type-Vergleich -->
+            <sc-if value="{{ ppcHasMatch }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:30px">
+                <h2 style="font-family:'Archivo';font-weight:800;font-size:19px;margin:0">Match-Type-Vergleich</h2>
+                <div style="font-size:12px;color:#9A9A96">Wo arbeitet euer Budget am effizientesten?</div>
+              </div>
+              <div style="background:#fff;border:1px solid #E4E4E0;margin-top:12px;overflow-x:auto">
+                <table style="width:100%;border-collapse:collapse;min-width:620px">
+                  <thead><tr>
+                    <th style="text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Match-Type</th>
+                    <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Ausgaben</th>
+                    <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Anteil</th>
+                    <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Klicks</th>
+                    <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Verkäufe</th>
+                    <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Umsatz</th>
+                    <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Conversion</th>
+                    <th style="text-align:right;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">ACOS</th>
+                  </tr></thead>
+                  <tbody>
+                    <sc-for list="{{ ppcMatch }}" as="m" hint-placeholder-count="3">
+                      <tr>
+                        <td style="padding:11px 14px;font-size:12.5px;font-weight:700;border-bottom:1px solid #F1F1EE">{{ m.label }}</td>
+                        <td style="padding:11px 10px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ m.spend }}</td>
+                        <td style="padding:11px 10px;font-size:12.5px;text-align:right;color:#8A8A86;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ m.share }}</td>
+                        <td style="padding:11px 10px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ m.clicks }}</td>
+                        <td style="padding:11px 10px;font-size:13px;text-align:right;font-weight:700;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ m.orders }}</td>
+                        <td style="padding:11px 10px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ m.sales }}</td>
+                        <td style="padding:11px 10px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ m.cvrStr }}</td>
+                        <td style="padding:11px 14px;font-size:13px;text-align:right;font-weight:700;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE;color:{{ m.acosColor }}">{{ m.acos }}</td>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+            </sc-if>
+
+            <!-- Kampagnen-Überschneidung (Kannibalisierung) -->
+            <sc-if value="{{ ppcHasCann }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:30px">
+                <h2 style="font-family:'Archivo';font-weight:800;font-size:19px;margin:0">Kampagnen-Überschneidung <span style="color:#D42E12">({{ ppcCannCount }})</span></h2>
+              </div>
+              <div style="font-size:12.5px;color:#8A8A86;margin-top:4px;max-width:760px;line-height:1.5">{{ ppcCannNote }}</div>
+              <div style="background:#fff;border:1px solid #E4E4E0;border-left:4px solid #D42E12;margin-top:12px">
+                <sc-for list="{{ ppcCann }}" as="c" hint-placeholder-count="3">
+                  <div style="border-bottom:1px solid #F1F1EE">
+                    <div onClick="{{ c.toggle }}" style="display:flex;align-items:center;gap:14px;padding:13px 18px;cursor:pointer;flex-wrap:wrap">
+                      <span style="flex:1;min-width:160px;font-size:14px;font-weight:600;color:#16130F">{{ c.term }}</span>
+                      <span style="font-size:12px;color:#8A8A86;white-space:nowrap">{{ c.nCamps }}</span>
+                      <span style="font-size:12.5px;color:#D42E12;font-weight:700;font-feature-settings:'tnum' 1;white-space:nowrap">{{ c.overlap }} außerhalb der stärksten</span>
+                      <span style="color:#B0B0AC;font-size:12px">{{ c.chevron }}</span>
+                    </div>
+                    <sc-if value="{{ c.expanded }}" hint-placeholder-val="{{ false }}">
+                      <div style="padding:4px 18px 16px;background:#FAFAF8">
+                        <div style="font-size:12.5px;color:#4A4A46;line-height:1.55;margin:6px 0 10px">{{ c.rec }}</div>
+                        <div style="background:#fff;border:1px solid #EEEEEB;overflow-x:auto">
+                          <table style="width:100%;border-collapse:collapse;min-width:560px">
+                            <thead><tr>
+                              <th style="text-align:left;padding:9px 12px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #E4E4E0">Kampagne</th>
+                              <th style="text-align:left;padding:9px 10px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #E4E4E0">Match</th>
+                              <th style="text-align:right;padding:9px 10px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #E4E4E0">Klicks</th>
+                              <th style="text-align:right;padding:9px 10px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #E4E4E0">Verkäufe</th>
+                              <th style="text-align:right;padding:9px 10px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #E4E4E0">Ausgaben</th>
+                              <th style="text-align:right;padding:9px 10px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #E4E4E0">ACOS</th>
+                              <th style="text-align:left;padding:9px 12px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1px solid #E4E4E0">Aktion</th>
+                            </tr></thead>
+                            <tbody>
+                              <sc-for list="{{ c.rows }}" as="x" hint-placeholder-count="3">
+                                <tr>
+                                  <td style="padding:9px 12px;font-size:12.5px;border-bottom:1px solid #F5F5F2">{{ x.campaign }}</td>
+                                  <td style="padding:9px 10px;font-size:11px;color:#8A8A86;border-bottom:1px solid #F5F5F2">{{ x.matches }}</td>
+                                  <td style="padding:9px 10px;font-size:12.5px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F5F5F2">{{ x.clicks }}</td>
+                                  <td style="padding:9px 10px;font-size:12.5px;text-align:right;font-weight:700;font-feature-settings:'tnum' 1;border-bottom:1px solid #F5F5F2">{{ x.orders }}</td>
+                                  <td style="padding:9px 10px;font-size:12.5px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F5F5F2">{{ x.spend }}</td>
+                                  <td style="padding:9px 10px;font-size:12.5px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F5F5F2">{{ x.acos }}</td>
+                                  <td style="padding:9px 12px;border-bottom:1px solid #F5F5F2"><span style="display:inline-block;padding:2px 8px;font-size:10px;font-weight:700;color:#fff;background:{{ x.tagColor }}">{{ x.tag }}</span></td>
+                                </tr>
+                              </sc-for>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
             <!-- Vereinheitlichte Keyword-Analyse: alles pro Keyword an einem Ort -->
             <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:30px">
               <h2 style="font-family:'Archivo';font-weight:800;font-size:19px;margin:0">Keyword-Analyse</h2>
@@ -1741,6 +1828,24 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                       <div style="margin-top:12px;background:#FFF8EE;border:1px solid #F0D9A8;padding:10px 14px;font-size:12px;color:#8A6D24;line-height:1.5">{{ wztCardMsg }}</div>
                     </sc-if>
                     <div style="font-size:11.5px;color:#9A9A96;margin-top:12px;line-height:1.5">Das Video wird in 1080×1920 (9:16) aufgenommen — Intro-Animation, danach schwebt die Karte dezent. Für den Feed reicht das PNG; für Reels/TikTok das Video verwenden.</div>
+
+                    <!-- Caption-Vorlage -->
+                    <div style="margin-top:18px;padding-top:16px;border-top:1px dashed #E4E4E0">
+                      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+                        <span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Caption für diesen Post</span>
+                        <div style="display:flex;align-items:center;gap:8px">
+                          <button onClick="{{ wztCaptionEditToggle }}" style="padding:0;background:none;border:none;color:#8A8A86;font-size:11.5px;font-weight:600;cursor:pointer">{{ wztCaptionEditLabel }}</button>
+                          <button onClick="{{ wztCardCaptionCopy }}" style="padding:7px 14px;border:1px solid #0A0A0A;background:#fff;color:#0A0A0A;font-size:12px;font-weight:600;cursor:pointer">{{ wztCardCaptionCopyLabel }}</button>
+                        </div>
+                      </div>
+                      <div style="margin-top:8px;background:#FAFAF8;border:1px solid #EEEEEB;padding:12px 14px;font-size:12.5px;color:#4A4A46;line-height:1.6;white-space:pre-wrap">{{ wztCardCaption }}</div>
+                      <sc-if value="{{ wztCaptionEdit }}" hint-placeholder-val="{{ false }}">
+                        <div style="margin-top:10px">
+                          <div style="font-size:11px;color:#9A9A96;margin-bottom:5px">Vorlage — <span style="font-feature-settings:'tnum' 1">{FRAGE}</span> und <span style="font-feature-settings:'tnum' 1">{NR}</span> werden automatisch ersetzt. Wird gespeichert und mit Tom synchronisiert.</div>
+                          <textarea value="{{ wztCaptionTpl }}" onInput="{{ setWztCaptionTpl }}" onBlur="{{ wztCaptionTplBlur }}" style="width:100%;min-height:130px;border:1px solid #E2E2E2;padding:11px 13px;font-size:12.5px;line-height:1.55;font-family:'IBM Plex Sans';resize:vertical"></textarea>
+                        </div>
+                      </sc-if>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1754,6 +1859,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
               <span style="flex:1;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#9A9A96">Frage</span>
               <span style="width:52px;text-align:center;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#1B7F4B">Foto</span>
               <span style="width:52px;text-align:center;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#2F6FED">Video</span>
+              <span style="width:60px;text-align:center;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#FF5A00">Gepostet</span>
             </div>
             <sc-if value="{{ wztEmpty }}" hint-placeholder-val="{{ false }}">
               <div style="padding:26px 20px;text-align:center;color:#9A9A96;font-size:13.5px">Keine Frage passt zu Filter/Suche.</div>
@@ -1771,6 +1877,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                   </div>
                   <div style="width:52px;display:flex;justify-content:center"><div onClick="{{ r.togglePhoto }}" style="{{ r.photoStyle }}">✓</div></div>
                   <div style="width:52px;display:flex;justify-content:center"><div onClick="{{ r.toggleVideo }}" style="{{ r.videoStyle }}">✓</div></div>
+                  <div style="width:60px;display:flex;flex-direction:column;align-items:center;gap:2px"><div onClick="{{ r.togglePosted }}" style="{{ r.postedStyle }}">✓</div><sc-if value="{{ r.hasPostedDate }}" hint-placeholder-val="{{ false }}"><span style="font-size:9.5px;color:#B0876A;font-feature-settings:'tnum' 1">{{ r.postedDate }}</span></sc-if></div>
                 </div>
                 <sc-if value="{{ r.promptOpen }}" hint-placeholder-val="{{ false }}">
                   <div style="padding:0 18px 16px 66px">
@@ -1994,6 +2101,8 @@ class Component extends DCLogic {
       rankScans:(saved && Array.isArray(saved.rankScans)) ? saved.rankScans : null,
       ppcRankLink:(saved && saved.ppcRankLink) || {},
       wztStatus:(saved && saved.wztStatus) || {},
+      wztCaptionTpl:(saved && saved.wztCaptionTpl) || 'WER ZUM TEUFEL… {FRAGE} 😈\n\nTag die Person, die das zu 100 % wäre 👇\n\nFrage No. {NR} von 276 · „Wer zum Teufel?" gibt\u2019s bei Amazon 🔗 Link in Bio\n\n#werzumteufel #partyspiel #kartenspiel #partygames #spieleabend #party #freunde #humor',
+      wztCaptionEdit:false,
       wztFilter:'alle', wztSearch:'', wztPromptOpen:{}, wztCopied:null,
       wztCardOpen:false, wztCardQ:'würde behaupten, im Zweikampf einen Gorilla zu bezwingen?', wztCardNum:'1', wztCardAnimKey:0, wztCardMsg:'',
       rankProductId:null, rankPaste:'', rankMsg:'', rankExpanded:{}, rankQueryOpen:false, ppcProductFilter:'alle'
@@ -2015,7 +2124,7 @@ class Component extends DCLogic {
      Haelt products / ideas / recDismissed live zwischen mehreren
      Personen synchron. Aendert NICHTS an der uebrigen Logik.
      ============================================================ */
-  _snapshot(){ return { products:this.state.products, ideas:this.state.ideas, todos:this.state.todos, recDismissed:this.state.recDismissed, ppcHistory:this.state.ppcHistory||[], ppcCampMap:this.state.ppcCampMap||{}, rankKw:this.state.rankKw||{}, rankScans:this.state.rankScans||[], ppcRankLink:this.state.ppcRankLink||{}, wztStatus:this.state.wztStatus||{} }; }
+  _snapshot(){ return { products:this.state.products, ideas:this.state.ideas, todos:this.state.todos, recDismissed:this.state.recDismissed, ppcHistory:this.state.ppcHistory||[], ppcCampMap:this.state.ppcCampMap||{}, rankKw:this.state.rankKw||{}, rankScans:this.state.rankScans||[], ppcRankLink:this.state.ppcRankLink||{}, wztStatus:this.state.wztStatus||{}, wztCaptionTpl:this.state.wztCaptionTpl||'' }; }
   // stabile Signatur (Reihenfolge der Keys egal) -> verhindert Sync-Schleifen
   _stableStringify(v){
     if(v===null || typeof v!=='object') return JSON.stringify(v);
@@ -2077,12 +2186,13 @@ class Component extends DCLogic {
       const rankScans = Array.isArray(remote.rankScans) ? remote.rankScans : (this.state.rankScans||[]);
       const ppcRankLink = remote.ppcRankLink || this.state.ppcRankLink || {};
       const wztStatus = remote.wztStatus || this.state.wztStatus || {};
+      const wztCaptionTpl = remote.wztCaptionTpl || this.state.wztCaptionTpl || '';
       // Aktuelle Analyse nachziehen, wenn dieses Geraet keine (oder eine veraltete) hat -> ueberall gleicher Stand
       const newestId=ppcHistory[0]&&ppcHistory[0].id;
       const needHydrate = newestId && (this.state.ppcCurrentId!==newestId || !this.state.ppcRaw) && !this.state.ppcLoading;
       const hyd = needHydrate ? (this._ppcHydrate(ppcHistory[0])||{}) : {};
-      this.setState({ products, ideas, todos, ppcHistory, ppcCampMap, recDismissed, rankKw, rankScans, ppcRankLink, wztStatus, ...hyd }); // WICHTIG: ohne _persist() -> keine Schleife
-      try{ localStorage.setItem('partypeak_v4', JSON.stringify({products, ideas, todos, ppcHistory, ppcCampMap, recDismissed, rankKw, rankScans, ppcRankLink, wztStatus})); }catch(e){}
+      this.setState({ products, ideas, todos, ppcHistory, ppcCampMap, recDismissed, rankKw, rankScans, ppcRankLink, wztStatus, wztCaptionTpl, ...hyd }); // WICHTIG: ohne _persist() -> keine Schleife
+      try{ localStorage.setItem('partypeak_v4', JSON.stringify({products, ideas, todos, ppcHistory, ppcCampMap, recDismissed, rankKw, rankScans, ppcRankLink, wztStatus, wztCaptionTpl})); }catch(e){}
     }catch(e){ console.warn('[Party Peak] Uebernahme fehlgeschlagen:', e); }
   }
   _sbPush(){
@@ -2460,7 +2570,7 @@ class Component extends DCLogic {
     const fmtD=(v)=>{ if(v==null) return null; if(v instanceof Date) return v.toISOString().slice(0,10); const s=String(v).slice(0,10); return s||null; };
     const normMatch=(m)=>{ m=this._ppcNorm(m); if(m.includes('exact')||m.includes('genau')) return 'exact'; if(m.includes('phrase')) return 'phrase'; if(m.includes('broad')||m.includes('weit')||m.includes('breit')) return 'broad'; return 'auto'; };
     // Aggregation je Suchbegriff (global) + je Kampagne/Anzeigengruppe (fuer Negatives) + Match-Typen (fuer Harvesting)
-    const map=new Map(); const campMap=new Map(); let minD=null,maxD=null;
+    const map=new Map(); const campMap=new Map(); const matchAgg=new Map(); let minD=null,maxD=null;
     for(let i=hRow+1;i<rows.length;i++){ const r=rows[i]; if(!r) continue;
       const term=String(r[col.term]==null?'':r[col.term]).trim(); if(!term||term==='-') continue;
       const impr=num(r[col.impr]), clicks=num(r[col.clicks]), spend=num(r[col.spend]), sales=num(r[col.sales]);
@@ -2474,6 +2584,9 @@ class Component extends DCLogic {
       // Kampagnen-Aggregat
       let cm=campMap.get(campaign); if(!cm){ cm={campaign, impr:0,clicks:0,spend:0,sales:0,orders:0,terms:0}; campMap.set(campaign,cm); }
       cm.impr+=impr; cm.clicks+=clicks; cm.spend+=spend; cm.sales+=sales; cm.orders+=orders;
+      // Match-Type-Aggregat (auf Zeilenebene, exakt)
+      let mm=matchAgg.get(mt); if(!mm){ mm={mt, impr:0,clicks:0,spend:0,sales:0,orders:0}; matchAgg.set(mt,mm); }
+      mm.impr+=impr; mm.clicks+=clicks; mm.spend+=spend; mm.sales+=sales; mm.orders+=orders;
       const key=term.toLowerCase();
       let o=map.get(key); if(!o){ o={term, impr:0, clicks:0, spend:0, sales:0, orders:0, units:0, matches:new Set(), byCamp:new Map()}; map.set(key,o); cm.terms++; }
       o.impr+=impr; o.clicks+=clicks; o.spend+=spend; o.sales+=sales; o.orders+=orders; o.units+=units; o.matches.add(mt);
@@ -2491,12 +2604,14 @@ class Component extends DCLogic {
       cvr:o.clicks>0?o.orders/o.clicks:0, aov:o.orders>0?o.sales/o.orders:0 }));
     if(!keywords.length){ this.setState({ppcLoading:false, ppcError:'Keine Suchbegriff-Zeilen gefunden.', ppcRaw:null}); return; }
     const camps=Array.from(campMap.values()).map(c=>({...c, spend:+c.spend.toFixed(2), sales:+c.sales.toFixed(2), acos:c.sales>0?c.spend/c.sales:null}));
+    const matchList=Array.from(matchAgg.values()).map(m=>({...m, spend:+m.spend.toFixed(2), sales:+m.sales.toFixed(2)}));
     const period=(minD&&maxD)?(minD===maxD?minD:(minD+' – '+maxD)):'';
     // ---- Verlauf: kompakten Eintrag speichern (persistiert + synchronisiert), max 12 Berichte ----
     const entry={ id:'r'+Date.now().toString(36), period, endDate:maxD||'', fileName:this.state.ppcFileName||'', uploadedAt:Date.now(),
       fileB64:fileB64||null,
-      keywords:keywords.map(k=>({term:k.term,impr:k.impr,clicks:k.clicks,spend:k.spend,sales:k.sales,orders:k.orders,isExact:k.isExact,
-        camps:k.camps.map(c=>({campaign:c.campaign,adgroup:c.adgroup,targeting:c.targeting,impr:c.impr,clicks:c.clicks,spend:c.spend,sales:c.sales,orders:c.orders}))})),
+      matchAgg:matchList,
+      keywords:keywords.map(k=>({term:k.term,impr:k.impr,clicks:k.clicks,spend:k.spend,sales:k.sales,orders:k.orders,isExact:k.isExact,matches:k.matches,
+        camps:k.camps.map(c=>({campaign:c.campaign,adgroup:c.adgroup,targeting:c.targeting,matches:c.matches,impr:c.impr,clicks:c.clicks,spend:c.spend,sales:c.sales,orders:c.orders}))})),
       camps:camps.map(c=>({campaign:c.campaign,impr:c.impr,clicks:c.clicks,spend:c.spend,sales:c.sales,orders:c.orders})) };
     let hist=(this.state.ppcHistory||[]).filter(h=> !(h.period===period && period));   // gleicher Zeitraum -> ersetzen
     hist=[entry, ...hist].sort((a,b)=> String(b.endDate).localeCompare(String(a.endDate)) || b.uploadedAt-a.uploadedAt).slice(0,12);
@@ -2506,22 +2621,22 @@ class Component extends DCLogic {
       keywords: i<6 ? h.keywords : (h.keywords||[]).map(k=>{ const {camps, ...rest}=k; return rest; }) }));
     // Standard-Monat fuer P&L-Uebernahme: Monat des Berichts-Endes
     const applyYm = (maxD && this.months.includes(maxD.slice(0,7))) ? maxD.slice(0,7) : this._curYm();
-    this.setState({ ppcLoading:false, ppcError:'', ppcRaw:keywords, ppcCamps:camps, ppcCurrentId:entry.id, ppcHistory:hist, ppcPeriod:period, ppcApplyYm:applyYm }, ()=>this._persist());
+    this.setState({ ppcLoading:false, ppcError:'', ppcRaw:keywords, ppcCamps:camps, ppcMatchAgg:matchList, ppcCurrentId:entry.id, ppcHistory:hist, ppcPeriod:period, ppcApplyYm:applyYm }, ()=>this._persist());
   }
   _ppcDeleteHistory(id){ this.setState(s=>{ const hist=(s.ppcHistory||[]).filter(h=>h.id!==id);
     const extra = (id===s.ppcCurrentId) ? (this._ppcHydrate(hist[0]) || {ppcRaw:null,ppcCamps:null,ppcCurrentId:null,ppcPeriod:'',ppcFileName:''}) : {};
     return {ppcHistory:hist, ...extra}; }, ()=>this._persist()); }
   // Stellt eine Analyse aus einem Verlaufseintrag wieder her (Reload / anderes Geraet / "Ansehen")
   _ppcHydrate(h){ if(!h || !Array.isArray(h.keywords) || !h.keywords.length) return null;
-    const keywords=h.keywords.map(k=>{ const camps=(k.camps||[]).map(c=>({...c}));
+    const keywords=h.keywords.map(k=>{ const camps=(k.camps||[]).map(c=>({...c, matches:c.matches||[]}));
       return {...k, camps,
         campNames:camps.map(c=>c.campaign).filter((v,i,a)=>a.indexOf(v)===i),
-        matches:k.isExact?['exact']:['auto'],
+        matches:Array.isArray(k.matches)&&k.matches.length?k.matches:(k.isExact?['exact']:['auto']),
         ctr:k.impr>0?k.clicks/k.impr:0, cpc:k.clicks>0?k.spend/k.clicks:0,
         acos:k.sales>0?k.spend/k.sales:null, cvr:k.clicks>0?k.orders/k.clicks:0, aov:k.orders>0?k.sales/k.orders:0}; });
     const camps=(h.camps||[]).map(c=>({...c, acos:c.sales>0?c.spend/c.sales:null}));
     const applyYm=(h.endDate && this.months.includes(String(h.endDate).slice(0,7))) ? String(h.endDate).slice(0,7) : this._curYm();
-    return { ppcRaw:keywords, ppcCamps:camps, ppcCurrentId:h.id, ppcPeriod:h.period||'', ppcFileName:h.fileName||'', ppcApplyYm:applyYm, ppcError:'' };
+    return { ppcRaw:keywords, ppcCamps:camps, ppcMatchAgg:(Array.isArray(h.matchAgg)?h.matchAgg:null), ppcCurrentId:h.id, ppcPeriod:h.period||'', ppcFileName:h.fileName||'', ppcApplyYm:applyYm, ppcError:'' };
   }
   _ppcDownload(h){ if(!h||!h.fileB64) return;
     try{ const bin=atob(h.fileB64); const bytes=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
@@ -2536,9 +2651,11 @@ class Component extends DCLogic {
 
   // ===== WZT-Fragen: Content-Status (Foto/Video) je Frage =====
   _wztData(){ return (typeof window!=='undefined' && window.PP_WZT) ? window.PP_WZT : []; }
-  _wztToggle(id, kind){ // kind: 'photo' | 'video'
+  _wztToggle(id, kind){ // kind: 'photo' | 'video' | 'posted'
     this.setState(s=>{ const st={...(s.wztStatus||{})}; const cur={...(st[id]||{photo:false,video:false})};
-      cur[kind]=!cur[kind]; st[id]=cur; return {wztStatus:st}; }, ()=>this._persist());
+      if(kind==='posted'){ if(cur.posted){ delete cur.posted; delete cur.postedDate; } else { cur.posted=true; cur.postedDate=this._todayISO(); } }
+      else { cur[kind]=!cur[kind]; }
+      st[id]=cur; return {wztStatus:st}; }, ()=>this._persist());
   }
   _wztSetFilter(f){ this.setState({wztFilter:f}); }
   _wztSetSearch(v){ this.setState({wztSearch:v}); }
@@ -2549,6 +2666,11 @@ class Component extends DCLogic {
   _wztCardUse(item){ this.setState({wztCardOpen:true, wztCardQ:item.q, wztCardNum:String(item.id), wztCardAnimKey:(this.state.wztCardAnimKey||0)+1, wztCardMsg:''});
     try{ const el=document.querySelector('[data-wzt-card]'); if(el&&el.scrollIntoView) el.scrollIntoView({behavior:'smooth', block:'start'}); }catch(e){} }
   _wztCardReplay(){ this.setState(s=>({wztCardAnimKey:(s.wztCardAnimKey||0)+1})); }
+  // Caption aus Vorlage bauen: {FRAGE} und {NR} ersetzen
+  _wztCaption(q, num){ return String(this.state.wztCaptionTpl||'').split('{FRAGE}').join(q||'').split('{NR}').join(num!=null?String(num):''); }
+  _wztCopyCaption(id, q, num){ const text=this._wztCaption(q, num);
+    try{ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text); } else { const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } }catch(e){}
+    this.setState({wztCopied:'cap'+id}); clearTimeout(this._wztCopyT); this._wztCopyT=setTimeout(()=>this.setState({wztCopied:null}), 1600); }
   // Text-Umbruch fuer Canvas (max Breite in px bei gesetzter Font)
   _wztWrap(ctx, text, maxW){ const words=String(text||'').split(/\s+/).filter(Boolean); const lines=[]; let cur='';
     for(const w of words){ const t=cur?cur+' '+w:w; if(ctx.measureText(t).width<=maxW || !cur){ cur=t; } else { lines.push(cur); cur=w; } }
@@ -3651,6 +3773,61 @@ class Component extends DCLogic {
             toggle:()=>this.setState(s=>{ const e={...(s.ppcExpanded||{})}; if(e[k.term]) delete e[k.term]; else e[k.term]=true; return {ppcExpanded:e}; })
           }; });
         V.ppcKwEmpty=kwList.length===0;
+
+        // ===== Match-Type-Vergleich (Exact/Phrase/Broad/Auto) =====
+        {
+          const order={exact:0, phrase:1, broad:2, auto:3};
+          const label={exact:'EXACT', phrase:'PHRASE', broad:'BROAD', auto:'AUTO / SONSTIGE'};
+          const list=(st.ppcMatchAgg||[]).slice().filter(m=>m.impr>0||m.spend>0)
+            .sort((a,b)=>(order[a.mt]!==undefined?order[a.mt]:9)-(order[b.mt]!==undefined?order[b.mt]:9));
+          const mtTotSpend=list.reduce((s,m)=>s+m.spend,0)||1;
+          V.ppcMatch=list.map(m=>{ const acos=m.sales>0?m.spend/m.sales:null; const cvr=m.clicks>0?m.orders/m.clicks:0;
+            return { label:label[m.mt]||String(m.mt).toUpperCase(),
+              spend:this._eur(m.spend), share:this._pct(m.spend/mtTotSpend*100,0),
+              sales:this._eur(m.sales), orders:this._num(m.orders), clicks:this._num(m.clicks),
+              acos:acos==null?'—':this._pct(acos*100,0),
+              acosColor: acos==null?'#8A8A86' : acos<=tgt?green : acos<=tgt*1.5?yellow : red,
+              cvrStr:m.clicks>0?this._pct(cvr*100,1):'—' }; });
+          V.ppcHasMatch=list.length>1; // nur zeigen, wenn es wirklich etwas zu vergleichen gibt
+        }
+
+        // ===== Kampagnen-Überschneidung (Kannibalisierung) =====
+        {
+          const isAsinC2=(k)=> /^b0[a-z0-9]{8}$/i.test(k.term) || (k.camps||[]).some(c=>/asin\s*=/i.test(c.targeting||''));
+          const cann=[];
+          enrich.forEach(k=>{ if(isAsinC2(k)) return;
+            if(pFlt!=='alle' && !kwProductIds(k).has(pFlt)) return;
+            // auf Kampagnen-Ebene gruppieren (k.camps ist je Kampagne+Anzeigengruppe)
+            const byC=new Map();
+            (k.camps||[]).forEach(c=>{ let e=byC.get(c.campaign); if(!e){ e={campaign:c.campaign, impr:0,clicks:0,spend:0,sales:0,orders:0, matches:new Set()}; byC.set(c.campaign,e); }
+              e.impr+=c.impr; e.clicks+=c.clicks; e.spend+=c.spend; e.sales+=c.sales; e.orders+=c.orders; (c.matches||[]).forEach(m=>e.matches.add(m)); });
+            const active=Array.from(byC.values()).filter(c=>c.spend>0.2 || c.clicks>=3);
+            if(active.length<2) return;
+            // Gewinner: meiste Verkäufe, dann bester ACOS, dann meiste Klicks
+            const scored=active.slice().sort((a,b)=> b.orders-a.orders
+              || ((a.sales>0?a.spend/a.sales:99)-(b.sales>0?b.spend/b.sales:99))
+              || b.clicks-a.clicks);
+            const winner=scored[0];
+            const overlapSpend=active.filter(c=>c!==winner).reduce((s,c)=>s+c.spend,0);
+            if(overlapSpend<0.5) return; // Rauschen
+            cann.push({ term:k.term, nCamps:active.length, totalSpend:k.spend, overlapSpend, winner, camps:scored });
+          });
+          cann.sort((a,b)=>b.overlapSpend-a.overlapSpend);
+          const cannOpen=st.ppcCannOpen||{};
+          const totOverlap=cann.reduce((s,c)=>s+c.overlapSpend,0);
+          V.ppcCann=cann.map(c=>{ const isOpen=!!cannOpen[c.term];
+            return { term:c.term, nCamps:c.nCamps+' Kampagnen',
+              overlap:this._eur(c.overlapSpend), total:this._eur(c.totalSpend),
+              expanded:isOpen, chevron:isOpen?'▲':'▼',
+              toggle:()=>this.setState(s=>{ const e={...(s.ppcCannOpen||{})}; if(e[c.term]) delete e[c.term]; else e[c.term]=true; return {ppcCannOpen:e}; }),
+              rec:'Empfehlung: „'+c.winner.campaign+'" behalten (stärkste Kampagne für diesen Begriff) — in den übrigen '+(c.nCamps-1)+' Kampagne'+(c.nCamps>2?'n':'')+' als Negativ setzen, damit ihr nicht gegen euch selbst bietet.',
+              rows:c.camps.map((x,i)=>({ campaign:x.campaign, isWinner:i===0, tag:i===0?'BEHALTEN':'NEGATIV SETZEN', tagColor:i===0?green:red,
+                clicks:this._num(x.clicks), orders:this._num(x.orders), spend:this._eur(x.spend),
+                acos:x.sales>0?this._pct(x.spend/x.sales*100,0):'—',
+                matches:Array.from(x.matches).map(m=>String(m).toUpperCase()).join(', ')||'—' })) }; });
+          V.ppcCannCount=cann.length; V.ppcHasCann=cann.length>0;
+          V.ppcCannNote= cann.length===0 ? '' : cann.length+' Suchbegriff'+(cann.length>1?'e':'')+' läuft in mehreren Kampagnen gleichzeitig — '+this._eur(totOverlap)+' der Ausgaben liegen außerhalb der jeweils stärksten Kampagne. Dort bietet ihr gegen euch selbst.';
+        }
         V.ppcKwCountLabel=kwList.length+(flt2==='alle'?' Suchbegriffe':' gefiltert');
 
         // ===== Konvertierende Suchbegriffe: ALLE mit mindestens einem Verkauf =====
@@ -3864,18 +4041,19 @@ class Component extends DCLogic {
       const search=(st.wztSearch||'').trim().toLowerCase();
       const promptOpen=st.wztPromptOpen||{};
       // Fortschritt
-      let nPhoto=0, nVideo=0, nBoth=0, nNone=0;
-      all.forEach(item=>{ const s=status[item.id]||{}; if(s.photo) nPhoto++; if(s.video) nVideo++; if(s.photo&&s.video) nBoth++; if(!s.photo&&!s.video) nNone++; });
+      let nPhoto=0, nVideo=0, nBoth=0, nNone=0, nPosted=0;
+      all.forEach(item=>{ const s=status[item.id]||{}; if(s.photo) nPhoto++; if(s.video) nVideo++; if(s.photo&&s.video) nBoth++; if(!s.photo&&!s.video) nNone++; if(s.posted) nPosted++; });
       const total=all.length||1;
       V.wztTotal=all.length;
-      V.wztPhotoCount=nPhoto; V.wztVideoCount=nVideo; V.wztBothCount=nBoth; V.wztNoneCount=nNone;
+      V.wztPhotoCount=nPhoto; V.wztVideoCount=nVideo; V.wztBothCount=nBoth; V.wztNoneCount=nNone; V.wztPostedCount=nPosted;
       V.wztPhotoPct=this._pct(nPhoto/total*100,0); V.wztVideoPct=this._pct(nVideo/total*100,0);
       V.wztPhotoBarW=(nPhoto/total*100).toFixed(1)+'%'; V.wztVideoBarW=(nVideo/total*100).toFixed(1)+'%';
+      V.wztPostedBarW=(nPosted/total*100).toFixed(1)+'%';
       // Filter-Chips
       const fchip=(active)=> active
         ? 'padding:7px 13px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12.5px;font-weight:600;cursor:pointer'
         : 'padding:7px 13px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12.5px;font-weight:500;cursor:pointer';
-      const filters=[['alle','Alle'],['kein_foto','Foto fehlt'],['kein_video','Video fehlt'],['offen','Nichts erledigt'],['fertig','Foto & Video ✓']];
+      const filters=[['alle','Alle'],['kein_foto','Foto fehlt'],['kein_video','Video fehlt'],['offen','Nichts erledigt'],['fertig','Foto & Video ✓'],['nicht_gepostet','Nicht gepostet'],['gepostet','Gepostet ✓']];
       V.wztFilterChips=filters.map(([v,l])=>({label:l, sel:()=>this._wztSetFilter(v), style:fchip(flt===v)}));
       V.wztSearch=st.wztSearch||'';
       V.setWztSearch=(e)=>this._wztSetSearch(e.target.value);
@@ -3886,20 +4064,27 @@ class Component extends DCLogic {
         if(flt==='kein_video') return !s.video;
         if(flt==='offen') return !s.photo && !s.video;
         if(flt==='fertig') return s.photo && s.video;
+        if(flt==='nicht_gepostet') return !s.posted;
+        if(flt==='gepostet') return !!s.posted;
         return true; };
       const rows2=all.filter(pass).map(item=>{ const s=status[item.id]||{};
         const isOpen=!!promptOpen[item.id];
         return { id:item.id, num:item.id, q:item.q,
-          photo:!!s.photo, video:!!s.video,
+          photo:!!s.photo, video:!!s.video, posted:!!s.posted,
+          postedDate:s.postedDate?String(s.postedDate).slice(5):'', hasPostedDate:!!s.postedDate,
           photoStyle: s.photo ? 'width:26px;height:26px;border:1.5px solid #1B7F4B;background:#1B7F4B;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;font-weight:700' : 'width:26px;height:26px;border:1.5px solid #C9C9C4;background:#fff;color:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;font-weight:700',
           videoStyle: s.video ? 'width:26px;height:26px;border:1.5px solid #2F6FED;background:#2F6FED;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;font-weight:700' : 'width:26px;height:26px;border:1.5px solid #C9C9C4;background:#fff;color:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;font-weight:700',
+          postedStyle: s.posted ? 'width:26px;height:26px;border:1.5px solid #FF5A00;background:#FF5A00;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;font-weight:700' : 'width:26px;height:26px;border:1.5px solid #C9C9C4;background:#fff;color:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;font-weight:700',
           togglePhoto:()=>this._wztToggle(item.id,'photo'),
           toggleVideo:()=>this._wztToggle(item.id,'video'),
+          togglePosted:()=>this._wztToggle(item.id,'posted'),
           promptOpen:isOpen, promptChevron:isOpen?'Beispiel-Prompt schließen ▲':'Beispiel-Prompt (Foto) ▼',
           togglePrompt:()=>this._wztTogglePrompt(item.id),
           prompt:item.prompt,
           copyLabel:(st.wztCopied===item.id)?'✓ Kopiert':'Prompt kopieren',
           copyPrompt:()=>this._wztCopyPrompt(item.id, item.prompt),
+          captionLabel:(st.wztCopied==='cap'+item.id)?'✓ Caption kopiert':'Caption kopieren',
+          copyCaption:()=>this._wztCopyCaption(item.id, item.q, item.id),
           useInCard:()=>this._wztCardUse(item)
         }; });
       V.wztRows=rows2; V.wztShownCount=rows2.length; V.wztEmpty=rows2.length===0;
@@ -3922,6 +4107,16 @@ class Component extends DCLogic {
       // Anzahl Zeilen fuer Schriftgroesse der Vorschau grob schaetzen (DOM skaliert selbst via CSS)
       const qlen=(st.wztCardQ||'').length;
       V.wztCardQSize= qlen>150 ? '15px' : qlen>100 ? '17px' : qlen>60 ? '19px' : '22px';
+      // Caption-Vorlage (mit Tom gesynct): {FRAGE} und {NR} als Platzhalter
+      V.wztCardCaption=this._wztCaption(st.wztCardQ||'', st.wztCardNum||'');
+      V.wztCardCaptionCopy=()=>this._wztCopyCaption('card', st.wztCardQ||'', st.wztCardNum||'');
+      V.wztCardCaptionCopyLabel=(st.wztCopied==='capcard')?'✓ Kopiert':'Caption kopieren';
+      V.wztCaptionEdit=!!st.wztCaptionEdit;
+      V.wztCaptionEditToggle=()=>this.setState(s=>({wztCaptionEdit:!s.wztCaptionEdit}));
+      V.wztCaptionEditLabel=st.wztCaptionEdit?'Vorlage schließen ▲':'Vorlage bearbeiten ▼';
+      V.wztCaptionTpl=st.wztCaptionTpl||'';
+      V.setWztCaptionTpl=(e)=>this.setState({wztCaptionTpl:e.target.value});
+      V.wztCaptionTplBlur=()=>this._persist();
     }
 
 
