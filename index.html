@@ -1246,7 +1246,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
             <div style="background:#fff;border:1px solid #E4E4E0;margin-top:22px">
               <div style="padding:16px 20px;border-bottom:1px solid #EEEEEB">
                 <div style="font-family:'Archivo';font-weight:800;font-size:16px">Kampagnen-Scorecard <span style="color:#9A9A96">({{ ppcCampCount }})</span></div>
-                <div style="font-size:12.5px;color:#8A8A86;margin-top:2px">Welche Kampagne ist profitabel, welche verbrennt Budget — inkl. Anteil an den Gesamtausgaben.</div>
+                <div style="font-size:12.5px;color:#8A8A86;margin-top:2px">Welche Kampagne ist profitabel, welche verbrennt Budget — inkl. Klickrate, Conversion und Anteil an den Gesamtausgaben. Sortiert nach Klicks.</div>
               </div>
               <div style="overflow-x:auto">
                 <table style="width:100%;border-collapse:collapse;min-width:860px">
@@ -1254,7 +1254,9 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                     <th style="text-align:left;padding:10px 16px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Kampagne</th>
                     <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Impr.</th>
                     <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Klicks</th>
+                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">CTR</th>
                     <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Verk.</th>
+                    <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">CVR</th>
                     <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Ausgaben</th>
                     <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Umsatz</th>
                     <th style="text-align:right;padding:10px 12px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">ACOS</th>
@@ -1267,7 +1269,9 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                         <td style="padding:11px 16px;font-size:13px;font-weight:600;border-bottom:1px solid #F1F1EE">{{ c.name }}<div style="font-size:11px;font-weight:400;color:#9A9A96;margin-top:2px">{{ c.note }}</div></td>
                         <td style="padding:11px 12px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ c.impr }}</td>
                         <td style="padding:11px 12px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ c.clicks }}</td>
+                        <td style="padding:11px 12px;font-size:12.5px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE;color:{{ c.ctrColor }}">{{ c.ctr }}</td>
                         <td style="padding:11px 12px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ c.orders }}</td>
+                        <td style="padding:11px 12px;font-size:12.5px;text-align:right;font-weight:600;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE;color:{{ c.cvrColor }}">{{ c.cvr }}</td>
                         <td style="padding:11px 12px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ c.spend }}</td>
                         <td style="padding:11px 12px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ c.sales }}</td>
                         <td style="padding:11px 12px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ c.acos }}</td>
@@ -3641,7 +3645,7 @@ class Component extends DCLogic {
         {h:'Ursachen-Diagnose (CTR / CVR)', b:'Trennt das Warum: Viele Impressionen, aber kaum Klicks (niedrige CTR) = Hauptbild, Titel oder Preis — kein Gebotsproblem. Viele Klicks, aber kaum Käufe (niedrige CVR) = Produktseite, Preis oder Bewertungen. Schwellen sind der halbe Konto-Schnitt, mindestens aber CTR 0,25 % bzw. CVR 5 %.'},
         {h:'Keyword-Harvesting', b:'Suchbegriffe, die bereits verkaufen, aber noch nicht als eigenes Exact-Keyword laufen (sie kommen aus Auto-/Broad-Kampagnen). Vorschlag: als Exact-Target anlegen, um Gebot und Sichtbarkeit gezielt zu steuern. Startgebot = Ziel-ACOS × Umsatz je Klick.'},
         {h:'Gebotsempfehlung', b:'Max. Gebot = Ziel-ACOS × Umsatz je Klick. Das ist der CPC, bei dem ein Keyword im Schnitt genau den Ziel-ACOS erreicht. Liegt der aktuelle CPC darüber → senken; darunter → es ist Luft für höhere Gebote.'},
-        {h:'Kampagnen-Scorecard', b:'Fasst dieselbe Bewertung auf Kampagnen-Ebene zusammen: profitabel (ACOS ≤ Ziel), grenzwertig (bis 1,5×), unrentabel oder „verbrennt Budget" (Ausgaben ganz ohne Verkauf). Der Balken zeigt den Anteil an den Gesamtausgaben.'},
+        {h:'Kampagnen-Scorecard', b:'Fasst dieselbe Bewertung auf Kampagnen-Ebene zusammen: profitabel (ACOS ≤ Ziel), grenzwertig (bis 1,5×), unrentabel oder „verbrennt Budget" (Ausgaben ganz ohne Verkauf). Zeigt zusätzlich Klickrate (CTR) und Conversion (CVR) je Kampagne, farblich gegen den Kampagnen-Durchschnitt eingeordnet. Sortiert nach Klicks absteigend. Der Balken zeigt den Anteil an den Gesamtausgaben.'},
         {h:'Wochenvergleich', b:'Jeder Upload wird gespeichert. Der neue Bericht wird automatisch gegen den zeitlich vorherigen verglichen — je Keyword als ACOS-Trend (▼ besser, ▲ schlechter, ● neu) und als Gesamt-Kennzahlen. So sieht man, ob eine Optimierung tatsächlich gewirkt hat.'},
         {h:'Wie entstehen die Gebotsvorschläge?', b:'Grundlage ist der Break-even-CPA = Verkaufspreis × Ziel-ACoS: der Betrag, den eine Bestellung an Werbekosten kosten darf. Multipliziert mit der Conversion-Rate ergibt das den Betrag, den ein Klick wert ist — also das Gebot. Statt der rohen CVR wird eine geglättete verwendet: (Orders + k × Konto-CVR) / (Klicks + k) mit k = 40. Dadurch zieht ein Keyword mit wenigen Klicks Richtung Kontodurchschnitt, statt aus einem Zufallstreffer ein extremes Gebot abzuleiten. Keyword- und ASIN-Targets bekommen getrennte Durchschnittswerte, weil sie sich typischerweise unterschiedlich konvertieren.'},
         {h:'Wann wird das Gebot NICHT angepasst?', b:'Vier Ausnahmen: (1) Marken-Begriffe wie „wer zum teufel" folgen der Rentabilitätsrechnung nicht — hier gilt ein Verteidigungsgebot, das ihr bewusst setzt. (2) Neue Targets ohne eigene Klicks starten direkt auf dem Kontodurchschnitt. (3) Rule of Three: Erst ab 3 × Break-even-CPA / CPC Klicks ist ein Signal belastbar — darunter bleibt das Gebot unverändert. (4) Deckelung: maximal ±25 % Änderung pro Runde, damit Kampagnen nicht aus der Lernphase gerissen werden.'}
@@ -3772,7 +3776,7 @@ class Component extends DCLogic {
         this._ppcEnrich=enrich; this._ppcFilterState={flt, sorter, catRank}; // fuer ppcKw-Bau nach Trend-Berechnung
 
         // ===== Kampagnen-Scorecard =====
-        const camps=(st.ppcCamps||[]).slice().sort((a,b)=>b.spend-a.spend);
+        const camps=(st.ppcCamps||[]).slice().sort((a,b)=>b.clicks-a.clicks);
         const totSpend=camps.reduce((s,c)=>s+c.spend,0)||1;
         const campClass=(c)=>{
           if(c.spend<=0) return {label:'Inaktiv', color:'#9A9A96', note:'Keine Ausgaben im Zeitraum.'};
@@ -3781,9 +3785,14 @@ class Component extends DCLogic {
           if(c.acos!=null && c.acos<=tgt*1.5) return {label:'Grenzwertig', color:yellow, note:'ACOS über Ziel — optimieren.'};
           return {label:'Unrentabel', color:red, note:'ACOS deutlich über Ziel — Struktur überarbeiten.'};
         };
+        const campCtrAvg = camps.reduce((s,c)=>s+c.impr,0)>0 ? camps.reduce((s,c)=>s+c.clicks,0)/camps.reduce((s,c)=>s+c.impr,0) : 0;
+        const campCvrAvg = camps.reduce((s,c)=>s+c.clicks,0)>0 ? camps.reduce((s,c)=>s+c.orders,0)/camps.reduce((s,c)=>s+c.clicks,0) : 0;
         V.ppcCampRows=camps.map(c=>{ const cl=campClass(c); const share=c.spend/totSpend;
+          const ctr=c.impr>0?c.clicks/c.impr:null, cvr=c.clicks>0?c.orders/c.clicks:null;
           return { name:c.campaign, impr:this._num(c.impr), clicks:this._num(c.clicks), orders:this._num(c.orders),
             spend:this._eur(c.spend), sales:this._eur(c.sales), acos:c.acos==null?'—':this._pct(c.acos*100,0),
+            ctr:ctr==null?'—':this._pct(ctr*100,2), ctrColor: ctr==null?'#8A8A86':(ctr>=campCtrAvg?green:(ctr>=campCtrAvg*0.6?yellow:red)),
+            cvr:cvr==null?'—':this._pct(cvr*100,1), cvrColor: cvr==null?'#8A8A86':(cvr>=campCvrAvg?green:(cvr>=campCvrAvg*0.5?yellow:red)),
             shareStr:this._pct(share*100,0), barW:Math.max(2,Math.round(share*100))+'%',
             catLabel:cl.label, catColor:cl.color, note:cl.note }; });
         V.ppcCampEmpty=camps.length===0;
