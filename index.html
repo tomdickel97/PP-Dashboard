@@ -1461,6 +1461,106 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
               </div>
             </sc-if>
 
+            <!-- Gebotsvorschläge -->
+            <div style="background:#fff;border:1px solid #E4E4E0;border-left:4px solid #2F6FED;margin-top:30px">
+              <button onClick="{{ bidToggle }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 20px;background:none;border:none;cursor:pointer;text-align:left">
+                <span style="font-family:'Archivo';font-weight:800;font-size:17px">Gebotsvorschläge <span style="color:#8A8A86;font-weight:600;font-size:13px">· Break-even-CPA × geglättete Conversion</span></span>
+                <span style="font-size:12.5px;color:#8A8A86;white-space:nowrap">{{ bidToggleLabel }}</span>
+              </button>
+              <sc-if value="{{ bidOpen }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:0 20px 20px;border-top:1px solid #EEEEEB">
+                  <!-- Eingaben -->
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:16px">
+                    <div>
+                      <div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px">Verkaufspreis (€)</div>
+                      <input value="{{ bidPrice }}" onInput="{{ setBidPrice }}" placeholder="19.99" style="width:100%;border:1px solid #E2E2E2;padding:8px 11px;font-size:13px">
+                      <div style="font-size:10.5px;color:#B0B0AC;margin-top:4px">{{ bidPriceAuto }}</div>
+                    </div>
+                    <div>
+                      <div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px">Ziel-ACoS (%)</div>
+                      <input value="{{ bidAcos }}" onInput="{{ setBidAcos }}" style="width:100%;border:1px solid #E2E2E2;padding:8px 11px;font-size:13px">
+                    </div>
+                    <div>
+                      <div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px">Glättung k</div>
+                      <input value="{{ bidK }}" onInput="{{ setBidK }}" style="width:100%;border:1px solid #E2E2E2;padding:8px 11px;font-size:13px">
+                    </div>
+                    <div>
+                      <div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px">Max. Änderung (±%)</div>
+                      <input value="{{ bidCap }}" onInput="{{ setBidCap }}" style="width:100%;border:1px solid #E2E2E2;padding:8px 11px;font-size:13px">
+                    </div>
+                    <div>
+                      <div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px">Platzierungs-Aufschlag (%)</div>
+                      <input value="{{ bidPlacePct }}" onInput="{{ setBidPlacePct }}" style="width:100%;border:1px solid #E2E2E2;padding:8px 11px;font-size:13px">
+                    </div>
+                    <div>
+                      <div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px">Dynamische Gebote</div>
+                      <select value="{{ bidDyn }}" onChange="{{ setBidDyn }}" style="width:100%;border:1px solid #E2E2E2;padding:8px 11px;font-size:13px;background:#fff">
+                        <sc-for list="{{ bidDynOptions }}" as="o" hint-placeholder-count="3"><option value="{{ o.v }}">{{ o.l }}</option></sc-for>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Rechengrundlage -->
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:#EEEEEB;border:1px solid #E4E4E0;margin-top:16px">
+                    <div style="background:#FAFAF8;padding:13px 16px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Break-even-CPA</div><div style="font-family:'Archivo';font-weight:800;font-size:20px;margin-top:5px;color:#2F6FED">{{ bidBeCpa }}</div><div style="font-size:10.5px;color:#B0B0AC;margin-top:3px">{{ bidPriceUsed }} × Ziel-ACoS</div></div>
+                    <div style="background:#FAFAF8;padding:13px 16px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Ø CVR Keywords</div><div style="font-family:'Archivo';font-weight:800;font-size:20px;margin-top:5px">{{ bidKwKonto }}</div></div>
+                    <sc-if value="{{ bidHasAsin }}" hint-placeholder-val="{{ true }}">
+                      <div style="background:#FAFAF8;padding:13px 16px"><div style="font-size:10.5px;color:#9A9A96;text-transform:uppercase;letter-spacing:.06em">Ø CVR ASIN-Targets</div><div style="font-family:'Archivo';font-weight:800;font-size:20px;margin-top:5px">{{ bidAsinKonto }}</div></div>
+                    </sc-if>
+                  </div>
+
+                  <div style="font-size:12px;color:#8A8A86;margin-top:12px;line-height:1.55">{{ bidDynNote }}</div>
+                  <div style="font-size:12px;color:#8A8A86;margin-top:6px;line-height:1.55">{{ bidPlaceNote }}</div>
+                  <div style="font-size:12px;color:#B0876A;margin-top:6px;line-height:1.55">Der Suchbegriffsbericht enthält kein Gebotsfeld — als „aktuelles Gebot" für Deckelung und Änderungs-Prozent wird der tatsächlich gezahlte CPC verwendet. Das ist eine Näherung: der CPC liegt in der Regel unter dem gesetzten Gebot.</div>
+
+                  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:16px">
+                    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                      <button onClick="{{ bidOnlySignalToggle }}" style="{{ bidOnlySignalStyle }}">{{ bidOnlySignalLabel }}</button>
+                      <span style="font-size:12px;color:#9A9A96">{{ bidCountLabel }}</span>
+                    </div>
+                    <button onClick="{{ bidCopy }}" style="padding:7px 14px;border:1px solid #0A0A0A;background:#fff;color:#0A0A0A;font-size:12px;font-weight:600;cursor:pointer">{{ bidCopyLabel }}</button>
+                  </div>
+
+                  <div style="border:1px solid #E4E4E0;margin-top:10px;overflow-x:auto">
+                    <sc-if value="{{ bidEmpty }}" hint-placeholder-val="{{ false }}">
+                      <div style="padding:24px 20px;text-align:center;color:#9A9A96;font-size:13.5px">Keine Targets für die aktuelle Auswahl.</div>
+                    </sc-if>
+                    <table style="width:100%;border-collapse:collapse;min-width:760px">
+                      <thead><tr>
+                        <th style="text-align:left;padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Keyword / ASIN</th>
+                        <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Klicks</th>
+                        <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Orders</th>
+                        <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">CVR roh</th>
+                        <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">CVR korrigiert</th>
+                        <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">CPC aktuell</th>
+                        <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Gebotsvorschlag</th>
+                        <th style="text-align:right;padding:11px 10px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9A96;border-bottom:1.5px solid #0A0A0A">Δ</th>
+                      </tr></thead>
+                      <tbody>
+                        <sc-for list="{{ bidRows }}" as="b" hint-placeholder-count="8">
+                          <tr>
+                            <td style="padding:11px 14px;font-size:13px;font-weight:600;border-bottom:1px solid #F1F1EE">
+                              {{ b.term }}
+                              <sc-if value="{{ b.isAsin }}" hint-placeholder-val="{{ true }}"><span style="display:inline-block;margin-left:7px;padding:2px 7px;font-size:9.5px;font-weight:700;color:#6E6C66;border:1px solid #C9C9C4;vertical-align:middle">ASIN</span></sc-if>
+                              <sc-if value="{{ b.hasTag }}" hint-placeholder-val="{{ true }}"><span style="display:inline-block;margin-left:7px;padding:2px 7px;font-size:9.5px;font-weight:700;color:#fff;background:{{ b.tagColor }};vertical-align:middle">{{ b.tag }}</span></sc-if>
+                              <sc-if value="{{ b.hasNote }}" hint-placeholder-val="{{ true }}"><div style="font-size:11px;color:#9A9A96;margin-top:4px;font-weight:400;line-height:1.45">{{ b.note }}</div></sc-if>
+                            </td>
+                            <td style="padding:11px 10px;font-size:13px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ b.clicks }}</td>
+                            <td style="padding:11px 10px;font-size:13px;text-align:right;font-weight:700;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ b.orders }}</td>
+                            <td style="padding:11px 10px;font-size:13px;text-align:right;color:#8A8A86;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ b.cvrRaw }}</td>
+                            <td style="padding:11px 10px;font-size:13px;text-align:right;font-weight:600;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ b.cvrCorr }}</td>
+                            <td style="padding:11px 10px;font-size:13px;text-align:right;color:#8A8A86;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE">{{ b.cpc }}</td>
+                            <td style="padding:11px 10px;font-size:14px;text-align:right;font-weight:800;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE;color:{{ b.bidColor }}">{{ b.bid }}</td>
+                            <td style="padding:11px 10px;font-size:12.5px;text-align:right;font-feature-settings:'tnum' 1;border-bottom:1px solid #F1F1EE;color:{{ b.changeColor }}">{{ b.change }}</td>
+                          </tr>
+                        </sc-for>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+
             <!-- Vereinheitlichte Keyword-Analyse: alles pro Keyword an einem Ort -->
             <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:30px">
               <h2 style="font-family:'Archivo';font-weight:800;font-size:19px;margin:0">Keyword-Analyse</h2>
@@ -2094,6 +2194,7 @@ class Component extends DCLogic {
       bueroTick:0,
       todoTitle:'', todoPrio:'Mittel', todoOwner:'Beide', todoFilterOwner:'alle', todoShowDone:false,
       ppcRaw:null, ppcFileName:'', ppcError:'', ppcLoading:false, ppcTargetAcos:30, ppcSort:'spend', ppcPeriod:'', ppcCopied:'',
+      bidOpen:false, bidPrice:'', bidAcos:32.7, bidK:40, bidCap:25, bidDyn:'down', bidPlacePct:0, bidOnlySignal:false,
       ppcCamps:null, ppcCurrentId:null, ppcApplyYm:'', ppcInfoOpen:false, ppcFilter:'alle', ppcExpanded:{},
       ppcCampMap:(saved && saved.ppcCampMap) || {},
       ppcHistory:(saved && Array.isArray(saved.ppcHistory)) ? saved.ppcHistory.slice(0,12) : [],
@@ -3541,7 +3642,9 @@ class Component extends DCLogic {
         {h:'Keyword-Harvesting', b:'Suchbegriffe, die bereits verkaufen, aber noch nicht als eigenes Exact-Keyword laufen (sie kommen aus Auto-/Broad-Kampagnen). Vorschlag: als Exact-Target anlegen, um Gebot und Sichtbarkeit gezielt zu steuern. Startgebot = Ziel-ACOS × Umsatz je Klick.'},
         {h:'Gebotsempfehlung', b:'Max. Gebot = Ziel-ACOS × Umsatz je Klick. Das ist der CPC, bei dem ein Keyword im Schnitt genau den Ziel-ACOS erreicht. Liegt der aktuelle CPC darüber → senken; darunter → es ist Luft für höhere Gebote.'},
         {h:'Kampagnen-Scorecard', b:'Fasst dieselbe Bewertung auf Kampagnen-Ebene zusammen: profitabel (ACOS ≤ Ziel), grenzwertig (bis 1,5×), unrentabel oder „verbrennt Budget" (Ausgaben ganz ohne Verkauf). Der Balken zeigt den Anteil an den Gesamtausgaben.'},
-        {h:'Wochenvergleich', b:'Jeder Upload wird gespeichert. Der neue Bericht wird automatisch gegen den zeitlich vorherigen verglichen — je Keyword als ACOS-Trend (▼ besser, ▲ schlechter, ● neu) und als Gesamt-Kennzahlen. So sieht man, ob eine Optimierung tatsächlich gewirkt hat.'}
+        {h:'Wochenvergleich', b:'Jeder Upload wird gespeichert. Der neue Bericht wird automatisch gegen den zeitlich vorherigen verglichen — je Keyword als ACOS-Trend (▼ besser, ▲ schlechter, ● neu) und als Gesamt-Kennzahlen. So sieht man, ob eine Optimierung tatsächlich gewirkt hat.'},
+        {h:'Wie entstehen die Gebotsvorschläge?', b:'Grundlage ist der Break-even-CPA = Verkaufspreis × Ziel-ACoS: der Betrag, den eine Bestellung an Werbekosten kosten darf. Multipliziert mit der Conversion-Rate ergibt das den Betrag, den ein Klick wert ist — also das Gebot. Statt der rohen CVR wird eine geglättete verwendet: (Orders + k × Konto-CVR) / (Klicks + k) mit k = 40. Dadurch zieht ein Keyword mit wenigen Klicks Richtung Kontodurchschnitt, statt aus einem Zufallstreffer ein extremes Gebot abzuleiten. Keyword- und ASIN-Targets bekommen getrennte Durchschnittswerte, weil sie sich typischerweise unterschiedlich konvertieren.'},
+        {h:'Wann wird das Gebot NICHT angepasst?', b:'Vier Ausnahmen: (1) Marken-Begriffe wie „wer zum teufel" folgen der Rentabilitätsrechnung nicht — hier gilt ein Verteidigungsgebot, das ihr bewusst setzt. (2) Neue Targets ohne eigene Klicks starten direkt auf dem Kontodurchschnitt. (3) Rule of Three: Erst ab 3 × Break-even-CPA / CPC Klicks ist ein Signal belastbar — darunter bleibt das Gebot unverändert. (4) Deckelung: maximal ±25 % Änderung pro Runde, damit Kampagnen nicht aus der Lernphase gerissen werden.'}
       ];
       if(V.ppcHasData){
         const tgt=(st.ppcTargetAcos||30)/100;
@@ -3827,6 +3930,110 @@ class Component extends DCLogic {
                 matches:Array.from(x.matches).map(m=>String(m).toUpperCase()).join(', ')||'—' })) }; });
           V.ppcCannCount=cann.length; V.ppcHasCann=cann.length>0;
           V.ppcCannNote= cann.length===0 ? '' : cann.length+' Suchbegriff'+(cann.length>1?'e':'')+' läuft in mehreren Kampagnen gleichzeitig — '+this._eur(totOverlap)+' der Ausgaben liegen außerhalb der jeweils stärksten Kampagne. Dort bietet ihr gegen euch selbst.';
+        }
+
+        // ===== Gebotsvorschläge (Break-even-CPA × geglättete CVR) =====
+        {
+          const isAsinB=(k)=> /^b0[a-z0-9]{8}$/i.test(k.term) || (k.camps||[]).some(c=>/asin\s*=/i.test(c.targeting||''));
+          // Marken-Begriffe: eigene Marke verteidigen, folgt nicht der Rentabilitaetsformel
+          const isBrand=(k)=>{ const n=String(k.term||'').toLowerCase().replace(/[^a-zäöüß0-9]/g,'');
+            return n.indexOf('werzumteufel')>=0 || n.indexOf('partypeak')>=0 || (n.indexOf('teufel')>=0 && n.indexOf('wer')>=0); };
+          // Verkaufspreis: manuell, sonst aus dem gefilterten Produkt, sonst 19,99
+          const fProd=(st.products||[]).find(p=>p.id===pFlt);
+          const autoPrice=fProd?(+fProd.price||0):0;
+          const price=(+st.bidPrice>0)?+st.bidPrice:(autoPrice>0?autoPrice:19.99);
+          V.bidPriceAuto= (+st.bidPrice>0)?'':(autoPrice>0?('automatisch aus „'+fProd.name+'"'):'Standard');
+          const bAcos=Math.max(0.1,(+st.bidAcos||32.7))/100;
+          const K=Math.max(0,(+st.bidK===0?0:(+st.bidK||40)));
+          const capPct=Math.max(0,(+st.bidCap===0?0:(+st.bidCap||25)));
+          const placePct=Math.max(0,+st.bidPlacePct||0);
+          const beCpa=price*bAcos;
+          // Basis: alle Suchbegriffe des Berichts (Produktfilter respektiert)
+          const base=(kws||[]).filter(k=> pFlt==='alle' || kwProductIds(k).has(pFlt));
+          const kwSet=base.filter(k=>!isAsinB(k)), asinSet=base.filter(isAsinB);
+          const konto=(arr)=>{ const c=arr.reduce((s,k)=>s+k.clicks,0), o=arr.reduce((s,k)=>s+k.orders,0); return c>0?o/c:null; };
+          const kwKontoRaw=konto(kwSet), asinKontoRaw=konto(asinSet);
+          const kwKonto = kwKontoRaw!=null?kwKontoRaw:(asinKontoRaw||0);
+          const asinKonto = asinKontoRaw!=null?asinKontoRaw:(kwKontoRaw||0);
+          const placeFactor=1+placePct/100;
+          const rows=base.map(k=>{ const asin=isAsinB(k), brand=isBrand(k);
+            const kt=asin?asinKonto:kwKonto;
+            const cvrRaw = k.clicks>0 ? k.orders/k.clicks : null;
+            const isNew = k.clicks===0;
+            // Bayesian Shrinkage Richtung Kontodurchschnitt; ohne eigene Daten direkt der Durchschnitt
+            const cvrCorr = isNew ? kt : (k.orders + K*kt)/(k.clicks + K);
+            const formulaBid = beCpa*cvrCorr/placeFactor;
+            const cpc = k.cpc||0; // Naeherung fuer das aktuelle Gebot (Bericht enthaelt kein Gebotsfeld)
+            // Rule of Three: genug Klicks fuer ein belastbares Signal?
+            const need = cpc>0 ? 3*beCpa/cpc : null;
+            const noSignal = !isNew && need!=null && k.clicks<need;
+            let finalBid=formulaBid, tag='', tagColor=green, note='', capped=false;
+            if(brand){ tag='MARKE'; tagColor='#7A3FBF'; note='Verteidigungsgebot — bewusst unabhängig von der Rentabilitätsrechnung setzen. Rechnerischer Wert nur als Referenz.'; finalBid=null; }
+            else if(isNew){ tag='NEU'; tagColor='#2F6FED'; note='Keine eigene Historie — Gebot startet auf dem Kontodurchschnitt ('+this._pct(kt*100,1)+' CVR).'; }
+            else if(noSignal){ tag='KEIN SIGNAL'; tagColor='#8A8A86'; note='Erst '+this._num(k.clicks)+' von '+Math.ceil(need)+' Klicks — Gebot unverändert lassen, weiter Daten sammeln.'; finalBid=null; }
+            else { const lo=cpc*(1-capPct/100), hi=cpc*(1+capPct/100);
+              if(cpc>0 && formulaBid>hi){ finalBid=hi; capped=true; }
+              else if(cpc>0 && formulaBid<lo){ finalBid=lo; capped=true; }
+              if(capped){ tag='GEDECKELT'; tagColor='#D8930A'; note='Formel schlägt '+this._eur(formulaBid,2)+' vor — auf ±'+capPct+' % gegenüber dem aktuellen CPC begrenzt.'; }
+            }
+            const change = (finalBid!=null && cpc>0) ? (finalBid/cpc-1) : null;
+            return { k, term:k.term, asin, brand, clicks:k.clicks, orders:k.orders, spend:k.spend,
+              cvrRaw, cvrCorr, formulaBid, finalBid, cpc, tag, tagColor, note, noSignal, isNew, change };
+          }).sort((a,b)=> b.spend-a.spend || b.clicks-a.clicks);
+          const shown = st.bidOnlySignal ? rows.filter(r=>r.finalBid!=null && !r.brand) : rows;
+          V.bidRows=shown.slice(0,120).map(r=>({
+            term:r.term, isAsin:r.asin,
+            clicks:this._num(r.clicks), orders:this._num(r.orders),
+            cvrRaw: r.cvrRaw==null?'—':this._pct(r.cvrRaw*100,1),
+            cvrCorr:this._pct(r.cvrCorr*100,1),
+            cpc: r.cpc>0?this._eur(r.cpc,2):'—',
+            bid: r.finalBid==null? (r.brand?('('+this._eur(r.formulaBid,2)+')'):'unverändert') : this._eur(r.finalBid,2),
+            bidColor: r.finalBid==null?'#8A8A86':'#0A0A0A',
+            change: (r.change==null)?'—':((r.change>=0?'+':'')+this._pct(r.change*100,0)),
+            changeColor: r.change==null?'#8A8A86':(r.change>=0?green:red),
+            hasTag:!!r.tag, tag:r.tag, tagColor:r.tagColor, hasNote:!!r.note, note:r.note }));
+          V.bidCount=rows.length; V.bidShown=Math.min(shown.length,120);
+          V.bidTruncated=shown.length>120; V.bidEmpty=shown.length===0;
+          V.bidBeCpa=this._eur(beCpa,2); V.bidPriceUsed=this._eur(price,2);
+          V.bidKwKonto=this._pct(kwKonto*100,1); V.bidAsinKonto=this._pct(asinKonto*100,1);
+          V.bidHasAsin=asinSet.length>0;
+          V.bidCountLabel=V.bidShown+(V.bidTruncated?(' von '+shown.length+' (nach Ausgaben)'):(shown.length===rows.length?' Targets':' von '+rows.length));
+          // Eingaben
+          V.bidOpen=!!st.bidOpen;
+          V.bidToggle=()=>this.setState(s=>({bidOpen:!s.bidOpen}));
+          V.bidToggleLabel=st.bidOpen?'Gebotsrechner schließen ▲':'Gebotsrechner öffnen ▼';
+          V.bidPrice=st.bidPrice===''?'':String(st.bidPrice);
+          V.setBidPrice=(e)=>this.setState({bidPrice:e.target.value});
+          V.bidAcos=String(st.bidAcos); V.setBidAcos=(e)=>this.setState({bidAcos:e.target.value});
+          V.bidK=String(st.bidK); V.setBidK=(e)=>this.setState({bidK:e.target.value});
+          V.bidCap=String(st.bidCap); V.setBidCap=(e)=>this.setState({bidCap:e.target.value});
+          V.bidPlacePct=String(st.bidPlacePct); V.setBidPlacePct=(e)=>this.setState({bidPlacePct:e.target.value});
+          V.bidDyn=st.bidDyn||'down'; V.setBidDyn=(e)=>this.setState({bidDyn:e.target.value});
+          V.bidDynOptions=[{v:'down',l:'nur senken'},{v:'updown',l:'hoch und runter'},{v:'fixed',l:'feste Gebote'}];
+          V.bidOnlySignal=!!st.bidOnlySignal;
+          V.bidOnlySignalToggle=()=>this.setState(s=>({bidOnlySignal:!s.bidOnlySignal}));
+          V.bidOnlySignalLabel=st.bidOnlySignal?'✓ Nur änderbare Targets':'Nur änderbare Targets';
+          V.bidOnlySignalStyle=st.bidOnlySignal
+            ? 'padding:7px 13px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:12.5px;font-weight:600;cursor:pointer'
+            : 'padding:7px 13px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:12.5px;font-weight:500;cursor:pointer';
+          // Hinweise
+          const dynNote = st.bidDyn==='updown'
+            ? 'Dynamische Gebote „hoch und runter" sind aktiv: Amazon darf euer Gebot bei aussichtsreichen Auktionen deutlich anheben. Das Basisgebot sollte daher eher am unteren Rand des Vorschlags liegen.'
+            : st.bidDyn==='down' ? 'Dynamische Gebote „nur senken": Amazon senkt bei schwachen Auktionen, erhöht aber nie — die Vorschläge können unverändert übernommen werden.'
+            : 'Feste Gebote: Amazon passt nichts an — die Vorschläge gelten genau so.';
+          V.bidDynNote=dynNote;
+          V.bidPlaceNote= placePct>0
+            ? ('Platzierungs-Aufschlag von '+placePct+' % ist eingerechnet: die Vorschläge sind bereits durch '+placeFactor.toFixed(2)+' geteilt, damit das erhöhte Gebot auf der Top-Platzierung wieder beim Zielwert landet.')
+            : 'Kein Platzierungs-Aufschlag hinterlegt. Falls in den Kampagnen einer aktiv ist (z. B. Top of Search), hier eintragen — sonst liegen die tatsächlichen Gebote oben entsprechend höher.';
+          V.bidCopyLabel=(st.ppcCopied==='bid')?'✓ Kopiert':'Als Tabelle kopieren';
+          V.bidCopy=()=>{ const head='Target\tKlicks\tOrders\tCVR roh\tCVR korrigiert\tAktueller CPC\tGebotsvorschlag\tHinweis';
+            const body=shown.map(r=>[r.term, r.clicks, r.orders,
+              r.cvrRaw==null?'':(r.cvrRaw*100).toFixed(1).replace('.',',')+'%',
+              (r.cvrCorr*100).toFixed(1).replace('.',',')+'%',
+              r.cpc>0?r.cpc.toFixed(2).replace('.',','):'',
+              r.finalBid==null?'':r.finalBid.toFixed(2).replace('.',','),
+              r.tag||''].join('\t')).join('\n');
+            this._ppcCopy(head+'\n'+body,'bid'); };
         }
         V.ppcKwCountLabel=kwList.length+(flt2==='alle'?' Suchbegriffe':' gefiltert');
 
