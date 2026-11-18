@@ -550,10 +550,10 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#EEEEEB" class="pp-calcgrid">
                   <label style="background:#fff;padding:12px 2px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Verkaufspreis €</span><input type="number" step="0.01" value="{{ sel.price }}" onChange="{{ editPrice }}" style="width:100%;border:1px solid #E2E2E2;padding:8px 10px;font-size:14px;margin-top:6px;font-feature-settings:'tnum' 1"></label>
                   <label style="background:#fff;padding:12px 2px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Produktionskosten €</span><input type="number" step="0.01" value="{{ sel.productionCost }}" onChange="{{ editProdCost }}" style="width:100%;border:1px solid #E2E2E2;padding:8px 10px;font-size:14px;margin-top:6px;font-feature-settings:'tnum' 1"></label>
-                  <label style="background:#fff;padding:12px 2px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">FBA-Gebühr €</span><input type="number" step="0.01" value="{{ sel.fbaFee }}" onChange="{{ editFba }}" style="width:100%;border:1px solid #E2E2E2;padding:8px 10px;font-size:14px;margin-top:6px;font-feature-settings:'tnum' 1"></label>
+                  <div style="background:#fff;padding:12px 2px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">FBA-/Verkaufsgebühr €</span><div style="width:100%;border:1px solid #EEEEEB;background:#FAFAF8;padding:8px 10px;font-size:14px;margin-top:6px;font-feature-settings:'tnum' 1;color:#6A6A66">{{ sel.referralStr }} <span style="font-size:11px;color:#9A9A96">· 15 % automatisch</span></div></div>
                   <label style="background:#fff;padding:12px 2px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Versand / Stk €</span><input type="number" step="0.01" value="{{ sel.shipping }}" onChange="{{ editShip }}" style="width:100%;border:1px solid #E2E2E2;padding:8px 10px;font-size:14px;margin-top:6px;font-feature-settings:'tnum' 1"></label>
                 </div>
-                <div style="display:flex;justify-content:space-between;padding-top:14px;font-size:13px;color:#7A7A76"><span>MwSt. 19 % · aus Brutto herausgerechnet</span><span style="font-feature-settings:'tnum' 1">{{ sel.vatStr }}</span></div>
+                <div style="display:flex;justify-content:space-between;padding-top:14px;font-size:13px;color:#7A7A76"><span>MwSt. 19 % vom Verkaufspreis</span><span style="font-feature-settings:'tnum' 1">{{ sel.vatStr }}</span></div>
                 <label style="display:block;margin-top:14px"><span style="font-size:11px;color:#9A9A96;text-transform:uppercase;letter-spacing:.05em">Amazon-Listing-Link</span><input value="{{ sel.amazonUrl }}" onChange="{{ editUrl }}" placeholder="https://www.amazon.de/dp/B0..." style="width:100%;border:1px solid #E2E2E2;padding:8px 10px;font-size:13px;margin-top:6px"></label>
               </div>
             </div>
@@ -2092,7 +2092,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;background:#FF5A00;bo
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
             <label style="display:block"><span style="font-size:12px;color:#7A7A76">Verkaufspreis €</span><input type="number" step="0.01" value="{{ draft.price }}" onInput="{{ setDraftPrice }}" style="width:100%;border:1px solid #E2E2E2;padding:10px 12px;font-size:14px;margin-top:6px"></label>
             <label style="display:block"><span style="font-size:12px;color:#7A7A76">Produktionskosten €</span><input type="number" step="0.01" value="{{ draft.productionCost }}" onInput="{{ setDraftProd }}" style="width:100%;border:1px solid #E2E2E2;padding:10px 12px;font-size:14px;margin-top:6px"></label>
-            <label style="display:block"><span style="font-size:12px;color:#7A7A76">FBA-Gebühr €</span><input type="number" step="0.01" value="{{ draft.fbaFee }}" onInput="{{ setDraftFba }}" style="width:100%;border:1px solid #E2E2E2;padding:10px 12px;font-size:14px;margin-top:6px"></label>
+            <div style="display:block"><span style="font-size:12px;color:#7A7A76">FBA-/Verkaufsgebühr</span><div style="width:100%;border:1px solid #EEEEEB;background:#FAFAF8;padding:10px 12px;font-size:13px;margin-top:6px;color:#8A8A86">15 % vom Verkaufspreis · automatisch</div></div>
             <label style="display:block"><span style="font-size:12px;color:#7A7A76">Versand / Stk €</span><input type="number" step="0.01" value="{{ draft.shipping }}" onInput="{{ setDraftShip }}" style="width:100%;border:1px solid #E2E2E2;padding:10px 12px;font-size:14px;margin-top:6px"></label>
           </div>
           <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9A9A96;margin:22px 0 12px">Logistik &amp; Werbung</div>
@@ -2377,23 +2377,28 @@ class Component extends DCLogic {
   _stockOf(p){ if(!p.stockRef) return +p.stock||0; return (+p.stockRef.value||0)-this._soldSince(p); }
 
   // ---------- core calculation engine (single source of truth) ----------
+  // Stueck-Oekonomie zentral: MwSt 19 % und Amazon-Verkaufsgebuehr 15 % jeweils auf den Verkaufspreis
+  _unitEcon(price, p, prodOverride){ const pr=+price||0;
+    const vat=pr*0.19, referral=pr*0.15;
+    const prod=(prodOverride!=null)?(+prodOverride||0):(+p.productionCost||0);
+    const unitProfit=pr-vat-referral-(+p.shipping||0)-prod; // FBA-/Verkaufsgebuehr = die automatischen 15 %, kein separater Abzug
+    return {vat, referral, net:pr-vat, unitProfit}; }
   derive(p, from, to){
     const dr=this._dataRange();
     from = from || dr.min; to = to || dr.max;
     if(from>to){ const t=from; from=to; to=t; }
     // Aktuelle Stück-Oekonomie (fuer Anzeige von Marge/Break-Even/Wasserfall – basiert auf JETZIGEM Preis)
-    // USt korrekt: Verkaufspreis ist BRUTTO -> Netto = Brutto/1,19; USt = Brutto - Netto.
-    // Amazon-Gebühren sind separate Betriebsausgaben und mindern die USt NICHT.
-    const net = p.price/1.19;
-    const vat = p.price - net;
-    const unitProfit = net - p.fbaFee - p.shipping - p.productionCost;
+    // DB je Stueck: Verkaufspreis − MwSt (19 % vom VK) − Verkaufsgebuehr (15 % vom VK) − FBA − Versand − Produktion
+    const ue = this._unitEcon(p.price, p);
+    const net = ue.net, vat = ue.vat, referral = ue.referral;
+    const unitProfit = ue.unitProfit;
     const marginPct = p.price>0 ? unitProfit/p.price : 0;
     // Aggregation PRO MONAT mit dem jeweils gueltigen Monatspreis
     let units=0, views=0, unitsPpc=0, adSpend=0, revenue=0, grossProfit=0, ppcRevenue=0;
     this.months.forEach(ym=>{ if(ym<from||ym>to) return; const m=p.monthly[ym]; if(!m) return;
       const mUnits=+m.units||0, mViews=+m.views||0, mPpc=Math.min(mUnits,+m.unitsPpc||0), mAd=+m.adCost||0;
       const mPrice=this._monthPrice(p,m);
-      const mUnitProfit=(mPrice/1.19)-p.fbaFee-p.shipping-p.productionCost;
+      const mUnitProfit=this._unitEcon(mPrice,p).unitProfit;
       units+=mUnits; views+=mViews; unitsPpc+=mPpc; adSpend+=mAd;
       revenue+=mUnits*mPrice; grossProfit+=mUnits*mUnitProfit; ppcRevenue+=mPpc*mPrice;
     });
@@ -2436,7 +2441,7 @@ class Component extends DCLogic {
     else if(cover < threshold) status='red';
     else if(cover < threshold*1.5) status='yellow';
     const reorderQty = velocity>0 ? Math.max(0, Math.ceil(velocity*(threshold+30) - stock)) : 0;
-    return {units,views,revenue,vat,net,unitProfit,marginPct,grossProfit,estProfit,conversion,breakEvenAcos,actualAcos,velocity,cover,threshold,status,reorderQty,adSpend,days,stock,unitsPpc,organicUnits,organicRate,ppcRevenue,tacos,maxCpc};
+    return {units,views,revenue,vat,referral,net,unitProfit,marginPct,grossProfit,estProfit,conversion,breakEvenAcos,actualAcos,velocity,cover,threshold,status,reorderQty,adSpend,days,stock,unitsPpc,organicUnits,organicRate,ppcRevenue,tacos,maxCpc};
   }
   aggregate(from,to){
     let revenue=0,units=0,ad=0,grossProfit=0,estProfit=0,views=0,contribution=0,ppcRev=0,ppcUnits=0;
@@ -2541,7 +2546,7 @@ class Component extends DCLogic {
     const steps=[
       {label:'Verkaufspreis', value:p.price, type:'base'},
       {label:'− MwSt 19%', value:-d.vat, type:'sub'},
-      {label:'− FBA-Gebühr', value:-p.fbaFee, type:'sub'},
+      {label:'− FBA-Geb. 15%', value:-d.referral, type:'sub'},
       {label:'− Versand', value:-p.shipping, type:'sub'},
       {label:'− Produktion', value:-p.productionCost, type:'sub'},
       {label:'Nettomarge', value:d.unitProfit, type:'net'}
@@ -3062,7 +3067,7 @@ class Component extends DCLogic {
       if(d.marginPct>0 && d.marginPct<0.20){
         recs.push({key:p.id+':margin', productId:p.id, productName:nm, area:'Marge', priority:'wichtig', sev:0.20-d.marginPct,
           reason:`Marge ${P(d.marginPct*100)} % niedrig — Deckungsbeitrag pro Stück nur ${this._eur(d.unitProfit,2)}.`,
-          action:'Kostenstruktur prüfen (Produktionskosten / FBA-Gebühren gestiegen?) oder Preis anheben.'});
+          action:'Kostenstruktur prüfen (Produktionskosten / Versand gestiegen?) oder Preis anheben.'});
       }
       // Organischer Anteil
       if(d.units>0 && d.organicRate<0.40 && d.tacos>12){
@@ -3197,7 +3202,7 @@ class Component extends DCLogic {
       const months=this.months.filter(ym=>p.monthly[ym]).sort();
       const d=this.derive(p);
       body+='<div class="prodblock"><div class="prodhd"><span class="pn">'+this._esc(p.name)+'</span><span class="pa">'+this._esc(p.asin||'—')+' · '+this._esc(p.dims||'')+'</span></div>';
-      body+='<div class="note" style="margin:2px 0 0">Aktueller Preis '+this._eur(p.price,2)+' · Produktion '+this._eur(p.productionCost,2)+' · FBA '+this._eur(p.fbaFee,2)+' · Versand '+this._eur(p.shipping,2)+' · Bestand '+this._num(this._stockOf(p))+' Stk</div>';
+      body+='<div class="note" style="margin:2px 0 0">Aktueller Preis '+this._eur(p.price,2)+' · Produktion '+this._eur(p.productionCost,2)+' · MwSt 19 % '+this._eur(p.price*0.19,2)+' · FBA-/Verkaufsgebühr 15 % '+this._eur(p.price*0.15,2)+' · Versand '+this._eur(p.shipping,2)+' · DB/Stk '+this._eur(this._unitEcon(p.price,p).unitProfit,2)+' · Bestand '+this._num(this._stockOf(p))+' Stk</div>';
       if(!months.length){ body+='<div class="note">Noch keine Monatswerte erfasst.</div></div>'; return; }
       let tU=0,tR=0,tPpc=0,tAd=0,tV=0;
       let rows='';
@@ -4484,7 +4489,7 @@ class Component extends DCLogic {
         const dTiles = detailScope==='year' ? this.derive(p, activeYear+'-01', activeYear+'-12') : d;
         const scopeBtn=(active)=> active?'padding:5px 12px;border:1px solid #0A0A0A;background:#0A0A0A;color:#fff;font-size:11.5px;font-weight:600;cursor:pointer;font-feature-settings:\'tnum\' 1':'padding:5px 12px;border:1px solid #E4E4E0;background:#fff;color:#6A6A66;font-size:11.5px;font-weight:500;cursor:pointer;font-feature-settings:\'tnum\' 1';
         const monthRows = yearMonths.map(ym=>{ const m=p.monthly[ym]; const conv=(+m.views>0)?(+m.units/+m.views):0; const tv=+((p.targets||{})[ym]||0); const un=+m.units||0; const ppcu=Math.min(un,+m.unitsPpc||0); const orgu=Math.max(0,un-ppcu); const ach=tv>0?un/tv:0;
-          const mPrice=this._monthPrice(p,m); const mUnitProfit=(mPrice/1.19)-p.fbaFee-p.shipping-p.productionCost; const mRev=un*mPrice; const mProfit=un*mUnitProfit-(+m.adCost||0); return {
+          const mPrice=this._monthPrice(p,m); const mUnitProfit=this._unitEcon(mPrice,p).unitProfit; const mRev=un*mPrice; const mProfit=un*mUnitProfit-(+m.adCost||0); return {
           label:this._mlabel(ym), units:un, ppc:+m.unitsPpc||0, adCost:+m.adCost||0, views:+m.views||0, target:tv||'',
           price:+(+mPrice).toFixed(2), revStr:this._eur(mRev), profitStr:this._eur(mProfit), profitColor: mProfit<0?red:ink,
           orgRateStr: un>0?this._pct(orgu/un*100,0):'—',
@@ -4514,7 +4519,7 @@ class Component extends DCLogic {
           scopeGesamtStyle: scopeBtn(detailScope==='gesamt'), scopeYearStyle: scopeBtn(detailScope==='year'),
           setScopeGesamt:()=>this.setState({detailScope:'gesamt'}), setScopeYear:()=>this.setState({detailScope:'year'}),
           unitProfitStr:this._eur(d.unitProfit,2), unitProfitColor:d.unitProfit<0?red:ink, marginStr:this._pct(dTiles.marginPct*100),
-          conversionStr:this._pct(dTiles.conversion*100), conversionColor:convColor(dTiles.conversion), revenueStr:this._eur(dTiles.revenue), vatStr:this._eur(d.vat,2),
+          conversionStr:this._pct(dTiles.conversion*100), conversionColor:convColor(dTiles.conversion), revenueStr:this._eur(dTiles.revenue), vatStr:this._eur(d.vat,2), referralStr:this._eur(d.referral,2),
           unitsStr:this._num(dTiles.units), acosStr:dTiles.ppcRevenue>0?this._pct(dTiles.actualAcos):'—', acosColor:dTiles.actualAcos>dTiles.breakEvenAcos?red:ink,
           tacosStr:dTiles.revenue>0?this._pct(dTiles.tacos):'—', stockStr:this._num(d.stock), stockColor:d.stock<0?red:ink,
           coverStr:isFinite(d.cover)?Math.round(d.cover)+' Tage':'∞', coverColor:statusColor(d.status),
@@ -4567,7 +4572,7 @@ class Component extends DCLogic {
         }
       }
     }
-    if(!V.sel) V.sel={name:'',asin:'',dims:'',amazonUrl:'',hasUrl:false,price:0,productionCost:0,fbaFee:0,shipping:0,noAds:false,adsOk:true,noAdsToggle:()=>{},noAdsBtnStyle:'',noAdsBtnLabel:'',activeYear:'',unitProfitStr:'',unitProfitColor:ink,marginStr:'',conversionStr:'',conversionColor:ink,revenueStr:'',vatStr:'',unitsStr:'',acosStr:'',acosColor:ink,tacosStr:'',stockStr:'',stockColor:ink,coverStr:'',coverColor:'#9A9A96',maxCpcStr:'',organicRateStr:'',starsVal:'',starsStr:'',addMonthOptions:[],statusColor:'#9A9A96',statusLabel:'',recs:[],monthRows:[],detailYears:[],qualityRows:[]};
+    if(!V.sel) V.sel={name:'',asin:'',dims:'',amazonUrl:'',hasUrl:false,price:0,productionCost:0,fbaFee:0,shipping:0,noAds:false,adsOk:true,noAdsToggle:()=>{},noAdsBtnStyle:'',noAdsBtnLabel:'',activeYear:'',unitProfitStr:'',unitProfitColor:ink,marginStr:'',conversionStr:'',conversionColor:ink,revenueStr:'',vatStr:'',referralStr:'',unitsStr:'',acosStr:'',acosColor:ink,tacosStr:'',stockStr:'',stockColor:ink,coverStr:'',coverColor:'#9A9A96',maxCpcStr:'',organicRateStr:'',starsVal:'',starsStr:'',addMonthOptions:[],statusColor:'#9A9A96',statusLabel:'',recs:[],monthRows:[],detailYears:[],qualityRows:[]};
     if(!V.starEl) V.starEl=null; if(!V.editStars) V.editStars=()=>{}; if(!V.editUrl) V.editUrl=()=>{}; if(!V.askDelete) V.askDelete=()=>{};
     if(V.detailAddYm===undefined) V.detailAddYm=''; if(!V.setDetailAddYm) V.setDetailAddYm=()=>{}; if(!V.addSelectedMonth) V.addSelectedMonth=()=>{};
     if(!V.goal) V.goal={monthLabel:'',tone:'#9A9A96',statusLabel:'',ringEl:null,actualStr:'',targetStr:'',remainingStr:'',curVelStr:'',reqVelStr:'',reqColor:ink,dayStr:'',targetInput:'',setTarget:()=>{}};
@@ -4639,7 +4644,7 @@ class Component extends DCLogic {
     if(scp){
       const sv = (st.scenario && st.scenario.productId===scp.id) ? st.scenario : this._scenDefaults(scp);
       const base = this._scenDefaults(scp);
-      const calc=(price,ad,units,prod)=>{ const net=price/1.19; const vat=price-net; const up=net-(+scp.fbaFee||0)-(+scp.shipping||0)-prod; const mp=price>0?up/price:0; const rev=units*price; const profit=units*up-ad; const acos=rev>0?ad/rev*100:0; return {up,mp,rev,profit,acos,be:mp*100}; };
+      const calc=(price,ad,units,prod)=>{ const up=this._unitEcon(price,scp,prod).unitProfit; const mp=price>0?up/price:0; const rev=units*price; const profit=units*up-ad; const acos=rev>0?ad/rev*100:0; return {up,mp,rev,profit,acos,be:mp*100}; };
       const cur=calc(sv.price,sv.adSpend,sv.units,sv.prodCost);
       const bas=calc(base.price,base.adSpend,base.units,base.prodCost);
       const dProfit=cur.profit-bas.profit, dUp=cur.up-bas.up;
